@@ -1,0 +1,243 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import { inspecaoService, equipamentoService, clienteService, laudoService } from "@/lib/services"
+import type { Inspecao, Equipamento, Cliente, Laudo } from "@/lib/types"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
+import { FileText, Ruler, AlertTriangle, ShieldCheck } from "lucide-react"
+
+export default function InspecaoDetalhe() {
+  const params = useParams()
+  const [inspecao, setInspecao] = useState<Inspecao | null>(null)
+  const [eq, setEq] = useState<Equipamento | undefined>(undefined)
+  const [cliente, setCliente] = useState<Cliente | undefined>(undefined)
+  const [laudo, setLaudo] = useState<Laudo | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const id = params.id as string
+    inspecaoService.getById(id).then(async (ins) => {
+      if (!ins) { setLoading(false); return }
+      setInspecao(ins)
+      const equip = await equipamentoService.getById(ins.equipamentoId)
+      setEq(equip)
+      if (equip) {
+        const cli = await clienteService.getById(equip.clienteId)
+        setCliente(cli)
+      }
+      const ld = await laudoService.getByInspecaoId(ins.id)
+      setLaudo(ld)
+      setLoading(false)
+    }).catch((err) => {
+      console.error("Erro ao carregar detalhe da inspeção:", err)
+      setLoading(false)
+    })
+  }, [params.id])
+
+  if (loading) return <div className="p-8 text-slate-500">Carregando...</div>
+  if (!inspecao) return <div className="p-8 text-slate-500">Inspeção não encontrada</div>
+
+  return (
+    <div className="p-8 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight capitalize">{inspecao.tipo.replace("_", " ")}</h1>
+            <Badge variant={inspecao.concluida ? "default" : "secondary"}>
+              {inspecao.concluida ? "Concluída" : "Em andamento"}
+            </Badge>
+          </div>
+          <p className="text-slate-500 text-sm mt-1">
+            {eq?.tag} — {eq?.descricao} • {inspecao.dataInicio} a {inspecao.dataTermino}
+          </p>
+          {cliente && <p className="text-xs text-blue-600 mt-0.5">Cliente: {cliente.nome}</p>}
+        </div>
+        <div className="flex gap-2">
+          {!laudo && inspecao.concluida && (
+            <Link href={`/laudos/novo?inspecao=${inspecao.id}`}>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+                <FileText className="h-4 w-4 mr-2" />
+                Gerar Laudo
+              </Button>
+            </Link>
+          )}
+          <Link href={`/equipamentos/${eq?.id}`}>
+            <Button variant="outline" className="border-slate-200 text-slate-700">Ver Equipamento</Button>
+          </Link>
+        </div>
+      </div>
+
+      <Tabs defaultValue="resumo" className="w-full">
+        <TabsList className="bg-slate-100 border border-slate-200">
+          <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Resumo</TabsTrigger>
+          <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Medições</TabsTrigger>
+          <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Anomalias</TabsTrigger>
+          <TabsTrigger value="dispositivos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Dispositivos</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="resumo" className="mt-4 space-y-4">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader><CardTitle className="text-slate-900">Exames Realizados</CardTitle></CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4">
+                {[
+                  { label: "Exame Externo", ok: inspecao.examesExternos },
+                  { label: "Exame Interno", ok: inspecao.examesInternos },
+                  { label: "Teste Hidrostático", ok: inspecao.testeHidrostatico },
+                ].map(({ label, ok }) => (
+                  <div key={label} className={`p-3 rounded-lg text-center border ${
+                    ok ? "bg-emerald-50 border-emerald-200" : "bg-slate-50 border-slate-200"
+                  }`}>
+                    <p className="text-sm text-slate-900">{label}</p>
+                    <p className={`text-xs mt-1 ${ok ? "text-emerald-600" : "text-slate-400"}`}>{ok ? "Realizado" : "Não realizado"}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader><CardTitle className="text-slate-900">Parecer Técnico</CardTitle></CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-700 leading-relaxed">{inspecao.parecer}</p>
+            </CardContent>
+          </Card>
+
+          {laudo && (
+            <Link href={`/laudos/${laudo.id}`}>
+              <Card className="border-slate-200 shadow-sm hover:bg-slate-50 cursor-pointer transition-colors">
+                <CardContent className="p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <FileText className="h-5 w-5 text-blue-600" />
+                    <div>
+                      <p className="text-sm font-medium text-slate-900">Laudo: {laudo.numeroLaudo}</p>
+                      <p className="text-xs text-slate-500">Emitido em {laudo.dataEmissao}</p>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="border-slate-200">Visualizar</Badge>
+                </CardContent>
+              </Card>
+            </Link>
+          )}
+        </TabsContent>
+
+        <TabsContent value="medicoes" className="mt-4">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-slate-900 flex items-center gap-2">
+                <Ruler className="h-4 w-4 text-blue-600" />
+                Medições de Espessura
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {inspecao.medicoes.length === 0 ? (
+                <p className="text-sm text-slate-400 italic">Nenhuma medição registrada</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-slate-200 bg-slate-50">
+                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Ponto</th>
+                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Atual (mm)</th>
+                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Anterior (mm)</th>
+                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Variação</th>
+                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Obs</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {inspecao.medicoes.map((med) => (
+                        <tr key={med.id} className="border-b border-slate-100">
+                          <td className="py-2 px-3 font-medium text-slate-900">{med.ponto}</td>
+                          <td className="py-2 px-3 text-slate-700">{med.espessura}</td>
+                          <td className="py-2 px-3 text-slate-700">{med.espessuraAnterior ?? "—"}</td>
+                          <td className="py-2 px-3">
+                            {med.espessuraAnterior ? (
+                              <span className={med.espessura < med.espessuraAnterior ? "text-red-600" : "text-emerald-600"}>
+                                {((med.espessura - med.espessuraAnterior) / med.espessuraAnterior * 100).toFixed(1)}%
+                              </span>
+                            ) : "—"}
+                          </td>
+                          <td className="py-2 px-3 text-slate-400 text-xs">{med.observacao}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="anomalias" className="mt-4 space-y-3">
+          {inspecao.anomalias.length === 0 ? (
+            <Card className="border-slate-200 shadow-sm">
+              <CardContent className="py-8 text-center">
+                <AlertTriangle className="h-8 w-8 text-emerald-500 mx-auto mb-2" />
+                <p className="text-sm text-slate-500">Nenhuma anomalia encontrada</p>
+              </CardContent>
+            </Card>
+          ) : (
+            inspecao.anomalias.map((ano) => (
+              <Card key={ano.id} className="border-slate-200 shadow-sm">
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Badge variant={
+                        ano.gravidade === "critica" ? "destructive" :
+                        ano.gravidade === "alta" ? "destructive" :
+                        ano.gravidade === "media" ? "default" : "secondary"
+                      } className="capitalize">{ano.gravidade}</Badge>
+                      <span className="text-sm text-slate-900">{ano.descricao}</span>
+                    </div>
+                    <Badge variant={ano.resolvida ? "default" : "secondary"}>
+                      {ano.resolvida ? "Resolvida" : "Pendente"}
+                    </Badge>
+                  </div>
+                  {ano.planoAcao && (
+                    <p className="text-xs text-slate-500 mt-2">Plano de ação: {ano.planoAcao}</p>
+                  )}
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </TabsContent>
+
+        <TabsContent value="dispositivos" className="mt-4">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-slate-900 flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-blue-600" />
+                Dispositivos de Segurança
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {inspecao.dispositivosSeguranca.length === 0 ? (
+                <p className="text-sm text-slate-400 italic">Nenhum dispositivo registrado</p>
+              ) : (
+                <div className="space-y-2">
+                  {inspecao.dispositivosSeguranca.map((d) => (
+                    <div key={d.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-100 bg-slate-50">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${d.inspecaoOk ? "bg-emerald-500" : "bg-red-500"}`} />
+                        <div>
+                          <p className="text-sm text-slate-900 font-medium capitalize">{d.tipo.replace("_", " ")}</p>
+                          <p className="text-xs text-slate-500">{d.tag}</p>
+                        </div>
+                      </div>
+                      <div className="text-right text-xs text-slate-500">{d.observacao}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}

@@ -1,0 +1,242 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import { laudoService, equipamentoService, inspecaoService, clienteService } from "@/lib/services"
+import type { Laudo, Equipamento, Inspecao, Cliente } from "@/lib/types"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { FileText, Download, Printer, ArrowLeft } from "lucide-react"
+import Link from "next/link"
+import { toast } from "sonner"
+
+function handlePrint() {
+  window.print()
+}
+
+function handleDownloadPDF() {
+  toast.success("PDF gerado com sucesso!")
+  window.print()
+}
+
+export default function LaudoDetalhe() {
+  const params = useParams()
+  const [laudo, setLaudo] = useState<Laudo | null>(null)
+  const [eq, setEq] = useState<Equipamento | undefined>(undefined)
+  const [inspecao, setInspecao] = useState<Inspecao | undefined>(undefined)
+  const [cliente, setCliente] = useState<Cliente | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const id = params.id as string
+    laudoService.getById(id).then(async (l) => {
+      if (!l) { setLoading(false); return }
+      setLaudo(l)
+      const equip = await equipamentoService.getById(l.equipamentoId)
+      setEq(equip)
+      if (equip) {
+        const cli = await clienteService.getById(equip.clienteId)
+        setCliente(cli)
+      }
+      const ins = await inspecaoService.getById(l.inspecaoId)
+      setInspecao(ins)
+      setLoading(false)
+    }).catch((err) => {
+      console.error("Erro ao carregar detalhe do laudo:", err)
+      setLoading(false)
+    })
+  }, [params.id])
+
+  if (loading) return <div className="p-8 text-slate-500">Carregando...</div>
+  if (!laudo) return <div className="p-8 text-slate-500">Laudo não encontrado</div>
+
+  return (
+    <div className="max-w-4xl mx-auto p-8 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link href="/laudos" className="text-slate-500 hover:text-slate-700">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{laudo.numeroLaudo}</h1>
+            <p className="text-slate-500 text-sm">{eq?.tag} — {eq?.descricao}</p>
+            {cliente && <p className="text-xs text-blue-600">{cliente.nome}</p>}
+          </div>
+        </div>
+        <div className="flex gap-2 no-print">
+          <Button variant="outline" onClick={handlePrint} className="border-slate-200 text-slate-700">
+            <Printer className="h-4 w-4 mr-2" /> Imprimir
+          </Button>
+          <Button onClick={handleDownloadPDF} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+            <Download className="h-4 w-4 mr-2" /> Exportar PDF
+          </Button>
+        </div>
+      </div>
+
+      <Card className="border-slate-200 shadow-sm print:shadow-none print:border-none">
+        <CardContent className="p-8 print:p-0">
+          {/* Cabeçalho do Laudo */}
+          <div className="text-center mb-10">
+            <h2 className="text-xl font-bold uppercase tracking-wide text-slate-900">RELATÓRIO DE INSPEÇÃO DE SEGURANÇA</h2>
+            <p className="text-sm text-slate-500 mt-1">NR-13 — Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento</p>
+            <Separator className="my-4 bg-slate-300" />
+            <p className="text-lg font-semibold text-slate-900">{laudo.numeroLaudo}</p>
+          </div>
+
+          {/* Identificação do Equipamento */}
+          <section className="mb-8">
+            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">1. Identificação do Equipamento</h3>
+            <table className="w-full text-sm">
+              <tbody>
+                {[
+                  ["Cliente:", cliente?.nome ?? ""],
+                  ["CNPJ:", cliente?.cnpj ?? ""],
+                  ["Tag / Identificação:", eq?.tag ?? ""],
+                  ["Descrição:", eq?.descricao ?? ""],
+                  ["Fabricante:", eq?.fabricante ?? ""],
+                  ["Nº de Série:", eq?.numeroSerie ?? ""],
+                  ["Ano de Fabricação:", String(eq?.anoFabricacao ?? "")],
+                  ["Localização:", eq?.localizacao ?? ""],
+                  ["Fluido de Serviço:", eq ? `${eq.fluido} (Classe ${eq.classeFluido})` : ""],
+                  ["Pressão de Operação:", eq ? `${eq.pressaoOperacao} kPa` : ""],
+                  ["Volume:", eq ? `${eq.volume} m³` : ""],
+                  ["PMTA:", eq ? `${eq.pmta} kPa` : ""],
+                  ["Categoria:", eq?.categoria ?? ""],
+                ].map(([label, value]) => (
+                  <tr key={label} className="border-b border-slate-200">
+                    <td className="py-2 pr-4 font-semibold text-slate-700 w-1/3">{label}</td>
+                    <td className="py-2 text-slate-900">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+
+          {/* Dados da Inspeção */}
+          <section className="mb-8">
+            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">2. Dados da Inspeção</h3>
+            <table className="w-full text-sm">
+              <tbody>
+                {[
+                  ["Tipo de Inspeção:", inspecao ? inspecao.tipo.replace("_", " ").replace(/\b\w/g, (l: string) => l.toUpperCase()) : ""],
+                  ["Data de Início:", inspecao?.dataInicio ?? ""],
+                  ["Data de Término:", inspecao?.dataTermino ?? ""],
+                  ["Exame Externo:", inspecao?.examesExternos ? "Realizado" : "Não Realizado"],
+                  ["Exame Interno:", inspecao?.examesInternos ? "Realizado" : "Não Realizado"],
+                  ["Teste Hidrostático:", inspecao?.testeHidrostatico ? "Realizado" : "Não Realizado"],
+                  ["SPIE:", inspecao?.temSPIE ? "Sim" : "Não"],
+                ].map(([label, value]) => (
+                  <tr key={label} className="border-b border-slate-200">
+                    <td className="py-2 pr-4 font-semibold text-slate-700 w-1/3">{label}</td>
+                    <td className="py-2 text-slate-900">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+
+          {/* Medições */}
+          {inspecao && inspecao.medicoes.length > 0 && (
+            <section className="mb-8">
+              <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">3. Medições de Espessura (Ultrassom)</h3>
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="bg-slate-100">
+                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Ponto</th>
+                    <th className="border border-slate-300 px-3 py-2 text-right text-slate-700">Espessura (mm)</th>
+                    <th className="border border-slate-300 px-3 py-2 text-right text-slate-700">Anterior (mm)</th>
+                    <th className="border border-slate-300 px-3 py-2 text-right text-slate-700">Variação (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inspecao.medicoes.map((med) => (
+                    <tr key={med.id}>
+                      <td className="border border-slate-300 px-3 py-2 text-slate-900">{med.ponto}</td>
+                      <td className="border border-slate-300 px-3 py-2 text-right text-slate-900">{med.espessura}</td>
+                      <td className="border border-slate-300 px-3 py-2 text-right text-slate-500">{med.espessuraAnterior ?? "—"}</td>
+                      <td className="border border-slate-300 px-3 py-2 text-right text-slate-900">
+                        {med.espessuraAnterior
+                          ? ((med.espessura - med.espessuraAnterior) / med.espessuraAnterior * 100).toFixed(1) + "%"
+                          : "—"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
+
+          {/* Anomalias */}
+          {inspecao && inspecao.anomalias.length > 0 && (
+            <section className="mb-8">
+              <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">4. Anomalias Encontradas</h3>
+              {inspecao.anomalias.map((ano, i) => (
+                <div key={ano.id} className="mb-3 p-3 border border-slate-300 rounded">
+                  <p className="font-semibold text-sm text-slate-900">Anomalia {i + 1}</p>
+                  <p className="text-sm mt-1 text-slate-700">{ano.descricao}</p>
+                  <div className="flex gap-4 mt-2 text-xs text-slate-600">
+                    <span>Gravidade: <strong className="uppercase">{ano.gravidade}</strong></span>
+                    <span>Plano de Ação: {ano.planoAcao}</span>
+                  </div>
+                </div>
+              ))}
+            </section>
+          )}
+
+          {/* Dispositivos */}
+          {inspecao && inspecao.dispositivosSeguranca.length > 0 && (
+            <section className="mb-8">
+              <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">5. Dispositivos de Segurança</h3>
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="bg-slate-100">
+                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Tipo</th>
+                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Tag</th>
+                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Situação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inspecao.dispositivosSeguranca.map((d) => (
+                    <tr key={d.id}>
+                      <td className="border border-slate-300 px-3 py-2 capitalize text-slate-900">{d.tipo.replace("_", " ")}</td>
+                      <td className="border border-slate-300 px-3 py-2 text-slate-900">{d.tag}</td>
+                      <td className="border border-slate-300 px-3 py-2 text-slate-700">{d.inspecaoOk ? "Aprovado" : "Reprovado"}{d.observacao ? ` — ${d.observacao}` : ""}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
+
+          {/* Parecer */}
+          <section className="mb-8">
+            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">6. Parecer Conclusivo</h3>
+            <p className="text-sm leading-relaxed text-slate-700">{inspecao?.parecer}</p>
+          </section>
+
+          {/* Assinatura */}
+          <section className="mb-8">
+            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">7. Responsável Técnico</h3>
+            <div className="border-2 border-slate-300 rounded-lg p-6 text-center mt-4">
+              <p className="font-semibold text-slate-900">{laudo.plhNome}</p>
+              <p className="text-sm text-slate-600">{laudo.plhCrea}</p>
+              <div className="mt-8 mb-4 border-b border-slate-400 w-64 mx-auto" />
+              <p className="text-sm text-slate-600">Assinatura do Profissional Legalmente Habilitado (PLH)</p>
+            </div>
+          </section>
+
+          {/* Próxima Inspeção */}
+          <section>
+            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">8. Próxima Inspeção</h3>
+            <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center">
+              <p className="text-sm text-slate-700">Data prevista para próxima inspeção:</p>
+              <p className="text-xl font-bold text-amber-700 mt-1">{laudo.dataProximaInspecao}</p>
+            </div>
+          </section>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

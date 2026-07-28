@@ -1,0 +1,101 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import { clienteService, equipamentoService } from "@/lib/services"
+import type { Cliente, Equipamento } from "@/lib/types"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Building2, Phone, Mail, MapPin, FileText, Pencil, Plus } from "lucide-react"
+import Link from "next/link"
+
+export default function ClienteDetalhe() {
+  const params = useParams()
+  const [cliente, setCliente] = useState<Cliente | null>(null)
+  const [equipamentos, setEquipamentos] = useState<Equipamento[]>([])
+
+  useEffect(() => {
+    const id = params.id as string
+    clienteService.getById(id).then((c) => setCliente(c ?? null))
+    equipamentoService.list({ clienteId: id }).then(setEquipamentos)
+  }, [params.id])
+
+  if (!cliente) return <div className="p-8 text-slate-500">Carregando...</div>
+
+  return (
+    <div className="p-8 space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Building2 className="h-6 w-6 text-blue-600" />
+          <div>
+            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{cliente.nome}</h1>
+            <p className="text-slate-500 text-sm">{cliente.cnpj}</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Link href={`/clientes/${cliente.id}/editar`}>
+            <Button variant="outline" className="border-slate-200 text-slate-700">
+              <Pencil className="h-4 w-4 mr-2" /> Editar
+            </Button>
+          </Link>
+          <Link href={`/equipamentos/novo?clienteId=${cliente.id}`}>
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+              <Plus className="h-4 w-4 mr-2" /> Novo Equipamento
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="border-slate-200 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-slate-900 text-sm">Informações de Contato</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex items-center gap-2">
+              <Phone className="h-4 w-4 text-slate-400" />
+              <span className="text-slate-700">{cliente.telefone}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Mail className="h-4 w-4 text-slate-400" />
+              <span className="text-slate-700">{cliente.email}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-slate-400" />
+              <span className="text-slate-700">{cliente.endereco}</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-slate-200 shadow-sm lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-slate-900 text-sm">Equipamentos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {equipamentos.length === 0 ? (
+              <p className="text-sm text-slate-400 py-8 text-center">Nenhum equipamento cadastrado</p>
+            ) : (
+              <div className="space-y-2">
+                {equipamentos.map((eq) => (
+                  <Link key={eq.id} href={`/equipamentos/${eq.id}`}>
+                    <div className="flex items-center justify-between p-3 rounded-lg border border-slate-100 bg-white hover:bg-slate-50 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-4 w-4 text-blue-600 shrink-0" />
+                        <div>
+                          <p className="text-sm font-medium text-slate-900">{eq.tag} — {eq.descricao}</p>
+                          <p className="text-xs text-slate-500">{eq.tipo} • {eq.localizacao}</p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="border-slate-200">{eq.categoria}</Badge>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
