@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useState, Suspense, useRef } from "react"
-import { equipamentos } from "@/lib/store"
+import { equipamentos, clientes } from "@/lib/store"
 import { inspecaoService, equipamentoService } from "@/lib/services"
 import { toast } from "sonner"
 import type { CreateInspecaoDTO } from "@/lib/types"
@@ -57,6 +57,7 @@ function NovaInspecaoForm() {
   ]
 
   const currentIndex = steps.findIndex((s) => s.key === step)
+  const selectedClient = selectedEq ? clientes.find((c) => c.id === selectedEq.clienteId) : null
 
   const finalizar = async () => {
     if (!selectedEq) return
@@ -137,8 +138,9 @@ function NovaInspecaoForm() {
             onClick={() => setSelectedEq(eq)}
           >
             <p className="text-sm font-semibold text-text-primary truncate">{eq.tag}</p>
-            <p className="text-[11px] text-text-secondary mt-0.5 truncate">{eq.tipo} • Cat. {eq.categoria}</p>
-            <Badge variant="outline" className="border-border mt-2 text-[10px]">{eq.classeFluido}</Badge>
+            <p className="text-[10px] text-text-secondary mt-0.5 leading-tight line-clamp-2">{eq.descricao}</p>
+            <p className="text-[10px] text-text-muted mt-0.5">{eq.tipo} • Cat. {eq.categoria}</p>
+            <Badge variant="outline" className="border-border mt-1.5 text-[10px]">{eq.classeFluido}</Badge>
           </div>
         ))}
       </div>
@@ -396,6 +398,11 @@ function NovaInspecaoForm() {
           <div>
             <h1 className="text-xl sm:text-2xl font-semibold text-text-primary tracking-tight">Nova Inspeção</h1>
             <p className="text-text-secondary text-xs sm:text-sm mt-0.5">Preencha os dados da inspeção de segurança</p>
+            {selectedClient && (
+              <p className="text-[11px] text-text-muted mt-0.5">
+                {selectedClient.nome} • CNPJ {selectedClient.cnpj}
+              </p>
+            )}
           </div>
           <div className="flex items-center gap-2 overflow-x-auto pb-1 shrink-0">
             {steps.map((s, i) => (
