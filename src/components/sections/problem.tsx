@@ -257,9 +257,9 @@ export function Problem() {
             </div>
             <h3 className="text-sm font-medium text-[#2E7D32]">Depois — Tudo na palma da mão</h3>
           </div>
-          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 w-full">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 w-full">
             <PhoneApp />
-            <ul className="space-y-2.5 w-full max-w-[260px]">
+            <ul className="space-y-3 w-full max-w-[260px]">
               {[
                 "Dados na nuvem, em tempo real",
                 "Laudos PDF automáticos",
