@@ -4,20 +4,11 @@ const footerLinks = {
   Produto: [
     { label: "Funcionalidades", href: "#funcionalidades" },
     { label: "Como Funciona", href: "#como-funciona" },
-    { label: "Preços", href: "#" },
     { label: "FAQ", href: "#faq" },
   ],
-  Empresa: [
-    { label: "Sobre", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Carreiras", href: "#" },
-    { label: "Contato", href: "#" },
-  ],
   Legal: [
-    { label: "Privacidade", href: "#" },
-    { label: "LGPD", href: "#" },
-    { label: "Termos de Uso", href: "#" },
-    { label: "Cookies", href: "#" },
+    { label: "Privacidade", href: "/privacidade" },
+    { label: "Termos de Uso", href: "/termos-de-uso" },
   ],
 }
 
@@ -77,9 +68,11 @@ export function Footer() {
           <p className="text-xs text-[#676767]">
             &copy; {new Date().getFullYear()} NR-13 Pro. Todos os direitos reservados.
           </p>
-          <p className="text-xs text-[#9E9E9E]">
-            Flux Soluções Digitais — CNPJ: 58.440.767/0001-11
-          </p>
+          <div className="flex items-center gap-4">
+            <a href="/privacidade" className="text-xs text-[#9E9E9E] hover:text-[#676767] transition-colors">Privacidade</a>
+            <a href="/termos-de-uso" className="text-xs text-[#9E9E9E] hover:text-[#676767] transition-colors">Termos</a>
+            <span className="text-xs text-[#9E9E9E]">Flux Soluções Digitais — CNPJ: 58.440.767/0001-11</span>
+          </div>
         </div>
       </Container>
     </footer>
