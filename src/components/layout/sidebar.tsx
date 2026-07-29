@@ -65,7 +65,7 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
     <>
       <div className={cn("p-4 border-b border-sidebar-border", collapsed ? "flex justify-center" : "")}>
         <div className={cn("flex items-center gap-2.5", collapsed && "flex-col")}>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sidebar-primary to-blue-500 flex items-center justify-center text-sidebar-primary-foreground text-sm font-bold shrink-0 shadow-sm">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center text-primary-foreground text-sm font-bold shrink-0 shadow-sm">
             N
           </div>
           {!collapsed && (
@@ -121,8 +121,8 @@ export function Sidebar() {
     <>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger>
-          <div className="fixed top-3 left-3 z-50 md:hidden flex items-center justify-center h-9 w-9 rounded-lg border border-slate-200 bg-white/90 backdrop-blur-sm shadow-sm cursor-pointer">
-            <Menu className="h-4 w-4 text-slate-700" />
+          <div className="fixed top-3 left-3 z-50 md:hidden flex items-center justify-center h-9 w-9 rounded-lg border border-border bg-card/90 backdrop-blur-sm cursor-pointer">
+            <Menu className="h-4 w-4 text-text-secondary" />
             <span className="sr-only">Abrir menu</span>
           </div>
         </SheetTrigger>

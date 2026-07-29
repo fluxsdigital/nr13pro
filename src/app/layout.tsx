@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Lora } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
 import { Sidebar } from "@/components/layout/sidebar"
@@ -12,6 +12,12 @@ const inter = Inter({
   display: "swap",
 })
 
+const lora = Lora({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   title: "NR-13 Pro — Gestão de Conformidade de Equipamentos",
   description:
@@ -20,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} h-full antialiased`}>
+    <html lang="pt-BR" className={`${inter.variable} ${lora.variable} h-full antialiased`}>
       <body className="min-h-full flex bg-background text-foreground">
         <SidebarProvider>
           <Sidebar />
