@@ -16,60 +16,6 @@ const badges = [
   "100% em Nuvem",
 ]
 
-const floatingCards = [
-  { id: "inspecao", icon: "✔", label: "Inspeção concluída", color: "#2E7D32", x: -20, y: -10 },
-  { id: "pdf", icon: "📄", label: "PDF gerado", color: "#C56A2D", x: 20, y: -15 },
-  { id: "fotos", icon: "📷", label: "8 fotos anexadas", color: "#C56A2D", x: 22, y: 5 },
-  { id: "proxima", icon: "📅", label: "Próx. inspeção", sub: "15/09/2026", color: "#D18A00", x: -22, y: 12 },
-  { id: "conforme", icon: "✔", label: "NR-13 Conforme", color: "#2E7D32", x: -25, y: 2 },
-  { id: "certificado", icon: "⚠", label: "Vence em 12 dias", color: "#C0392B", x: 18, y: -5 },
-]
-
-function FloatingCard({
-  card,
-  mouseX,
-  mouseY,
-  prefersReducedMotion,
-  index,
-}: {
-  card: (typeof floatingCards)[0]
-  mouseX: ReturnType<typeof useMotionValue<number>>
-  mouseY: ReturnType<typeof useMotionValue<number>>
-  prefersReducedMotion: boolean
-  index: number
-}) {
-  const cardX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-10, 10]), { stiffness: 80, damping: 15 })
-  const cardY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-10, 10]), { stiffness: 80, damping: 15 })
-
-  return (
-    <motion.div
-      initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.9, y: 10 }}
-      animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.9 + index * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-      style={{
-        ...(prefersReducedMotion ? {} : { x: cardX, y: cardY }),
-        left: `${50 + card.x}%`,
-        top: `${50 + card.y}%`,
-      }}
-      className="hidden lg:flex absolute z-20"
-    >
-      <motion.div
-        animate={prefersReducedMotion ? {} : { y: [0, -3, 0] }}
-        transition={{ duration: 4 + index * 0.5, repeat: Infinity, ease: "easeInOut", delay: index * 0.3 }}
-        className="bg-white/80 backdrop-blur-xl border border-white/30 rounded-lg px-3 py-2 shadow-[0_4px_20px_rgba(23,23,23,0.08)] flex items-center gap-2 whitespace-nowrap"
-      >
-        <span className="text-xs">{card.icon}</span>
-        <div>
-          <span className="text-xs font-medium" style={{ color: card.color }}>{card.label}</span>
-          {"sub" in card && card.sub && (
-            <span className="text-[10px] text-[#676767] ml-1">{card.sub}</span>
-          )}
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
 export function Hero() {
   const { prefersReducedMotion } = useReducedMotion()
   const heroRef = useRef<HTMLDivElement>(null)
@@ -209,33 +155,6 @@ export function Hero() {
           >
             <div className="relative">
               <SafariMockup />
-
-              {!prefersReducedMotion && (
-                <svg
-                  className="absolute inset-0 w-full h-full pointer-events-none z-10"
-                  viewBox="0 0 600 500"
-                  preserveAspectRatio="none"
-                  style={{ opacity: 0.12 }}
-                >
-                  <line x1="0" y1="80" x2="200" y2="100" stroke="#C56A2D" strokeWidth="0.5" />
-                  <line x1="600" y1="60" x2="400" y2="100" stroke="#C56A2D" strokeWidth="0.5" />
-                  <line x1="600" y1="250" x2="420" y2="220" stroke="#C56A2D" strokeWidth="0.5" />
-                  <line x1="0" y1="350" x2="200" y2="280" stroke="#C56A2D" strokeWidth="0.5" />
-                  <line x1="0" y1="200" x2="180" y2="200" stroke="#C56A2D" strokeWidth="0.5" />
-                  <line x1="600" y1="380" x2="400" y2="340" stroke="#C56A2D" strokeWidth="0.5" />
-                </svg>
-              )}
-
-              {floatingCards.map((card, i) => (
-                <FloatingCard
-                  key={card.id}
-                  card={card}
-                  mouseX={mouseX}
-                  mouseY={mouseY}
-                  prefersReducedMotion={prefersReducedMotion}
-                  index={i}
-                />
-              ))}
             </div>
           </motion.div>
         </div>
