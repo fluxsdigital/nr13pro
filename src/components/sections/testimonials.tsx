@@ -12,16 +12,7 @@ const testimonials = [
     text: "Reduzimos em 60% o tempo de emissão de laudos. O checklist digital no celular transformou a forma como trabalhamos em campo.",
     result: "60% mais rápido",
     rating: 5,
-    avatar: (
-      <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
-        <rect width="36" height="36" rx="18" fill="#F8F0E8" />
-        <circle cx="18" cy="13" r="5" fill="#DDB895" />
-        <ellipse cx="18" cy="28" rx="11" ry="8" fill="#DDB895" />
-        <circle cx="15" cy="12" r="1" fill="#8B6914" />
-        <circle cx="21" cy="12" r="1" fill="#8B6914" />
-        <path d="M15 16c1 .5 3 .5 4 0" stroke="#8B6914" strokeWidth="0.6" fill="none" />
-      </svg>
-    ),
+    avatar: { src: "https://i.pravatar.cc/80?img=11", seed: "carlos" },
   },
   {
     name: "Ana Oliveira",
@@ -30,16 +21,7 @@ const testimonials = [
     text: "O QR Code foi um divisor de águas. Agora qualquer técnico escaneia e tem todo o histórico da válvula na mão. Simplesmente essencial.",
     result: "100% digital",
     rating: 5,
-    avatar: (
-      <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
-        <rect width="36" height="36" rx="18" fill="#F0E8F0" />
-        <circle cx="18" cy="13" r="5" fill="#E8C8D0" />
-        <ellipse cx="18" cy="28" rx="11" ry="8" fill="#E8C8D0" />
-        <circle cx="15" cy="12" r="1" fill="#8B6050" />
-        <circle cx="21" cy="12" r="1" fill="#8B6050" />
-        <path d="M14 17c1.5 1 4 1 6 0" stroke="#8B6050" strokeWidth="0.6" fill="none" />
-      </svg>
-    ),
+    avatar: { src: "https://i.pravatar.cc/80?img=5", seed: "ana" },
   },
   {
     name: "Pedro Santos",
@@ -48,16 +30,7 @@ const testimonials = [
     text: "A gestão de prazos de vencimento acabou com nossas não conformidades. O dashboard dá visibilidade total do parque de válvulas.",
     result: "Zero não conformidades",
     rating: 5,
-    avatar: (
-      <svg viewBox="0 0 36 36" fill="none" className="w-full h-full">
-        <rect width="36" height="36" rx="18" fill="#E8F0E8" />
-        <circle cx="18" cy="13" r="5" fill="#C8D8B8" />
-        <ellipse cx="18" cy="28" rx="11" ry="8" fill="#C8D8B8" />
-        <circle cx="15" cy="12" r="1" fill="#5B6B3B" />
-        <circle cx="21" cy="12" r="1" fill="#5B6B3B" />
-        <path d="M15 16c1 .5 3 .5 4 0" stroke="#5B6B3B" strokeWidth="0.6" fill="none" />
-      </svg>
-    ),
+    avatar: { src: "https://i.pravatar.cc/80?img=53", seed: "pedro" },
   },
 ]
 
@@ -92,7 +65,11 @@ export function Testimonials() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
-                  {t.avatar}
+                  <img
+                    src={t.avatar.src}
+                    alt={t.name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
                   <div className="text-sm font-medium text-[#171717]">{t.name}</div>

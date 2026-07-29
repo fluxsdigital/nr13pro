@@ -75,7 +75,7 @@ export function Hero() {
         />
       </div>
 
-      <Container className="relative flex-1 flex flex-col justify-center py-8 sm:py-12">
+      <Container className="relative flex-1 flex flex-col justify-center pt-20 sm:pt-24 pb-8 sm:pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
