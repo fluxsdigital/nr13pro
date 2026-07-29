@@ -1,9 +1,9 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { QrCode, FileText, Cloud } from "lucide-react"
 import { Section } from "@/components/landing/section"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-import { cn } from "@/lib/utils"
+import { useReducedMotion } from "@/components/landing/motion-provider"
 
 const items = [
   {
@@ -23,44 +23,51 @@ const items = [
   },
 ]
 
+const container = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.12 },
+  },
+}
+
+const cardVariant = {
+  hidden: { y: 30, opacity: 0 },
+  show: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+  },
+}
+
 export function Benefits() {
+  const reduced = useReducedMotion()
+
   return (
     <Section
       title="Por que o NR-13 Pro?"
       subtitle="Três razões pelas quais engenheiros e inspetores estão migrando do papel para nossa plataforma."
     >
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {items.map((item, i) => (
-          <BenefitCard key={item.title} item={item} index={i} />
+      <motion.div
+        className="mt-10 grid gap-6 md:grid-cols-3"
+        variants={reduced ? undefined : container}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
+      >
+        {items.map((b) => (
+          <motion.div
+            key={b.title}
+            variants={reduced ? undefined : cardVariant}
+            className="rounded-2xl border border-border bg-white p-8 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white">
+              <b.icon className="h-6 w-6" />
+            </div>
+            <h3 className="mt-6 text-lg font-semibold text-text-primary">{b.title}</h3>
+            <p className="mt-3 text-sm leading-relaxed text-text-secondary">{b.desc}</p>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </Section>
-  )
-}
-
-function BenefitCard({
-  item,
-  index,
-}: {
-  item: { icon: React.ElementType; title: string; desc: string }
-  index: number
-}) {
-  const { ref, isVisible } = useScrollAnimation()
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "rounded-2xl border border-border bg-white p-8 transition-all duration-500 hover:shadow-card-hover",
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-      )}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white">
-        <item.icon className="h-6 w-6" />
-      </div>
-      <h3 className="mt-6 text-lg font-semibold text-text-primary">{item.title}</h3>
-      <p className="mt-3 text-sm leading-relaxed text-text-secondary">{item.desc}</p>
-    </div>
   )
 }

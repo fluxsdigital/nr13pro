@@ -1,23 +1,23 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Container } from "@/components/landing/container"
 import { Button } from "@/components/landing/button"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-import { cn } from "@/lib/utils"
+import { useReducedMotion } from "@/components/landing/motion-provider"
 
 export function CTA() {
-  const { ref, isVisible } = useScrollAnimation()
+  const reduced = useReducedMotion()
 
   return (
     <section id="demo">
       <Container>
-        <div
-          ref={ref}
-          className={cn(
-            "relative my-20 sm:my-28 overflow-hidden rounded-3xl bg-primary px-6 py-16 sm:px-12 sm:py-20 text-center transition-all duration-700",
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
-          )}
+        <motion.div
+          initial={reduced ? undefined : { y: 50, opacity: 0, scale: 0.97 }}
+          whileInView={reduced ? undefined : { y: 0, opacity: 1, scale: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
+          className="relative my-20 sm:my-28 overflow-hidden rounded-3xl bg-primary px-6 py-16 sm:px-12 sm:py-20 text-center"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-3xl" />
@@ -29,7 +29,7 @@ export function CTA() {
 
             <h2 className="mt-6 text-[clamp(1.8rem,4vw,2.75rem)] font-semibold leading-tight tracking-tight text-white">
               Pronto para transformar{" "}
-              <span className="text-accent">suas inspeções?</span>
+              <span className="text-white/70">suas inspeções?</span>
             </h2>
 
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/80">
@@ -62,7 +62,7 @@ export function CTA() {
               Sem compromisso. Sem contrato fidelidade.
             </p>
           </div>
-        </div>
+        </motion.div>
       </Container>
     </section>
   )

@@ -1,9 +1,9 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { QrCode, ClipboardCheck, Camera, FileText, History } from "lucide-react"
 import { Section } from "@/components/landing/section"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-import { cn } from "@/lib/utils"
+import { useReducedMotion } from "@/components/landing/motion-provider"
 
 const steps = [
   {
@@ -34,6 +34,8 @@ const steps = [
 ]
 
 export function HowItWorks() {
+  const reduced = useReducedMotion()
+
   return (
     <Section
       id="como-funciona"
@@ -42,51 +44,36 @@ export function HowItWorks() {
     >
       <div className="mt-10 relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-border hidden md:block" />
-        <div className="space-y-8 md:space-y-0">
+        <div className="space-y-0">
           {steps.map((step, i) => (
-            <Step key={step.title} step={step} index={i} />
+            <motion.div
+              key={step.title}
+              initial={reduced ? undefined : { y: 30, opacity: 0 }}
+              whileInView={reduced ? undefined : { y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
+              className="flex flex-col md:flex-row gap-6 md:gap-8 pb-8 md:pb-12 last:pb-0"
+            >
+              <div className="relative flex items-center justify-center md:justify-start">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white shadow-sm relative z-10">
+                  <step.icon className="h-5 w-5" />
+                </div>
+                <span className="md:hidden ml-4 text-sm font-semibold text-text-primary">
+                  {step.title}
+                </span>
+              </div>
+              <div className="md:pt-2 flex-1">
+                <h3 className="hidden md:block text-base font-semibold text-text-primary">
+                  {step.title}
+                </h3>
+                <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+                  {step.desc}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </Section>
-  )
-}
-
-function Step({
-  step,
-  index,
-}: {
-  step: { icon: React.ElementType; title: string; desc: string }
-  index: number
-}) {
-  const { ref, isVisible } = useScrollAnimation()
-  const Icon = step.icon
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "flex flex-col md:flex-row gap-6 md:gap-8 pb-8 md:pb-12 last:pb-0 transition-all duration-700",
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-      )}
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      <div className="relative flex items-center justify-center md:justify-start">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white shadow-sm relative z-10">
-          <Icon className="h-5 w-5" />
-        </div>
-        <span className="md:hidden ml-4 text-sm font-semibold text-text-primary">
-          {step.title}
-        </span>
-      </div>
-      <div className="md:pt-2 flex-1">
-        <h3 className="hidden md:block text-base font-semibold text-text-primary">
-          {step.title}
-        </h3>
-        <p className="mt-1 text-sm leading-relaxed text-text-secondary">
-          {step.desc}
-        </p>
-      </div>
-    </div>
   )
 }

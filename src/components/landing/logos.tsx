@@ -1,8 +1,8 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { Container } from "@/components/landing/container"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-import { cn } from "@/lib/utils"
+import { useReducedMotion } from "@/components/landing/motion-provider"
 
 const placeholders = [
   "Indústria ABC",
@@ -14,7 +14,7 @@ const placeholders = [
 ]
 
 export function Logos() {
-  const { ref, isVisible } = useScrollAnimation()
+  const reduced = useReducedMotion()
 
   return (
     <section className="py-16 border-b border-border">
@@ -22,27 +22,25 @@ export function Logos() {
         <p className="text-center text-xs font-medium uppercase tracking-widest text-text-muted mb-8">
           Utilizado por profissionais de empresas como
         </p>
-        <div
-          ref={ref}
+        <motion.div
           className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
         >
           {placeholders.map((name, i) => (
-            <div
+            <motion.span
               key={name}
-              className={cn(
-                "transition-all duration-500",
-                isVisible
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-4 opacity-0"
-              )}
-              style={{ transitionDelay: `${i * 80}ms` }}
+              initial={reduced ? undefined : { y: 15, opacity: 0 }}
+              whileInView={reduced ? undefined : { y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
+              className="text-lg font-semibold tracking-tight text-text-muted/40 select-none"
             >
-              <span className="text-lg font-semibold tracking-tight text-text-muted/40 select-none">
-                {name}
-              </span>
-            </div>
+              {name}
+            </motion.span>
           ))}
-        </div>
+        </motion.div>
       </Container>
     </section>
   )

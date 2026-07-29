@@ -1,8 +1,9 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { Container } from "@/components/landing/container"
+import { useReducedMotion } from "@/components/landing/motion-provider"
 
 interface SectionProps {
   id?: string
@@ -23,12 +24,11 @@ export function Section({
   containerClassName,
   dark,
 }: SectionProps) {
-  const { ref, isVisible } = useScrollAnimation<HTMLDivElement>()
+  const reduced = useReducedMotion()
 
   return (
     <section
       id={id}
-      ref={ref}
       className={cn(
         "py-20 sm:py-28",
         dark && "bg-primary text-white",
@@ -37,11 +37,12 @@ export function Section({
     >
       <Container className={containerClassName}>
         {(title || subtitle) && (
-          <div
-            className={cn(
-              "mx-auto max-w-2xl text-center transition-all duration-700",
-              isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-            )}
+          <motion.div
+            initial={reduced ? undefined : { y: 30, opacity: 0 }}
+            whileInView={reduced ? undefined : { y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
+            className="mx-auto max-w-2xl text-center"
           >
             {title && (
               <h2
@@ -63,16 +64,9 @@ export function Section({
                 {subtitle}
               </p>
             )}
-          </div>
+          </motion.div>
         )}
-        <div
-          className={cn(
-            "transition-all duration-700 delay-150",
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          )}
-        >
-          {children}
-        </div>
+        {children}
       </Container>
     </section>
   )

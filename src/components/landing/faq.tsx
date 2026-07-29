@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { motion } from "framer-motion"
 import { ChevronDown } from "lucide-react"
 import { Section } from "@/components/landing/section"
-import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { useReducedMotion } from "@/components/landing/motion-provider"
 import { cn } from "@/lib/utils"
 
 const faqs = [
@@ -51,6 +52,7 @@ const faqs = [
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const reduced = useReducedMotion()
 
   return (
     <Section
@@ -61,63 +63,38 @@ export function FAQ() {
       <div className="mt-10 mx-auto max-w-3xl">
         <div className="divide-y divide-border rounded-2xl border border-border bg-white">
           {faqs.map((faq, i) => (
-            <FAQItem
+            <motion.div
               key={i}
-              faq={faq}
-              isOpen={openIndex === i}
-              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
-              index={i}
-            />
+              initial={reduced ? undefined : { y: 15, opacity: 0 }}
+              whileInView={reduced ? undefined : { y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ delay: i * 0.04, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
+            >
+              <button
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-card-hover"
+                aria-expanded={openIndex === i}
+              >
+                <span className="text-sm font-medium text-text-primary">{faq.q}</span>
+                <ChevronDown
+                  className={cn(
+                    "h-4 w-4 shrink-0 text-text-muted transition-transform duration-200",
+                    openIndex === i && "rotate-180"
+                  )}
+                />
+              </button>
+              <div
+                className={cn(
+                  "overflow-hidden transition-all duration-200",
+                  openIndex === i ? "max-h-96 pb-5" : "max-h-0"
+                )}
+              >
+                <p className="px-6 text-sm leading-relaxed text-text-secondary">{faq.a}</p>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </Section>
-  )
-}
-
-function FAQItem({
-  faq,
-  isOpen,
-  onToggle,
-  index,
-}: {
-  faq: { q: string; a: string }
-  isOpen: boolean
-  onToggle: () => void
-  index: number
-}) {
-  const { ref, isVisible } = useScrollAnimation()
-
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "transition-all duration-500",
-        isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-      )}
-      style={{ transitionDelay: `${index * 50}ms` }}
-    >
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition-colors hover:bg-card-hover"
-        aria-expanded={isOpen}
-      >
-        <span className="text-sm font-medium text-text-primary">{faq.q}</span>
-        <ChevronDown
-          className={cn(
-            "h-4 w-4 shrink-0 text-text-muted transition-transform duration-200",
-            isOpen && "rotate-180"
-          )}
-        />
-      </button>
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-200",
-          isOpen ? "max-h-96 pb-5" : "max-h-0"
-        )}
-      >
-        <p className="px-6 text-sm leading-relaxed text-text-secondary">{faq.a}</p>
-      </div>
-    </div>
   )
 }
