@@ -4,11 +4,11 @@ import { useEffect, useMemo, useState } from "react"
 import { equipamentoService, clienteService } from "@/lib/services"
 import type { Equipamento, Cliente } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Plus, Search, Pencil, Trash2 } from "lucide-react"
+import { Plus, Search, Pencil, Trash2, ArrowRight, FlaskConical, Building2, MapPin } from "lucide-react"
 import Link from "next/link"
 
 const statusMap: Record<string, "destructive" | "default" | "secondary" | "outline"> = {
@@ -57,6 +57,8 @@ export default function Equipamentos() {
     data.some((eq) => eq.clienteId === c.id)
   ).length
 
+  const nomeCliente = (id: string) => clientes.find((c) => c.id === id)?.nome ?? "—"
+
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -75,6 +77,7 @@ export default function Equipamentos() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
+            <FlaskConical className="h-8 w-8 text-blue-600 shrink-0" />
             <div>
               <p className="text-2xl font-bold text-slate-900">{data.length}</p>
               <p className="text-xs text-slate-500">Total</p>
@@ -83,6 +86,7 @@ export default function Equipamentos() {
         </Card>
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
+            <Building2 className="h-8 w-8 text-violet-600 shrink-0" />
             <div>
               <p className="text-2xl font-bold text-slate-900">{porCliente}</p>
               <p className="text-xs text-slate-500">Empresas</p>
@@ -91,6 +95,9 @@ export default function Equipamentos() {
         </Card>
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
+            <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+              <div className="h-3 w-3 rounded-full bg-emerald-500" />
+            </div>
             <div>
               <p className="text-2xl font-bold text-slate-900">
                 {data.filter((eq) => eq.tipo === "vaso").length}
@@ -101,6 +108,9 @@ export default function Equipamentos() {
         </Card>
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
+            <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+              <div className="h-3 w-3 rounded-full bg-amber-500" />
+            </div>
             <div>
               <p className="text-2xl font-bold text-slate-900">
                 {data.filter((eq) => eq.tipo === "caldeira").length}
@@ -136,88 +146,73 @@ export default function Equipamentos() {
         </div>
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-slate-900 text-lg">
-            {filtroCliente || "Todos os Equipamentos"}
-            <span className="text-sm font-normal text-slate-500 ml-2">({filtered.length})</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50">
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Tag</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Descrição</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Cliente</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Tipo</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Cat.</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Classe</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Local</th>
-                  <th className="text-right py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-400">Nenhum equipamento encontrado</td>
-                  </tr>
-                ) : (
-                  filtered.map((eq) => {
-                    const catStr = eq.categoria ?? ""
-                    return (
-                      <tr
-                        key={eq.id}
-                        className="border-b border-slate-100 hover:bg-slate-50 transition-colors"
-                      >
-                        <td
-                          className="py-3 px-4 font-medium text-slate-900 cursor-pointer"
-                          onClick={() => window.location.href = `/equipamentos/${eq.id}`}
-                        >{eq.tag}</td>
-                        <td
-                          className="py-3 px-4 text-slate-600 cursor-pointer"
-                          onClick={() => window.location.href = `/equipamentos/${eq.id}`}
-                        >{eq.descricao}</td>
-                        <td className="py-3 px-4 text-slate-600">
-                          {clientes.find((c) => c.id === eq.clienteId)?.nome ?? "—"}
-                        </td>
-                        <td className="py-3 px-4">
-                          <Badge variant="outline" className="capitalize border-slate-200 text-slate-600">{eq.tipo}</Badge>
-                        </td>
-                        <td className="py-3 px-4">
-                          <Badge variant={statusMap[catStr] ?? "outline"}>
-                            {catStr || "N/A"}
-                          </Badge>
-                        </td>
-                        <td className="py-3 px-4 text-slate-700 font-medium">{eq.classeFluido}</td>
-                        <td className="py-3 px-4 text-slate-600">{eq.localizacao}</td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Link href={`/equipamentos/${eq.id}/editar`}>
-                              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600">
-                                <Pencil className="h-3.5 w-3.5" />
-                              </Button>
-                            </Link>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 text-slate-400 hover:text-red-600"
-                              onClick={() => handleDelete(eq.id, eq.tag)}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
+      {filtered.length === 0 ? (
+        <Card className="border-slate-200 shadow-sm">
+          <CardContent className="py-16 text-center">
+            <FlaskConical className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+            <p className="text-slate-600 text-lg">Nenhum equipamento encontrado</p>
+            <p className="text-slate-400 text-sm mt-1">
+              {filtroCliente || search ? "Tente alterar os filtros" : "Cadastre o primeiro equipamento clicando no botão acima"}
+            </p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div>
+          {filtered.map((eq) => {
+            const catStr = eq.categoria ?? ""
+            return (
+              <div key={eq.id} className="mb-6 last:mb-0">
+                <Card className="border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
+                  <Link href={`/equipamentos/${eq.id}`}>
+                    <CardContent className="p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                            <FlaskConical className="h-5 w-5 text-blue-600" />
                           </div>
-                        </td>
-                      </tr>
-                    )
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <p className="text-sm font-semibold text-slate-900">{eq.tag}</p>
+                              <Badge variant="outline" className="border-slate-200 text-slate-600 capitalize text-xs">{eq.tipo}</Badge>
+                              {catStr && <Badge className="text-xs">{catStr}</Badge>}
+                            </div>
+                            <p className="text-xs text-slate-500 truncate mt-0.5">{eq.descricao}</p>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+                              <span className="flex items-center gap-1 text-xs text-blue-600">
+                                <Building2 className="h-3 w-3 shrink-0" />
+                                {nomeCliente(eq.clienteId)}
+                              </span>
+                              <span className="flex items-center gap-1 text-xs text-slate-600">
+                                <MapPin className="h-3 w-3 shrink-0" />
+                                {eq.localizacao}
+                              </span>
+                              <span className="text-xs text-slate-400 font-medium">{eq.classeFluido}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0 sm:pl-3">
+                          <Link href={`/equipamentos/${eq.id}/editar`} onClick={(e) => e.stopPropagation()}>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600">
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                          </Link>
+                          <Button
+                            variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-red-600"
+                            onClick={(e) => { e.stopPropagation(); handleDelete(eq.id, eq.tag) }}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                          <ArrowRight className="h-4 w-4 text-slate-400 shrink-0 hidden sm:block" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Link>
+                </Card>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
