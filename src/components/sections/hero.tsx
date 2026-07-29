@@ -99,7 +99,7 @@ export function Hero() {
       ref={heroRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative pt-24 sm:pt-28 pb-12 sm:pb-20 overflow-hidden"
+      className="relative min-h-screen flex flex-col overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-[#F7F5F2] to-white pointer-events-none" />
 
@@ -129,7 +129,7 @@ export function Hero() {
         />
       </div>
 
-      <Container className="relative">
+      <Container className="relative flex-1 flex flex-col justify-center py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
@@ -190,7 +190,6 @@ export function Hero() {
                   </svg>
                   Assinar agora — R$ 197/mês
                 </a>
-
               </div>
 
               <div className="mt-3 flex items-center gap-2 text-xs text-[#2E7D32]">
@@ -199,52 +198,6 @@ export function Hero() {
                 </svg>
                 Cancele quando quiser, sem multa
               </div>
-            </motion.div>
-
-            <motion.div
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.7 }}
-              className="mt-6 sm:mt-8 grid grid-cols-3 gap-4 sm:gap-6 max-w-sm"
-            >
-              {[
-                { label: "Empresas", end: 350, suffix: "+" },
-                { label: "Inspeções", end: 12000, suffix: "+" },
-                { label: "Satisfação", end: 98, suffix: "%" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-xl sm:text-2xl font-semibold text-[#171717]">
-                    <AnimatedCounter end={stat.end} suffix={stat.suffix} />
-                  </div>
-                  <div className="text-xs text-[#676767] mt-0.5">{stat.label}</div>
-                </div>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={prefersReducedMotion ? {} : {
-                hidden: { opacity: 0 },
-                visible: { opacity: 1, transition: { staggerChildren: 0.06 } },
-              }}
-              className="flex flex-wrap items-center gap-2 mt-4 sm:mt-5"
-            >
-              {badges.map((badge) => (
-                <motion.span
-                  key={badge}
-                  variants={prefersReducedMotion ? {} : {
-                    hidden: { opacity: 0, y: 8, scale: 0.95 },
-                    visible: { opacity: 1, y: 0, scale: 1 },
-                  }}
-                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white border border-[#EDE9E3] text-[11px] text-[#676767]"
-                >
-                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                  {badge}
-                </motion.span>
-              ))}
             </motion.div>
           </motion.div>
 
@@ -286,6 +239,54 @@ export function Hero() {
             </div>
           </motion.div>
         </div>
+
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+          animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 1 }}
+          className="mt-8 sm:mt-10"
+        >
+          <div className="flex items-center justify-center gap-8 sm:gap-14">
+            {[
+              { label: "Empresas", end: 350, suffix: "+" },
+              { label: "Inspeções", end: 12000, suffix: "+" },
+              { label: "Satisfação", end: 98, suffix: "%" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-xl sm:text-2xl font-semibold text-[#171717]">
+                  <AnimatedCounter end={stat.end} suffix={stat.suffix} />
+                </div>
+                <div className="text-xs text-[#676767] mt-0.5">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={prefersReducedMotion ? {} : {
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.04 } },
+            }}
+            className="flex flex-wrap items-center justify-center gap-2 mt-4 sm:mt-5"
+          >
+            {badges.map((badge) => (
+              <motion.span
+                key={badge}
+                variants={prefersReducedMotion ? {} : {
+                  hidden: { opacity: 0, y: 6, scale: 0.95 },
+                  visible: { opacity: 1, y: 0, scale: 1 },
+                }}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white border border-[#EDE9E3] text-[11px] text-[#676767]"
+              >
+                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                {badge}
+              </motion.span>
+            ))}
+          </motion.div>
+        </motion.div>
       </Container>
     </section>
   )
