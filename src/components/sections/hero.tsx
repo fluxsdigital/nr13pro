@@ -2,6 +2,7 @@
 
 import { useRef, useCallback } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import type { MotionValue } from "framer-motion"
 import { Container } from "@/components/ui/container"
 import { SafariMockup } from "./safari-mockup"
 import { AnimatedCounter } from "./animated-counter"

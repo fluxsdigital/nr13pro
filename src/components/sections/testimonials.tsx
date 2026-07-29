@@ -90,7 +90,7 @@ export function Testimonials() {
           </svg>
         </div>
 
-        <div className="bg-[#FAFAFA] px-4 py-2 flex items-center gap-2 border-b border-[#EDE9E3]">
+        <div className="bg-[#F7F5F2] px-4 py-2 flex items-center gap-2 border-b border-[#EDE9E3]">
           <img src="https://i.pravatar.cc/80?img=11" alt="" className="w-5 h-5 rounded-full object-cover" />
           <span className="text-xs text-[#676767]">
             <span className="font-semibold text-[#171717]">carlosmendes_inspetor</span> e
