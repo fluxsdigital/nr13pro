@@ -1,23 +1,20 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import type { Metadata } from "next"
 import Lenis from "lenis"
-import { MotionProvider } from "@/components/landing/motion-provider"
-import { Navbar } from "@/components/landing/navbar"
-import { Hero } from "@/components/landing/hero"
-import { Logos } from "@/components/landing/logos"
-import { Benefits } from "@/components/landing/benefits"
-import { Problem } from "@/components/landing/problem"
-import { HowItWorks } from "@/components/landing/how-it-works"
-import { Showcase } from "@/components/landing/showcase"
-import { Features } from "@/components/landing/features"
-import { DashboardPreview } from "@/components/landing/dashboard-preview"
-import { Differentials } from "@/components/landing/differentials"
-import { Testimonials } from "@/components/landing/testimonials"
-import { FAQ } from "@/components/landing/faq"
-import { CTA } from "@/components/landing/cta"
-import { Footer } from "@/components/landing/footer"
+import { MotionProvider } from "@/components/sections/motion-provider"
+import { Navbar } from "@/components/sections/navbar"
+import { Hero } from "@/components/sections/hero"
+import { Logos } from "@/components/sections/logos"
+import { Benefits } from "@/components/sections/benefits"
+import { Problem } from "@/components/sections/problem"
+import { Timeline } from "@/components/sections/timeline"
+import { DashboardPreview } from "@/components/sections/dashboard"
+import { Features } from "@/components/sections/features"
+import { Testimonials } from "@/components/sections/testimonials"
+import { FAQ } from "@/components/sections/faq"
+import { CTA } from "@/components/sections/cta"
+import { Footer } from "@/components/sections/footer"
 
 export default function VendasPage() {
   const lenisRef = useRef<Lenis | null>(null)
@@ -25,7 +22,7 @@ export default function VendasPage() {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
@@ -49,17 +46,15 @@ export default function VendasPage() {
 
   return (
     <MotionProvider>
-      <div className="min-h-dvh bg-background text-text-primary">
+      <div className="min-h-dvh" style={{ backgroundColor: "#F7F5F2", color: "#171717" }}>
         <Navbar />
         <Hero />
         <Logos />
         <Benefits />
         <Problem />
-        <HowItWorks />
-        <Showcase />
-        <Features />
+        <Timeline />
         <DashboardPreview />
-        <Differentials />
+        <Features />
         <Testimonials />
         <FAQ />
         <CTA />

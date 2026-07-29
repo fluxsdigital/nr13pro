@@ -1,32 +1,61 @@
 import type { Metadata } from "next"
 
+const siteUrl = "https://nr13pro.com.br"
+
 export const metadata: Metadata = {
-  title: "NR-13 Pro — Plataforma de Inspeção de Válvulas | Conformidade NR-13",
+  title: {
+    default: "NR-13 Pro | Software para Inspeção de Válvulas",
+    template: "%s | NR-13 Pro",
+  },
   description:
-    "Software profissional para inspeção de válvulas industriais conforme NR-13. QR Code, laudos PDF automáticos, assinatura digital e armazenamento em nuvem.",
-  openGraph: {
-    title: "NR-13 Pro — Inspeção de Válvulas Profissional",
-    description:
-      "Cadastre válvulas, inspecione em campo com QR Code, gere laudos PDF e mantenha tudo na nuvem.",
-    type: "website",
-    locale: "pt_BR",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "NR-13 Pro — Inspeção de Válvulas Profissional",
-    description:
-      "Cadastre válvulas, inspecione em campo com QR Code, gere laudos PDF e mantenha tudo na nuvem.",
-  },
+    "Software completo para gestão de inspeção de válvulas conforme NR-13. Cadastro, QR Code, laudos PDF, assinatura digital e histórico na nuvem.",
   keywords: [
     "NR-13",
     "inspeção de válvulas",
-    "laudo NR-13",
-    "software inspeção",
-    "QR Code válvulas",
-    "gestão de ativos",
-    "conformidade NR-13",
+    "laudo técnico",
+    "válvula de segurança",
+    "gestão de inspeção",
+    "software NR-13",
+    "QR Code válvula",
+    "laudo PDF",
+    "inspeção industrial",
   ],
-  robots: "index, follow",
+  authors: [{ name: "NR-13 Pro" }],
+  creator: "NR-13 Pro",
+  publisher: "NR-13 Pro",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: siteUrl,
+    siteName: "NR-13 Pro",
+    title: "NR-13 Pro | Software para Inspeção de Válvulas",
+    description:
+      "Software completo para gestão de inspeção de válvulas conforme NR-13. Cadastro, QR Code, laudos PDF, assinatura digital e histórico na nuvem.",
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "NR-13 Pro",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NR-13 Pro | Software para Inspeção de Válvulas",
+    description:
+      "Software completo para gestão de inspeção de válvulas conforme NR-13.",
+    images: [`${siteUrl}/og-image.png`],
+    creator: "@nr13pro",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: siteUrl,
+  },
 }
 
 const jsonLd = {
@@ -34,27 +63,41 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
       name: "NR-13 Pro",
-      url: "https://nr13pro.vercel.app",
+      url: siteUrl,
+      logo: `${siteUrl}/logo.png`,
       description:
-        "Plataforma completa para gestão de inspeções de válvulas conforme a NR-13.",
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+55-19-99223-2149",
-        contactType: "sales",
+        "Software para gestão de inspeção de válvulas conforme NR-13.",
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "BR",
       },
     },
     {
       "@type": "SoftwareApplication",
+      "@id": `${siteUrl}/#software`,
       name: "NR-13 Pro",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description:
-        "Software para inspeção de válvulas industriais com QR Code, laudos PDF automáticos e assinatura digital.",
+        "Software completo para gestão de inspeção de válvulas conforme NR-13. Cadastro, QR Code, laudos PDF, assinatura digital e histórico na nuvem.",
       offers: {
         "@type": "Offer",
-        price: "179",
+        price: "0",
         priceCurrency: "BRL",
+      },
+      author: {
+        "@id": `${siteUrl}/#organization`,
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: "NR-13 Pro",
+      publisher: {
+        "@id": `${siteUrl}/#organization`,
       },
     },
   ],
