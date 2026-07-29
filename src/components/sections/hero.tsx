@@ -87,10 +87,7 @@ export function Hero() {
               animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8F0E8] border border-[#E8A96B]/20 text-xs text-[#C56A2D] font-medium mb-4 sm:mb-5">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8F0E8] text-xs text-[#C56A2D] font-medium mb-4 sm:mb-5">
                 Plataforma especializada em inspeção NR-13
               </div>
             </motion.div>
