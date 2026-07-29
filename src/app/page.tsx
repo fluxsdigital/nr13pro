@@ -144,14 +144,14 @@ export default function Dashboard() {
                 </Link>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {clientes.map((cli) => {
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                   {clientes.map((cli) => {
                     const p = progressoCliente(cli.id)
                     return (
                       <button
                         key={cli.id}
                         onClick={() => setFiltro(cli.id)}
-                        className="w-full block p-4 rounded-lg border border-border bg-white hover:bg-background transition-colors text-left"
+                        className="block p-4 rounded-lg border border-border bg-white hover:bg-background transition-colors text-left"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
@@ -204,8 +204,8 @@ export default function Dashboard() {
                 </Link>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  {[...inspecoes].reverse().map((ins) => {
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                   {[...inspecoes].reverse().map((ins) => {
                     const eq = equipamentos.find((e) => e.id === ins.equipamentoId)
                     const cliNome = eq ? clientes.find((c) => c.id === eq.clienteId)?.nome ?? "" : ""
                     return (
