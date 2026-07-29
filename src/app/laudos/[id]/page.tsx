@@ -277,7 +277,39 @@ export default function LaudoDetalhe() {
                     </Button>
                   </Link>
                 )}
-              </div>
+               </div>
+             </section>
+          )}
+
+          {/* Checklist */}
+          {inspecao && inspecao.checklist.length > 0 && (
+            <section className="mb-8">
+              <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">Checklist de Inspeção</h3>
+              {(() => {
+                const secoes = [...new Set(inspecao.checklist.map((c) => c.secao))]
+                return secoes.map((secao) => {
+                  const items = inspecao.checklist.filter((c) => c.secao === secao)
+                  return (
+                    <div key={secao} className="mb-3">
+                      <h4 className="text-sm font-semibold text-text-primary mb-2">{secao}</h4>
+                      <div className="space-y-1.5">
+                        {items.map((item, idx) => (
+                          <div key={idx} className="flex items-start gap-2 text-sm">
+                            <span className={`shrink-0 mt-0.5 w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
+                              item.ok === true ? "bg-success text-white" :
+                              item.ok === false ? "bg-red-100 text-red-600" :
+                              "border border-border text-text-muted"
+                            }`}>
+                              {item.ok === true ? "✓" : item.ok === false ? "✗" : ""}
+                            </span>
+                            <span className={item.ok === false ? "text-red-600" : "text-text-secondary"}>{item.item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })
+              })()}
             </section>
           )}
 
