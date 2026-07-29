@@ -78,7 +78,7 @@ export function Footer() {
             &copy; {new Date().getFullYear()} NR-13 Pro. Todos os direitos reservados.
           </p>
           <p className="text-xs text-[#9E9E9E]">
-            CNPJ: 00.000.000/0001-00
+            Flux Soluções Digitais — CNPJ: 58.440.767/0001-11
           </p>
         </div>
       </Container>
