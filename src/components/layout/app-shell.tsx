@@ -1,0 +1,24 @@
+"use client"
+
+import { usePathname } from "next/navigation"
+import { Sidebar } from "@/components/layout/sidebar"
+import { SidebarProvider } from "@/lib/sidebar-context"
+import { MainContent } from "@/components/layout/main-content"
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isLanding = pathname === "/vendas"
+
+  if (isLanding) {
+    return <>{children}</>
+  }
+
+  return (
+    <div className="flex min-h-full">
+      <SidebarProvider>
+        <Sidebar />
+        <MainContent>{children}</MainContent>
+      </SidebarProvider>
+    </div>
+  )
+}

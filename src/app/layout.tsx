@@ -2,9 +2,7 @@ import type { Metadata } from "next"
 import { Inter, Lora } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
-import { Sidebar } from "@/components/layout/sidebar"
-import { SidebarProvider } from "@/lib/sidebar-context"
-import { MainContent } from "@/components/layout/main-content"
+import { AppShell } from "@/components/layout/app-shell"
 
 const inter = Inter({
   variable: "--font-sans",
@@ -27,11 +25,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${inter.variable} ${lora.variable} h-full antialiased`}>
-      <body className="min-h-full flex bg-background text-foreground">
-        <SidebarProvider>
-          <Sidebar />
-          <MainContent>{children}</MainContent>
-        </SidebarProvider>
+      <body className="min-h-full bg-background text-foreground">
+        <AppShell>{children}</AppShell>
         <Toaster richColors closeButton />
       </body>
     </html>
