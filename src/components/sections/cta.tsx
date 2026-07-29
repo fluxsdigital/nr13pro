@@ -18,6 +18,21 @@ export function CTA() {
           className="relative bg-[#171717] rounded-2xl p-8 sm:p-12 lg:p-16 text-center overflow-hidden"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-[#C56A2D]/5 to-transparent pointer-events-none" />
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full pointer-events-none"
+            style={{
+              background: prefersReducedMotion
+                ? "none"
+                : "radial-gradient(circle, rgba(197, 106, 45, 0.15) 0%, transparent 70%)",
+              animation: prefersReducedMotion ? "none" : "cta-glow 4s ease-in-out infinite alternate",
+            }}
+          />
+          <style>{`
+            @keyframes cta-glow {
+              0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.8); }
+              100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            }
+          `}</style>
           <div className="relative">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-white tracking-tight">
               Comece agora por R$ 197/mês
@@ -28,13 +43,13 @@ export function CTA() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <a
                 href="/checkout"
-                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-white text-[#171717] hover:bg-[#F1ECE6] shadow-sm"
+                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base bg-white text-[#171717] hover:bg-[#F1ECE6] shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
               >
                 Assinar agora
               </a>
               <a
                 href="mailto:contato@nr13pro.com.br"
-                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base text-[#9E9E9E] hover:text-white hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base text-[#9E9E9E] hover:text-white hover:bg-white/10"
               >
                 Falar com Consultor
               </a>

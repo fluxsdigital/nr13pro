@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Container } from "@/components/ui/container"
+import { useReducedMotion } from "./motion-provider"
 
 type SectionProps = {
   children: React.ReactNode
@@ -13,15 +14,17 @@ type SectionProps = {
 }
 
 export function Section({ children, id, className = "", title, subtitle, containerClassName = "" }: SectionProps) {
+  const { prefersReducedMotion } = useReducedMotion()
+
   return (
     <section id={id} className={`py-16 sm:py-20 lg:py-24 ${className}`}>
       <Container className={containerClassName}>
         {(title || subtitle) && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 24, filter: "blur(8px)" }}
+            whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-12 sm:mb-16 text-center"
           >
             {title && (
@@ -36,7 +39,14 @@ export function Section({ children, id, className = "", title, subtitle, contain
             )}
           </motion.div>
         )}
-        {children}
+        <motion.div
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, scale: 0.98, filter: "blur(6px)" }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }}
+        >
+          {children}
+        </motion.div>
       </Container>
     </section>
   )

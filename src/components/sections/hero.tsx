@@ -24,29 +24,50 @@ export function Hero() {
       <Container className="relative">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
+            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8F0E8] border border-[#E8A96B]/20 text-xs text-[#C56A2D] font-medium mb-4 sm:mb-5">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
-              Software para Inspeção NR-13
-            </div>
+            <motion.div
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
+            >
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8F0E8] border border-[#E8A96B]/20 text-xs text-[#C56A2D] font-medium mb-4 sm:mb-5">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+                Software para Inspeção NR-13
+              </div>
+            </motion.div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#171717] tracking-tight leading-[1.1]">
+            <motion.h1
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+              className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#171717] tracking-tight leading-[1.1]"
+            >
               Inspeção de válvulas
               <br />
               <span className="text-[#C56A2D]">simples, digital e conforme</span>
-            </h1>
+            </motion.h1>
 
-            <p className="mt-4 sm:mt-5 text-base sm:text-lg text-[#676767] leading-relaxed max-w-lg">
+            <motion.p
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.45 }}
+              className="mt-4 sm:mt-5 text-base sm:text-lg text-[#676767] leading-relaxed max-w-lg"
+            >
               Gerencie inspeções, emita laudos técnicos e mantenha o histórico
               completo das suas válvulas — tudo em um só lugar.
-            </p>
+            </motion.p>
 
-            <div className="mt-6 sm:mt-8">
+            <motion.div
+              initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.96 }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
+              className="mt-6 sm:mt-8"
+            >
               <div className="flex items-baseline gap-1 mb-5">
                 <span className="text-3xl font-semibold text-[#171717]">R$ 197</span>
                 <span className="text-sm text-[#676767]">/mês</span>
@@ -54,7 +75,7 @@ export function Hero() {
 
               <a
                 href="/checkout"
-                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm h-11 w-full sm:w-auto sm:min-w-[240px]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm h-11 w-full sm:w-auto sm:min-w-[240px] hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
               >
                 Assinar agora — R$ 197/mês
               </a>
@@ -65,27 +86,39 @@ export function Hero() {
                 </svg>
                 Cancele quando quiser, sem multa
               </div>
-            </div>
+            </motion.div>
 
-            <div className="flex flex-wrap items-center gap-2 mt-6 sm:mt-8">
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={prefersReducedMotion ? {} : {
+                hidden: { opacity: 0 },
+                visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+              }}
+              className="flex flex-wrap items-center gap-2 mt-6 sm:mt-8"
+            >
               {badges.map((badge) => (
-                <span
+                <motion.span
                   key={badge}
+                  variants={prefersReducedMotion ? {} : {
+                    hidden: { opacity: 0, y: 10, scale: 0.95 },
+                    visible: { opacity: 1, y: 0, scale: 1 },
+                  }}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white border border-[#EDE9E3] text-xs text-[#676767]"
                 >
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {badge}
-                </span>
+                </motion.span>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
 
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, x: 30 }}
-            animate={prefersReducedMotion ? {} : { opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 60, rotateX: 4, scale: 0.96 }}
+            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: 0.8 }}
           >
             <SafariMockup />
           </motion.div>

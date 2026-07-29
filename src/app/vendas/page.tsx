@@ -15,6 +15,8 @@ import { Testimonials } from "@/components/sections/testimonials"
 import { FAQ } from "@/components/sections/faq"
 import { CTA } from "@/components/sections/cta"
 import { Footer } from "@/components/sections/footer"
+import { ScrollProgress } from "@/components/ui/scroll-progress"
+import { GlowBackground } from "@/components/ui/glow-background"
 
 export default function VendasPage() {
   const lenisRef = useRef<Lenis | null>(null)
@@ -46,7 +48,9 @@ export default function VendasPage() {
 
   return (
     <MotionProvider>
-      <div className="min-h-dvh" style={{ backgroundColor: "#F7F5F2", color: "#171717" }}>
+      <ScrollProgress />
+      <GlowBackground />
+      <div className="min-h-dvh relative z-10" style={{ backgroundColor: "#F7F5F2", color: "#171717" }}>
         <Navbar />
         <Hero />
         <Logos />
