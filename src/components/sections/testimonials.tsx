@@ -64,7 +64,7 @@ export function Testimonials() {
                 <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
               </svg>
-              <span className="truncate">instagram.com/p/DEf3F3hxR9k</span>
+              <span className="truncate">instagram.com/nr13pro</span>
             </div>
           </div>
           <div className="flex gap-2">
