@@ -191,13 +191,13 @@ export default function Clientes() {
           </CardContent>
         </Card>
       ) : (
-        <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((cli) => {
             const status = statusPorCliente.get(cli.id)
             const urgency = clienteUrgency(status)
 
             return (
-              <div key={cli.id} className="mb-6 last:mb-0">
+              <div key={cli.id}>
                 <Card className={cn(
                   "card-hover cursor-pointer",
                   urgency === "urgente" ? "border-red-200 hover:!border-red-300" :
@@ -206,92 +206,76 @@ export default function Clientes() {
                 )}>
                   <Link href={`/clientes/${cli.id}`}>
                     <CardContent className="p-4">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className={cn(
-                            "w-9 h-9 rounded-lg border flex items-center justify-center shrink-0",
-                            urgency === "urgente" ? "bg-red-50 border-red-100" :
-                            urgency === "atencao" ? "bg-amber-50 border-amber-100" :
-                            "bg-primary-subtle border-primary/20"
-                          )}>
-                            <Building2 className={cn(
-                              "h-5 w-5",
-                              urgency === "urgente" ? "text-red-500" :
-                              urgency === "atencao" ? "text-amber-500" :
-                              "text-primary"
-                            )} />
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <p className="text-sm font-semibold text-text-primary truncate">{cli.nome}</p>
-                              {urgency === "urgente" && (
-                                <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-100 text-xs">
-                                  <AlertTriangle className="h-3 w-3 mr-1" />
-                                  Vencida
-                                </Badge>
-                              )}
-                              {urgency === "atencao" && (
-                                <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-xs">
-                                  <AlertCircle className="h-3 w-3 mr-1" />
-                                  Próxima
-                                </Badge>
-                              )}
-                            </div>
-                            <p className="text-xs text-text-secondary">{cli.cnpj}</p>
-                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-                              <span className="flex items-center gap-1 text-xs text-text-secondary">
-                                <Mail className="h-3 w-3 shrink-0" />
-                                {cli.contato}
-                              </span>
-                              <span className="flex items-center gap-1 text-xs text-text-secondary">
-                                <Phone className="h-3 w-3 shrink-0" />
-                                {cli.telefone}
-                              </span>
-                              <span className="text-xs text-text-muted truncate">{cli.email}</span>
-                            </div>
-                            {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0) && (
-                              <div className="flex items-center gap-3 mt-2">
-                                {status.overdue > 0 && (
-                                  <span className="flex items-center gap-1 text-xs text-red-600 font-medium">
-                                    <AlertTriangle className="h-3 w-3" />
-                                    {status.overdue} vencida{status.overdue > 1 ? "s" : ""}
-                                  </span>
-                                )}
-                                {status.approaching > 0 && (
-                                  <span className="flex items-center gap-1 text-xs text-amber-600 font-medium">
-                                    <AlertCircle className="h-3 w-3" />
-                                    {status.approaching} em {status.approaching > 1 ? "até" : "até"} 60 dias
-                                  </span>
-                                )}
-                                {status.unknown > 0 && (
-                                  <span className="flex items-center gap-1 text-xs text-text-muted">
-                                    <HelpCircle className="h-3 w-3" />
-                                    {status.unknown} sem inspeção
-                                  </span>
-                                )}
-                                {status.safe > 0 && (
-                                  <span className="flex items-center gap-1 text-xs text-success">
-                                    <CheckCircle2 className="h-3 w-3" />
-                                    {status.safe} em dia
-                                  </span>
-                                )}
-                              </div>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={cn(
+                          "w-9 h-9 rounded-lg border flex items-center justify-center shrink-0",
+                          urgency === "urgente" ? "bg-red-50 border-red-100" :
+                          urgency === "atencao" ? "bg-amber-50 border-amber-100" :
+                          "bg-primary-subtle border-primary/20"
+                        )}>
+                          <Building2 className={cn(
+                            "h-5 w-5",
+                            urgency === "urgente" ? "text-red-500" :
+                            urgency === "atencao" ? "text-amber-500" :
+                            "text-primary"
+                          )} />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="text-sm font-semibold text-text-primary truncate">{cli.nome}</p>
+                            {urgency === "urgente" && (
+                              <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-100 text-xs">
+                                <AlertTriangle className="h-3 w-3 mr-1" />
+                                Vencida
+                              </Badge>
+                            )}
+                            {urgency === "atencao" && (
+                              <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-xs">
+                                <AlertCircle className="h-3 w-3 mr-1" />
+                                Próxima
+                              </Badge>
                             )}
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0 sm:pl-3">
-                          <Link href={`/clientes/${cli.id}/editar`} onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-text-muted hover:text-primary">
-                              <Pencil className="h-3.5 w-3.5" />
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-red-600"
-                            onClick={(e) => { e.stopPropagation(); handleDelete(cli.id, cli.nome) }}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
-                          <ArrowRight className="h-4 w-4 text-text-muted shrink-0 hidden sm:block" />
+                          <p className="text-xs text-text-secondary">{cli.cnpj}</p>
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+                            <span className="flex items-center gap-1 text-xs text-text-secondary">
+                              <Mail className="h-3 w-3 shrink-0" />
+                              {cli.contato}
+                            </span>
+                            <span className="flex items-center gap-1 text-xs text-text-secondary">
+                              <Phone className="h-3 w-3 shrink-0" />
+                              {cli.telefone}
+                            </span>
+                            <span className="text-xs text-text-muted truncate">{cli.email}</span>
+                          </div>
+                          {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0) && (
+                            <div className="flex items-center gap-3 mt-2">
+                              {status.overdue > 0 && (
+                                <span className="flex items-center gap-1 text-xs text-red-600 font-medium">
+                                  <AlertTriangle className="h-3 w-3" />
+                                  {status.overdue} vencida{status.overdue > 1 ? "s" : ""}
+                                </span>
+                              )}
+                              {status.approaching > 0 && (
+                                <span className="flex items-center gap-1 text-xs text-amber-600 font-medium">
+                                  <AlertCircle className="h-3 w-3" />
+                                  {status.approaching} em {status.approaching > 1 ? "até" : "até"} 60 dias
+                                </span>
+                              )}
+                              {status.unknown > 0 && (
+                                <span className="flex items-center gap-1 text-xs text-text-muted">
+                                  <HelpCircle className="h-3 w-3" />
+                                  {status.unknown} sem inspeção
+                                </span>
+                              )}
+                              {status.safe > 0 && (
+                                <span className="flex items-center gap-1 text-xs text-success">
+                                  <CheckCircle2 className="h-3 w-3" />
+                                  {status.safe} em dia
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </CardContent>
