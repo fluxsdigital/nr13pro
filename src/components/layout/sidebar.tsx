@@ -159,7 +159,7 @@ export function Sidebar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-14 left-0 right-0 z-40 bg-white border-b border-[#EDE9E3] overflow-hidden shadow-lg"
+            className="md:hidden fixed top-14 left-0 right-0 z-40 bg-sidebar text-sidebar-foreground border-b border-sidebar-border overflow-hidden shadow-lg"
           >
             <nav className="p-3 space-y-0.5">
               <NavItems />
