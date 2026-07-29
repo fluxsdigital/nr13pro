@@ -126,23 +126,19 @@ function NovaInspecaoForm() {
   const renderEquipamento = () => (
     <div className="space-y-4">
       <Label className="text-text-primary">Selecione o Equipamento</Label>
-      <div className="grid gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         {equipamentos.map((eq) => (
           <div
             key={eq.id}
             className={cn(
-              "p-4 rounded-lg border cursor-pointer transition-colors",
-              selectedEq?.id === eq.id ? "border-primary bg-primary-subtle" : "border-border bg-white hover:border-primary/30"
+              "p-3 rounded-lg border cursor-pointer transition-all text-center",
+              selectedEq?.id === eq.id ? "border-primary bg-primary-subtle ring-1 ring-primary" : "border-border bg-white hover:border-primary/30 hover:shadow-sm"
             )}
             onClick={() => setSelectedEq(eq)}
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-text-primary">{eq.tag} — {eq.descricao}</p>
-                <p className="text-xs text-text-secondary">{eq.localizacao} • {eq.tipo} • Cat. {eq.categoria}</p>
-              </div>
-              <Badge variant="outline" className="border-border">{eq.classeFluido}</Badge>
-            </div>
+            <p className="text-sm font-semibold text-text-primary truncate">{eq.tag}</p>
+            <p className="text-[11px] text-text-secondary mt-0.5 truncate">{eq.tipo} • Cat. {eq.categoria}</p>
+            <Badge variant="outline" className="border-border mt-2 text-[10px]">{eq.classeFluido}</Badge>
           </div>
         ))}
       </div>
