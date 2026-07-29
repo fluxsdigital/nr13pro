@@ -66,7 +66,7 @@ export default function EquipamentoDetalhe() {
             <CardTitle className="text-text-primary">Dados Técnicos</CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 text-sm">
               <div>
                 <dt className="text-text-secondary">Fabricante</dt>
                 <dd className="text-text-primary font-medium">{eq.fabricante}</dd>
@@ -80,8 +80,16 @@ export default function EquipamentoDetalhe() {
                 <dd className="text-text-primary font-medium">{eq.anoFabricacao}</dd>
               </div>
               <div>
+                <dt className="text-text-secondary">Pressão de Projeto (kPa)</dt>
+                <dd className="text-text-primary font-medium">{eq.pressaoProjeto}</dd>
+              </div>
+              <div>
                 <dt className="text-text-secondary">Pressão de Operação (kPa)</dt>
                 <dd className="text-text-primary font-medium">{eq.pressaoOperacao}</dd>
+              </div>
+              <div>
+                <dt className="text-text-secondary">Pressão Teste Hidrostático (kPa)</dt>
+                <dd className="text-text-primary font-medium">{eq.pressaoTesteHidrostatico ?? "N/A"}</dd>
               </div>
               <div>
                 <dt className="text-text-secondary">Volume (m³)</dt>
@@ -98,16 +106,40 @@ export default function EquipamentoDetalhe() {
                 </dd>
               </div>
               <div>
+                <dt className="text-text-secondary">Temperatura de Projeto (°C)</dt>
+                <dd className="text-text-primary font-medium">{eq.temperaturaProjeto ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="text-text-secondary">Temperatura de Operação (°C)</dt>
+                <dd className="text-text-primary font-medium">{eq.temperaturaOperacao ?? "—"}</dd>
+              </div>
+              <div>
                 <dt className="text-text-secondary">Fluido</dt>
                 <dd className="text-text-primary font-medium">{eq.fluido} (Classe {eq.classeFluido})</dd>
               </div>
-              <div className="col-span-2">
-                <dt className="text-text-secondary">Classe do Fluido</dt>
-                <dd className="text-text-secondary text-xs mt-0.5">{descricaoClasseFluido(eq.classeFluido)}</dd>
+              <div>
+                <dt className="text-text-secondary">Diâmetro Interno (mm)</dt>
+                <dd className="text-text-primary font-medium">{eq.diametroInterno ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="text-text-secondary">Altura / Comprimento (mm)</dt>
+                <dd className="text-text-primary font-medium">{eq.alturaComprimento ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="text-text-secondary">Material de Construção</dt>
+                <dd className="text-text-primary font-medium">{eq.materialConstrucao}</dd>
+              </div>
+              <div>
+                <dt className="text-text-secondary">Código de Projeto</dt>
+                <dd className="text-text-primary font-medium">{eq.codigoProjeto}</dd>
               </div>
               <div>
                 <dt className="text-text-secondary">Localização</dt>
                 <dd className="text-text-primary font-medium">{eq.localizacao}</dd>
+              </div>
+              <div className="col-span-full">
+                <dt className="text-text-secondary">Classe do Fluido</dt>
+                <dd className="text-text-secondary text-xs mt-0.5">{descricaoClasseFluido(eq.classeFluido)}</dd>
               </div>
             </dl>
           </CardContent>

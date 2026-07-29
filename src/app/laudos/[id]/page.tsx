@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { FileText, Download, Printer, ArrowLeft } from "lucide-react"
+import { calcularPMTACasco, calcularPMTATampoEliptico } from "@/lib/nr13"
+import { FileText, Download, Printer, ArrowLeft, ShieldCheck, Gauge } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 
@@ -100,9 +101,17 @@ export default function LaudoDetalhe() {
                   ["Ano de Fabricação:", String(eq?.anoFabricacao ?? "")],
                   ["Localização:", eq?.localizacao ?? ""],
                   ["Fluido de Serviço:", eq ? `${eq.fluido} (Classe ${eq.classeFluido})` : ""],
+                  ["Pressão de Projeto:", eq ? `${eq.pressaoProjeto} kPa` : ""],
                   ["Pressão de Operação:", eq ? `${eq.pressaoOperacao} kPa` : ""],
+                  ["Pressão Teste Hidrostático:", eq?.pressaoTesteHidrostatico ? `${eq.pressaoTesteHidrostatico} kPa` : "N/A"],
                   ["Volume:", eq ? `${eq.volume} m³` : ""],
                   ["PMTA:", eq ? `${eq.pmta} kPa` : ""],
+                  ["Temperatura de Projeto:", eq?.temperaturaProjeto ? `${eq.temperaturaProjeto}°C` : "—"],
+                  ["Temperatura de Operação:", eq?.temperaturaOperacao ? `${eq.temperaturaOperacao}°C` : "—"],
+                  ["Diâmetro Interno:", eq?.diametroInterno ? `${eq.diametroInterno} mm` : "—"],
+                  ["Altura / Comprimento:", eq?.alturaComprimento ? `${eq.alturaComprimento} mm` : "—"],
+                  ["Material de Construção:", eq?.materialConstrucao ?? ""],
+                  ["Código de Projeto:", eq?.codigoProjeto ?? ""],
                   ["Categoria:", eq?.categoria ?? ""],
                 ].map(([label, value]) => (
                   <tr key={label} className="border-b border-border">
@@ -141,30 +150,76 @@ export default function LaudoDetalhe() {
           {inspecao && inspecao.medicoes.length > 0 && (
             <section className="mb-8">
               <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">3. Medições de Espessura (Ultrassom)</h3>
+              
+              {/* Parâmetros do Ultrassom */}
+              {inspecao.parametrosUltrassom && (
+                <div className="mb-4 p-3 bg-card-hover rounded text-xs space-y-1">
+                  <p><strong>Aparelho:</strong> {inspecao.parametrosUltrassom.aparelho} &nbsp;|&nbsp; 
+                  <strong>Transdutor:</strong> {inspecao.parametrosUltrassom.transdutor} &nbsp;|&nbsp; 
+                  <strong>Velocidade Sônica:</strong> {inspecao.parametrosUltrassom.velocidadeSonica} m/s</p>
+                  <p><strong>Técnica:</strong> {inspecao.parametrosUltrassom.tecnica} &nbsp;|&nbsp; 
+                  <strong>Bloco de Calibração:</strong> {inspecao.parametrosUltrassom.blocoCalibracao} mm</p>
+                </div>
+              )}
+              
               <table className="w-full text-sm border-collapse">
                 <thead>
                   <tr className="bg-card-hover">
                     <th className="border border-border px-3 py-2 text-left text-text-secondary">Ponto</th>
-                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Espessura (mm)</th>
+                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Atual (mm)</th>
                     <th className="border border-border px-3 py-2 text-right text-text-secondary">Anterior (mm)</th>
+                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Construção (mm)</th>
+                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Perda Total (mm)</th>
                     <th className="border border-border px-3 py-2 text-right text-text-secondary">Variação (%)</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {inspecao.medicoes.map((med) => (
-                    <tr key={med.id}>
-                      <td className="border border-border px-3 py-2 text-text-primary">{med.ponto}</td>
-                      <td className="border border-border px-3 py-2 text-right text-text-primary">{med.espessura}</td>
-                      <td className="border border-border px-3 py-2 text-right text-text-secondary">{med.espessuraAnterior ?? "—"}</td>
-                      <td className="border border-border px-3 py-2 text-right text-text-primary">
-                        {med.espessuraAnterior
-                          ? ((med.espessura - med.espessuraAnterior) / med.espessuraAnterior * 100).toFixed(1) + "%"
-                          : "—"}
-                      </td>
-                    </tr>
-                  ))}
+                  {inspecao.medicoes.map((med) => {
+                    const perdaTotal = med.espessuraConstrucao ? (med.espessuraConstrucao - med.espessura).toFixed(2) : null
+                    return (
+                      <tr key={med.id}>
+                        <td className="border border-border px-3 py-2 text-text-primary">{med.ponto}</td>
+                        <td className="border border-border px-3 py-2 text-right text-text-primary">{med.espessura}</td>
+                        <td className="border border-border px-3 py-2 text-right text-text-secondary">{med.espessuraAnterior ?? "—"}</td>
+                        <td className="border border-border px-3 py-2 text-right text-text-secondary">{med.espessuraConstrucao ?? "—"}</td>
+                        <td className="border border-border px-3 py-2 text-right text-text-secondary">{perdaTotal ?? "—"}</td>
+                        <td className="border border-border px-3 py-2 text-right text-text-primary">
+                          {med.espessuraAnterior
+                            ? ((med.espessura - med.espessuraAnterior) / med.espessuraAnterior * 100).toFixed(1) + "%"
+                            : "—"}
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
+
+              {/* PMTA calculado */}
+              {eq && inspecao.medicoes.length > 0 && eq.diametroInterno && (
+                <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-sm font-semibold text-amber-800 mb-2">Cálculo de PMTA (menor espessura medida)</p>
+                  {(() => {
+                    const menorMedicao = [...inspecao.medicoes].sort((a, b) => a.espessura - b.espessura)[0]
+                    if (!menorMedicao) return null
+                    const pmtaCasco = calcularPMTACasco(
+                      eq.materialConstrucao, eq.codigoProjeto,
+                      eq.diametroInterno, menorMedicao.espessura
+                    )
+                    return (
+                      <div className="text-xs space-y-1 text-amber-700">
+                        <p>Menor espessura medida: <strong>{menorMedicao.espessura} mm</strong> ({menorMedicao.ponto})</p>
+                        <p>PMTA calculada (casco): <strong>{pmtaCasco ? `${pmtaCasco.toFixed(2)} kgf/cm² (${(pmtaCasco * 98.0665).toFixed(1)} kPa)` : "—"}</strong></p>
+                        <p>PMTA atual do equipamento: <strong>{eq.pmta} kPa</strong></p>
+                        <p className={pmtaCasco && (pmtaCasco * 98.0665) >= eq.pmta ? "text-success font-semibold" : "text-red-600 font-semibold"}>
+                          {pmtaCasco && (pmtaCasco * 98.0665) >= eq.pmta 
+                            ? "✓ PMTA calculada ≥ PMTA atual — Espessura suficiente"
+                            : "✗ PMTA calculada < PMTA atual — Atenção"}
+                        </p>
+                      </div>
+                    )
+                  })()}
+                </div>
+              )}
             </section>
           )}
 
@@ -207,6 +262,22 @@ export default function LaudoDetalhe() {
                   ))}
                 </tbody>
               </table>
+              <div className="mt-3 flex gap-2 no-print">
+                {inspecao.dispositivosSeguranca.some((d) => d.tipo === "valvula_seguranca") && (
+                  <Link href={`/certificados/psv?inspecao=${inspecao.id}`}>
+                    <Button variant="outline" size="sm" className="border-border text-text-secondary">
+                      <ShieldCheck className="h-3.5 w-3.5 mr-1" /> Certificado PSV
+                    </Button>
+                  </Link>
+                )}
+                {inspecao.dispositivosSeguranca.some((d) => d.tipo === "manometro") && (
+                  <Link href={`/certificados/calibracao?inspecao=${inspecao.id}`}>
+                    <Button variant="outline" size="sm" className="border-border text-text-secondary">
+                      <Gauge className="h-3.5 w-3.5 mr-1" /> Certificado Calibração
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </section>
           )}
 

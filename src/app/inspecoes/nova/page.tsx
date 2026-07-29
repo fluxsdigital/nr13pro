@@ -17,7 +17,9 @@ import { Separator } from "@/components/ui/separator"
 import { Camera, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-type Step = "equipamento" | "exames" | "medicoes" | "anomalias" | "dispositivos" | "parecer"
+import { CHECKLIST_INSPECAO } from "@/lib/checklist-data"
+
+type Step = "equipamento" | "exames" | "checklist" | "medicoes" | "anomalias" | "dispositivos" | "parecer"
 
 function NovaInspecaoForm() {
   const searchParams = useSearchParams()
@@ -37,19 +39,36 @@ function NovaInspecaoForm() {
   const [dataTermino, setDataTermino] = useState(new Date().toISOString().slice(0, 10))
   const [saving, setSaving] = useState(false)
 
+  const [checklist, setChecklist] = useState<
+    { secao: string; item: string; ok: boolean | null; observacao: string }[]
+  >(
+    CHECKLIST_INSPECAO.flatMap((s) =>
+      s.itens.map((i) => ({ secao: s.secao, item: i.item, ok: null, observacao: "" }))
+    )
+  )
+
+  const setCheck = (idx: number, ok: boolean | null) =>
+    setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, ok } : c)))
+
+  const setCheckObs = (idx: number, observacao: string) =>
+    setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, observacao } : c)))
+
   const [medicoes, setMedicoes] = useState([{ ponto: "", espessura: "", observacao: "" }])
   const [anomalias, setAnomalias] = useState<{ descricao: string; gravidade: string; planoAcao: string }[]>([])
-  const [dispositivos, setDispositivos] = useState([
-    { tipo: "valvula_seguranca", tag: "", inspecaoOk: true, observacao: "" },
+  const [dispositivos, setDispositivos] = useState<
+    { tipo: string; tag: string; fabricante: string; modelo: string; numeroSerie: string; pressaoAbertura: string; pressaoVedacao: string; inspecaoOk: boolean; observacao: string }[]
+  >([
+    { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", inspecaoOk: true, observacao: "" },
   ])
 
   const adicionarMedicao = () => setMedicoes([...medicoes, { ponto: "", espessura: "", observacao: "" }])
   const adicionarAnomalia = () => setAnomalias([...anomalias, { descricao: "", gravidade: "media", planoAcao: "" }])
-  const adicionarDispositivo = () => setDispositivos([...dispositivos, { tipo: "valvula_seguranca", tag: "", inspecaoOk: true, observacao: "" }])
+  const adicionarDispositivo = () => setDispositivos([...dispositivos, { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", inspecaoOk: true, observacao: "" }])
 
   const steps: { key: Step; label: string }[] = [
     ...(equipamentoId ? [] : [{ key: "equipamento" as Step, label: "Equipamento" }]),
     { key: "exames" as Step, label: "Exames" },
+    { key: "checklist" as Step, label: "Checklist" },
     { key: "medicoes" as Step, label: "Medições" },
     { key: "anomalias" as Step, label: "Anomalias" },
     { key: "dispositivos" as Step, label: "Dispositivos" },
@@ -74,12 +93,16 @@ function NovaInspecaoForm() {
         temSPIE,
         parecer,
         concluida: true,
+        parametrosUltrassom: null,
+        checklist: checklist,
         medicoes: medicoes
           .filter((m) => m.ponto && m.espessura)
           .map((m) => ({
             ponto: m.ponto,
             espessura: parseFloat(m.espessura),
             espessuraAnterior: null,
+            espessuraConstrucao: null,
+            tempoOperacao: null,
             dataMedicao: dataInicio,
             observacao: m.observacao,
           })),
@@ -96,6 +119,11 @@ function NovaInspecaoForm() {
           .map((d) => ({
             tipo: d.tipo as "valvula_seguranca" | "disco_ruptura" | "manometro" | "termometro" | "visor_nivel",
             tag: d.tag,
+            fabricante: d.fabricante || undefined,
+            modelo: d.modelo || undefined,
+            numeroSerie: d.numeroSerie || undefined,
+            pressaoAbertura: d.pressaoAbertura ? Number(d.pressaoAbertura) : undefined,
+            pressaoVedacao: d.pressaoVedacao ? Number(d.pressaoVedacao) : undefined,
             inspecaoOk: d.inspecaoOk,
             observacao: d.observacao,
           })),
@@ -203,6 +231,67 @@ function NovaInspecaoForm() {
       </div>
     </div>
   )
+
+  const renderChecklist = () => {
+    const secoes = CHECKLIST_INSPECAO
+    let checkIdx = 0
+    return (
+      <div className="space-y-6">
+        <p className="text-base font-medium text-text-primary">Checklist de Inspeção</p>
+        {secoes.map((s) => {
+          const startIdx = checkIdx
+          checkIdx += s.itens.length
+          return (
+            <div key={s.secao} className="border border-border rounded-lg overflow-hidden">
+              <div className="bg-card-hover px-4 py-2 font-medium text-sm text-text-primary">{s.secao}</div>
+              <div className="divide-y divide-border">
+                {(checklist.slice(startIdx, startIdx + s.itens.length) as typeof checklist).map((item, j) => {
+                  const idx = startIdx + j
+                  return (
+                    <div key={idx} className="px-4 py-3 flex items-start gap-3">
+                      <div className="flex gap-1 shrink-0 mt-0.5">
+                        <button
+                          type="button"
+                          onClick={() => setCheck(idx, item.ok === true ? null : true)}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                            item.ok === true
+                              ? "bg-success text-white"
+                              : "bg-background border border-border text-text-muted hover:border-success/50"
+                          }`}
+                        >Sim</button>
+                        <button
+                          type="button"
+                          onClick={() => setCheck(idx, item.ok === false ? null : false)}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                            item.ok === false
+                              ? "bg-red-500 text-white"
+                              : "bg-background border border-border text-text-muted hover:border-red-500/50"
+                          }`}
+                        >Não</button>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm ${item.ok === null ? "text-text-secondary" : item.ok ? "text-success font-medium" : "text-red-600 font-medium"}`}>
+                          {item.item}
+                        </p>
+                        {item.ok === false && (
+                          <input
+                            value={item.observacao}
+                            onChange={(e) => setCheckObs(idx, e.target.value)}
+                            placeholder="Observação..."
+                            className="mt-1 w-full text-xs border border-border rounded px-2 py-1 bg-white"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
 
   const renderMedicoes = () => (
     <div className="space-y-4">
@@ -330,6 +419,35 @@ function NovaInspecaoForm() {
                 placeholder="Ex: PSV-101" className="border-border bg-white h-9" />
             </div>
           </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">Fabricante</Label>
+              <Input value={disp.fabricante} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], fabricante: e.target.value }; setDispositivos(d) }}
+                placeholder="Ex: Spirax Sarco" className="border-border bg-white h-8 text-xs" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">Modelo</Label>
+              <Input value={disp.modelo} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], modelo: e.target.value }; setDispositivos(d) }}
+                placeholder="Ex: SCV-25" className="border-border bg-white h-8 text-xs" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">Nº Série</Label>
+              <Input value={disp.numeroSerie} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], numeroSerie: e.target.value }; setDispositivos(d) }}
+                placeholder="Ex: SS-2025-001" className="border-border bg-white h-8 text-xs" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">Pressão de Abertura (kPa)</Label>
+              <Input type="number" value={disp.pressaoAbertura} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoAbertura: e.target.value }; setDispositivos(d) }}
+                placeholder="Ex: 1650" className="border-border bg-white h-8 text-xs" />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">Pressão de Vedação (kPa)</Label>
+              <Input type="number" value={disp.pressaoVedacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoVedacao: e.target.value }; setDispositivos(d) }}
+                placeholder="Ex: 1480" className="border-border bg-white h-8 text-xs" />
+            </div>
+          </div>
           <div className="flex items-center gap-3">
             <div
               className={cn(
@@ -384,6 +502,7 @@ function NovaInspecaoForm() {
     switch (step) {
       case "equipamento": return renderEquipamento()
       case "exames": return renderExames()
+      case "checklist": return renderChecklist()
       case "medicoes": return renderMedicoes()
       case "anomalias": return renderAnomalias()
       case "dispositivos": return renderDispositivos()

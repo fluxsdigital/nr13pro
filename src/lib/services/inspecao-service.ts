@@ -29,6 +29,10 @@ class MockInspecaoService implements InspecaoService {
     const inspecao: Inspecao = {
       ...data,
       id: String(this.nextId++),
+      checklist: data.checklist.map((c, i) => ({
+        ...c,
+        id: String(this.nextSubId++),
+      })),
       medicoes: data.medicoes.map((m) => ({
         ...m,
         id: String(this.nextSubId++),

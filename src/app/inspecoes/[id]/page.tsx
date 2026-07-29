@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
-import { FileText, Ruler, AlertTriangle, ShieldCheck } from "lucide-react"
+import { FileText, Ruler, AlertTriangle, ShieldCheck, ClipboardCheck } from "lucide-react"
 
 export default function InspecaoDetalhe() {
   const params = useParams()
@@ -74,10 +74,11 @@ export default function InspecaoDetalhe() {
 
       <Tabs defaultValue="resumo" className="w-full">
         <TabsList className="bg-card-hover border border-border overflow-x-auto flex-nowrap">
-          <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Resumo</TabsTrigger>
-          <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Medições</TabsTrigger>
-          <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Anomalias</TabsTrigger>
-          <TabsTrigger value="dispositivos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Dispositivos</TabsTrigger>
+        <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Resumo</TabsTrigger>
+           <TabsTrigger value="checklist" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Checklist</TabsTrigger>
+           <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Medições</TabsTrigger>
+           <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Anomalias</TabsTrigger>
+           <TabsTrigger value="dispositivos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Dispositivos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="resumo" className="mt-4 space-y-4">
@@ -108,6 +109,19 @@ export default function InspecaoDetalhe() {
             </CardContent>
           </Card>
 
+          {inspecao.parametrosUltrassom && (
+            <Card className="border-border shadow-sm">
+              <CardHeader><CardTitle className="text-text-primary text-sm">Parâmetros Ultrassom</CardTitle></CardHeader>
+              <CardContent className="text-xs space-y-1">
+                <p><strong>Aparelho:</strong> {inspecao.parametrosUltrassom.aparelho}</p>
+                <p><strong>Transdutor:</strong> {inspecao.parametrosUltrassom.transdutor}</p>
+                <p><strong>Velocidade Sônica:</strong> {inspecao.parametrosUltrassom.velocidadeSonica} m/s</p>
+                <p><strong>Técnica:</strong> {inspecao.parametrosUltrassom.tecnica}</p>
+                <p><strong>Bloco de Calibração:</strong> {inspecao.parametrosUltrassom.blocoCalibracao} mm</p>
+              </CardContent>
+            </Card>
+          )}
+
           {laudo && (
             <Link href={`/laudos/${laudo.id}`}>
               <Card className="border-border shadow-sm hover:bg-card-hover cursor-pointer transition-colors">
@@ -123,6 +137,50 @@ export default function InspecaoDetalhe() {
                 </CardContent>
               </Card>
             </Link>
+          )}
+        </TabsContent>
+
+        <TabsContent value="checklist" className="mt-4 space-y-3">
+          {inspecao.checklist.length === 0 ? (
+            <Card className="border-border shadow-sm">
+              <CardContent className="py-8 text-center">
+                <ClipboardCheck className="h-10 w-10 text-text-muted mx-auto mb-3" />
+                <p className="text-text-secondary">Nenhum item de checklist registrado</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-3">
+              {(() => {
+                const secoes = [...new Set(inspecao.checklist.map((c) => c.secao))]
+                return secoes.map((secao) => {
+                  const items = inspecao.checklist.filter((c) => c.secao === secao)
+                  return (
+                    <Card key={secao} className="border-border shadow-sm">
+                      <CardHeader className="pb-2"><CardTitle className="text-sm text-text-primary">{secao}</CardTitle></CardHeader>
+                      <CardContent className="space-y-2">
+                        {items.map((item, idx) => (
+                          <div key={idx} className="flex items-start gap-3 text-sm">
+                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${
+                              item.ok === true ? "bg-success border-success text-white text-xs flex items-center justify-center" :
+                              item.ok === false ? "bg-red-100 border-red-400 text-red-600 text-xs flex items-center justify-center" :
+                              "border-border text-text-muted"
+                            }`}>
+                              {item.ok === true ? "✓" : item.ok === false ? "✗" : ""}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className={item.ok === false ? "text-red-600" : "text-text-primary"}>{item.item}</p>
+                              {item.observacao && (
+                                <p className="text-xs text-text-secondary mt-0.5">{item.observacao}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  )
+                })
+              })()}
+            </div>
           )}
         </TabsContent>
 
@@ -220,18 +278,23 @@ export default function InspecaoDetalhe() {
                 <p className="text-sm text-text-muted italic">Nenhum dispositivo registrado</p>
               ) : (
                 <div className="space-y-2">
-                  {inspecao.dispositivosSeguranca.map((d) => (
-                    <div key={d.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-background">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${d.inspecaoOk ? "bg-success" : "bg-red-500"}`} />
-                        <div>
-                          <p className="text-sm text-text-primary font-medium capitalize">{d.tipo.replace("_", " ")}</p>
-                          <p className="text-xs text-text-secondary">{d.tag}</p>
-                        </div>
-                      </div>
-                      <div className="text-right text-xs text-text-secondary">{d.observacao}</div>
-                    </div>
-                  ))}
+                      {inspecao.dispositivosSeguranca.map((d) => (
+                     <div key={d.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-background">
+                       <div className="flex items-center gap-3">
+                         <div className={`w-2 h-2 rounded-full ${d.inspecaoOk ? "bg-success" : "bg-red-500"}`} />
+                         <div>
+                           <p className="text-sm text-text-primary font-medium capitalize">{d.tipo.replace("_", " ")}</p>
+                           <p className="text-xs text-text-secondary">{d.tag}</p>
+                           {d.fabricante && <p className="text-[10px] text-text-muted">{d.fabricante} {d.modelo ?? ""}</p>}
+                           {d.pressaoAbertura && <p className="text-[10px] text-text-muted">PS: {d.pressaoAbertura} kPa</p>}
+                         </div>
+                       </div>
+                       <div className="text-right text-xs text-text-secondary">
+                         <p>{d.inspecaoOk ? "Aprovado" : "Reprovado"}</p>
+                         {d.pressaoVedacao && <p>Vedação: {d.pressaoVedacao} kPa</p>}
+                       </div>
+                     </div>
+                   ))}
                 </div>
               )}
             </CardContent>

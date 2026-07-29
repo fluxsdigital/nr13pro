@@ -39,9 +39,17 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
     fabricante: initial?.fabricante ?? "",
     numeroSerie: initial?.numeroSerie ?? "",
     anoFabricacao: initial?.anoFabricacao ?? new Date().getFullYear(),
+    pressaoProjeto: initial?.pressaoProjeto ?? 0,
     pressaoOperacao: initial?.pressaoOperacao ?? 0,
+    pressaoTesteHidrostatico: initial?.pressaoTesteHidrostatico ?? null,
     volume: initial?.volume ?? 0,
     pmta: initial?.pmta ?? 0,
+    temperaturaProjeto: initial?.temperaturaProjeto ?? null,
+    temperaturaOperacao: initial?.temperaturaOperacao ?? null,
+    diametroInterno: initial?.diametroInterno ?? null,
+    alturaComprimento: initial?.alturaComprimento ?? null,
+    materialConstrucao: initial?.materialConstrucao ?? "",
+    codigoProjeto: initial?.codigoProjeto ?? "",
     fluido: initial?.fluido ?? "",
     classeFluido: initial?.classeFluido ?? "C",
     localizacao: initial?.localizacao ?? "",
@@ -134,23 +142,13 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Fabricante</Label>
               <Input
                 value={form.fabricante}
                 onChange={(e) => set("fabricante", e.target.value)}
                 placeholder="Ex: VasosTech"
-                required
-                className="border-border bg-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-text-secondary text-xs">Nº de Série</Label>
-              <Input
-                value={form.numeroSerie}
-                onChange={(e) => set("numeroSerie", e.target.value)}
-                placeholder="Ex: VT-2024-001"
                 required
                 className="border-border bg-white"
               />
@@ -174,12 +172,32 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
           <p className="text-sm font-medium text-text-secondary">Parâmetros Operacionais</p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Pressão de Projeto (kPa)</Label>
+              <Input
+                type="number"
+                value={form.pressaoProjeto}
+                onChange={(e) => set("pressaoProjeto", Number(e.target.value))}
+                required
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Pressão de Operação (kPa)</Label>
               <Input
                 type="number"
                 value={form.pressaoOperacao}
                 onChange={(e) => set("pressaoOperacao", Number(e.target.value))}
                 required
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Pressão Teste Hidrostático (kPa)</Label>
+              <Input
+                type="number"
+                value={form.pressaoTesteHidrostatico ?? ""}
+                onChange={(e) => set("pressaoTesteHidrostatico", e.target.value ? Number(e.target.value) : null)}
+                placeholder="Opcional"
                 className="border-border bg-white"
               />
             </div>
@@ -193,6 +211,8 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 className="border-border bg-white"
               />
             </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">PMTA (kPa)</Label>
               <Input
@@ -200,6 +220,26 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.pmta}
                 onChange={(e) => set("pmta", Number(e.target.value))}
                 required
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Temperatura de Projeto (°C)</Label>
+              <Input
+                type="number"
+                value={form.temperaturaProjeto ?? ""}
+                onChange={(e) => set("temperaturaProjeto", e.target.value ? Number(e.target.value) : null)}
+                placeholder="Opcional"
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Temperatura de Operação (°C)</Label>
+              <Input
+                type="number"
+                value={form.temperaturaOperacao ?? ""}
+                onChange={(e) => set("temperaturaOperacao", e.target.value ? Number(e.target.value) : null)}
+                placeholder="Opcional"
                 className="border-border bg-white"
               />
             </div>
@@ -215,7 +255,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Classe do Fluido</Label>
               <select
@@ -234,6 +274,62 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.localizacao}
                 onChange={(e) => set("localizacao", e.target.value)}
                 placeholder="Ex: Compressores - Prédio 1"
+                required
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Código de Projeto</Label>
+              <Input
+                value={form.codigoProjeto}
+                onChange={(e) => set("codigoProjeto", e.target.value)}
+                placeholder="Ex: ASME VIII Div.1"
+                className="border-border bg-white"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="border-border shadow-sm">
+        <CardContent className="p-6 space-y-4">
+          <p className="text-sm font-medium text-text-secondary">Dados Construtivos</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Diâmetro Interno (mm)</Label>
+              <Input
+                type="number"
+                value={form.diametroInterno ?? ""}
+                onChange={(e) => set("diametroInterno", e.target.value ? Number(e.target.value) : null)}
+                placeholder="Opcional"
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Altura / Comprimento (mm)</Label>
+              <Input
+                type="number"
+                value={form.alturaComprimento ?? ""}
+                onChange={(e) => set("alturaComprimento", e.target.value ? Number(e.target.value) : null)}
+                placeholder="Opcional"
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Material de Construção</Label>
+              <Input
+                value={form.materialConstrucao}
+                onChange={(e) => set("materialConstrucao", e.target.value)}
+                placeholder="Ex: Aço Carbono"
+                className="border-border bg-white"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-text-secondary text-xs">Nº de Série</Label>
+              <Input
+                value={form.numeroSerie}
+                onChange={(e) => set("numeroSerie", e.target.value)}
+                placeholder="Ex: VT-2024-001"
                 required
                 className="border-border bg-white"
               />

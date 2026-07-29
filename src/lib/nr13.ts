@@ -73,6 +73,74 @@ export function descricaoClasseFluido(classe: ClasseFluido): string {
   return mapa[classe]
 }
 
+// ── Cálculo de PMTA ──
+// Baseado em casos reais dos PDFs de inspeção NR-13
+
+// Tabela de tensão admissível básica (S) para aços comuns (kgf/cm²)
+const TENSao_ADMISSIVEL: Record<string, number> = {
+  "Aço Carbono": 1203.3,
+  "Aço Inoxidável 304": 1400,
+  "Aço Inoxidável 316L": 1450,
+  "Aço Liga": 1600,
+  "Aço Carbono c/ Revestimento": 1200,
+}
+
+// Coeficiente de eficiência de solda (E) típico por tipo de junta
+function eficienciaSolda(codigoProjeto: string): number {
+  if (codigoProjeto.includes("API")) return 0.85
+  return 0.65 // ASME VIII Div.1 típico para juntas radiografadas parcialmente
+}
+
+// Fator K para tampo elíptico (relação semi-eixos)
+function fatorTampoEliptico(alturaTampoMm: number | null, diametroInternoMm: number): number {
+  if (!alturaTampoMm) return 1.0
+  const razao = diametroInternoMm / (2 * alturaTampoMm)
+  return (1 / 6) * (2 + razao * razao)
+}
+
+/**
+ * PMTA do casco cilíndrico
+ * PMTA = (S * E * e) / (R + 0.6 * e)
+ * Onde:
+ *   S = Tensão Admissível (kgf/cm²)
+ *   E = Eficiência de solda
+ *   e = Espessura medida (cm)
+ *   R = Raio interno (cm)
+ */
+export function calcularPMTACasco(
+  material: string,
+  codigoProjeto: string,
+  diametroInternoMm: number | null,
+  espessuraMedidaMm: number
+): number | null {
+  const S = TENSao_ADMISSIVEL[material] ?? 1200
+  const E = eficienciaSolda(codigoProjeto)
+  if (!diametroInternoMm || diametroInternoMm <= 0) return null
+  const R = diametroInternoMm / 20 // mm → cm raio
+  const e = espessuraMedidaMm / 10 // mm → cm
+  return (S * E * e) / (R + 0.6 * e)
+}
+
+/**
+ * PMTA do tampo elíptico
+ * PMTA = (S * E * e) / (R * K + 0.1 * e)
+ */
+export function calcularPMTATampoEliptico(
+  material: string,
+  codigoProjeto: string,
+  diametroInternoMm: number | null,
+  espessuraMedidaMm: number,
+  alturaTampoMm: number | null
+): number | null {
+  const S = TENSao_ADMISSIVEL[material] ?? 1200
+  const E = eficienciaSolda(codigoProjeto)
+  if (!diametroInternoMm || diametroInternoMm <= 0) return null
+  const R = diametroInternoMm / 20 // mm → cm raio
+  const e = espessuraMedidaMm / 10 // mm → cm
+  const K = fatorTampoEliptico(alturaTampoMm, diametroInternoMm)
+  return (S * E * e) / (R * K + 0.1 * e)
+}
+
 export function descricaoInspecaoExtraordinaria(
   tipo: "caldeira" | "vaso"
 ): { inatividade: number; descricao: string } {

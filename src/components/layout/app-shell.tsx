@@ -7,7 +7,7 @@ import { MainContent } from "@/components/layout/main-content"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const noSidebar = pathname === "/vendas" || pathname === "/checkout" || pathname === "/privacidade" || pathname === "/termos-de-uso"
+  const noSidebar = pathname === "/vendas" || pathname === "/checkout" || pathname === "/privacidade" || pathname === "/termos-de-uso" || pathname.startsWith("/certificados/")
 
   if (noSidebar) {
     return <>{children}</>

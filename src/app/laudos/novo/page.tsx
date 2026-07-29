@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { inspecaoService, laudoService, equipamentoService, clienteService } from "@/lib/services"
+import { periodicidadeInspecao } from "@/lib/nr13"
 import type { Equipamento, Inspecao, Cliente } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -47,17 +48,20 @@ function NovoLaudoForm() {
       const count = (await laudoService.list()).length + 1
       setNumeroLaudo(`NR13-LD-${ano}-${String(count).padStart(4, "0")}`)
 
-      if (eq?.categoria && ["I","II","III","IV","V"].includes(eq.categoria)) {
-        const mapa: Record<string, number> = { I: 3, II: 4, III: 6, IV: 8, V: 10 }
-        const anos = mapa[eq.categoria as string] ?? 3
-        const prox = new Date()
-        prox.setFullYear(prox.getFullYear() + anos)
-        setDataProxima(prox.toISOString().slice(0, 10))
-      } else {
-        const prox = new Date()
+      const prox = new Date()
+      const temSPIE = inspecao?.temSPIE ?? false
+      if (eq?.categoria && eq.tipo === "caldeira") {
         prox.setFullYear(prox.getFullYear() + 1)
-        setDataProxima(prox.toISOString().slice(0, 10))
+      } else if (eq?.categoria && ["I","II","III","IV","V"].includes(eq.categoria)) {
+        const prazos = periodicidadeInspecao(eq.categoria as any, temSPIE)
+        prox.setFullYear(prox.getFullYear() + prazos.externo)
+      } else if (eq?.categoria) {
+        const prazos = periodicidadeInspecao(eq.categoria as any, temSPIE)
+        prox.setFullYear(prox.getFullYear() + prazos.externo)
+      } else {
+        prox.setFullYear(prox.getFullYear() + 1)
       }
+      setDataProxima(prox.toISOString().slice(0, 10))
 
       setLoading(false)
     })

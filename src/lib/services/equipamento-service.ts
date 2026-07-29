@@ -71,9 +71,14 @@ class MockEquipamentoService implements EquipamentoService {
       const classificacao = autoClassificar({
         clienteId: updated.clienteId, tag: updated.tag, descricao: updated.descricao,
         fabricante: updated.fabricante, numeroSerie: updated.numeroSerie,
-        anoFabricacao: updated.anoFabricacao, pressaoOperacao: updated.pressaoOperacao,
-        volume: updated.volume, pmta: updated.pmta, fluido: updated.fluido,
-        classeFluido: updated.classeFluido, localizacao: updated.localizacao, tipo: updated.tipo,
+        anoFabricacao: updated.anoFabricacao, pressaoProjeto: updated.pressaoProjeto,
+        pressaoOperacao: updated.pressaoOperacao, pressaoTesteHidrostatico: updated.pressaoTesteHidrostatico,
+        volume: updated.volume, pmta: updated.pmta,
+        temperaturaProjeto: updated.temperaturaProjeto, temperaturaOperacao: updated.temperaturaOperacao,
+        diametroInterno: updated.diametroInterno, alturaComprimento: updated.alturaComprimento,
+        materialConstrucao: updated.materialConstrucao, codigoProjeto: updated.codigoProjeto,
+        fluido: updated.fluido, classeFluido: updated.classeFluido,
+        localizacao: updated.localizacao, tipo: updated.tipo,
       })
       updated.categoria = classificacao.categoria
       updated.grupoPotencialRisco = classificacao.grupoPotencialRisco

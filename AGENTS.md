@@ -1,5 +1,7 @@
 # NR-13 Pro — Agent Guide
 
+> **Idioma**: Sempre responda em **português do Brasil**.
+
 ## Stack & Commands
 - **Stack**: Next.js 16, TypeScript, Tailwind CSS v4, shadcn/ui (base-nova), lucide-react, recharts, sonner, @base-ui/react
 - **Animation**: Framer Motion, Embla Carousel, Lenis (smooth scroll)

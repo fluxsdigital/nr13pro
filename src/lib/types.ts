@@ -29,9 +29,17 @@ export interface CreateEquipamentoDTO {
   fabricante: string
   numeroSerie: string
   anoFabricacao: number
+  pressaoProjeto: number
   pressaoOperacao: number
+  pressaoTesteHidrostatico: number | null
   volume: number
   pmta: number
+  temperaturaProjeto: number | null
+  temperaturaOperacao: number | null
+  diametroInterno: number | null
+  alturaComprimento: number | null
+  materialConstrucao: string
+  codigoProjeto: string
   fluido: string
   classeFluido: ClasseFluido
   localizacao: string
@@ -56,6 +64,8 @@ export interface CreateInspecaoDTO {
   examesInternos: boolean
   testeHidrostatico: boolean
   temSPIE: boolean
+  parametrosUltrassom: ParametrosUltrassom | null
+  checklist: Omit<ChecklistItem, "id">[]
   medicoes: Omit<Medicao, "id">[]
   anomalias: Omit<Anomalia, "id" | "foto">[]
   dispositivosSeguranca: Omit<DispositivoSeguranca, "id">[]
@@ -77,6 +87,8 @@ export interface Inspecao {
   examesInternos: boolean
   testeHidrostatico: boolean
   temSPIE: boolean
+  parametrosUltrassom: ParametrosUltrassom | null
+  checklist: ChecklistItem[]
   medicoes: Medicao[]
   anomalias: Anomalia[]
   dispositivosSeguranca: DispositivoSeguranca[]
@@ -90,8 +102,18 @@ export interface Medicao {
   ponto: string
   espessura: number
   espessuraAnterior: number | null
+  espessuraConstrucao: number | null
+  tempoOperacao: number | null
   dataMedicao: string
   observacao: string
+}
+
+export interface ParametrosUltrassom {
+  aparelho: string
+  transdutor: string
+  velocidadeSonica: number
+  tecnica: string
+  blocoCalibracao: string
 }
 
 export interface Anomalia {
@@ -103,11 +125,28 @@ export interface Anomalia {
   resolvida: boolean
 }
 
+export interface ChecklistItem {
+  secao: string
+  item: string
+  ok: boolean | null
+  observacao: string
+}
+
 export interface DispositivoSeguranca {
   id: string
   tipo: "valvula_seguranca" | "disco_ruptura" | "manometro" | "termometro" | "visor_nivel"
   tag: string
+  fabricante?: string
+  modelo?: string
+  numeroSerie?: string
   inspecaoOk: boolean
+  pressaoAbertura?: number
+  pressaoVedacao?: number
+  conexaoEntrada?: string
+  conexaoSaida?: string
+  ultimaCalibracao?: string
+  proximaCalibracao?: string
+  numeroCertificado?: string
   observacao: string
 }
 
