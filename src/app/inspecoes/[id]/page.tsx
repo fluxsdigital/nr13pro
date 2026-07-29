@@ -39,41 +39,41 @@ export default function InspecaoDetalhe() {
     })
   }, [params.id])
 
-  if (loading) return <div className="p-4 sm:p-8 text-slate-500">Carregando...</div>
-  if (!inspecao) return <div className="p-4 sm:p-8 text-slate-500">Inspeção não encontrada</div>
+  if (loading) return <div className="p-4 sm:p-8 text-text-secondary">Carregando...</div>
+  if (!inspecao) return <div className="p-4 sm:p-8 text-text-secondary">Inspeção não encontrada</div>
 
   return (
     <div className="p-4 sm:p-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight capitalize">{inspecao.tipo.replace("_", " ")}</h1>
+            <h1 className="text-2xl font-semibold text-text-primary tracking-tight capitalize">{inspecao.tipo.replace("_", " ")}</h1>
             <Badge variant={inspecao.concluida ? "default" : "secondary"}>
               {inspecao.concluida ? "Concluída" : "Em andamento"}
             </Badge>
           </div>
-          <p className="text-slate-500 text-sm mt-1 truncate">
+          <p className="text-text-secondary text-sm mt-1 truncate">
             {eq?.tag} — {eq?.descricao} • {inspecao.dataInicio} a {inspecao.dataTermino}
           </p>
-          {cliente && <p className="text-xs text-blue-600 mt-0.5">Cliente: {cliente.nome}</p>}
+          {cliente && <p className="text-xs text-primary mt-0.5">Cliente: {cliente.nome}</p>}
         </div>
         <div className="flex flex-col sm:flex-row gap-2 shrink-0">
           {!laudo && inspecao.concluida && (
             <Link href={`/laudos/novo?inspecao=${inspecao.id}`}>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
+              <Button variant="primary" className="w-full sm:w-auto">
                 <FileText className="h-4 w-4 mr-2" />
                 Gerar Laudo
               </Button>
             </Link>
           )}
           <Link href={`/equipamentos/${eq?.id}`}>
-            <Button variant="outline" className="border-slate-200 text-slate-700 w-full sm:w-auto">Ver Equipamento</Button>
+            <Button variant="outline" className="border-border text-text-secondary w-full sm:w-auto">Ver Equipamento</Button>
           </Link>
         </div>
       </div>
 
       <Tabs defaultValue="resumo" className="w-full">
-        <TabsList className="bg-slate-100 border border-slate-200 overflow-x-auto flex-nowrap">
+        <TabsList className="bg-card-hover border border-border overflow-x-auto flex-nowrap">
           <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Resumo</TabsTrigger>
           <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Medições</TabsTrigger>
           <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Anomalias</TabsTrigger>
@@ -81,8 +81,8 @@ export default function InspecaoDetalhe() {
         </TabsList>
 
         <TabsContent value="resumo" className="mt-4 space-y-4">
-          <Card className="border-slate-200 shadow-sm">
-            <CardHeader><CardTitle className="text-slate-900">Exames Realizados</CardTitle></CardHeader>
+          <Card className="border-border shadow-sm">
+            <CardHeader><CardTitle className="text-text-primary">Exames Realizados</CardTitle></CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
@@ -91,35 +91,35 @@ export default function InspecaoDetalhe() {
                   { label: "Teste Hidrostático", ok: inspecao.testeHidrostatico },
                 ].map(({ label, ok }) => (
                   <div key={label} className={`p-3 rounded-lg text-center border ${
-                    ok ? "bg-emerald-50 border-emerald-200" : "bg-slate-50 border-slate-200"
+                    ok ? "bg-success-subtle border-success/30" : "bg-background border-border"
                   }`}>
-                    <p className="text-sm text-slate-900">{label}</p>
-                    <p className={`text-xs mt-1 ${ok ? "text-emerald-600" : "text-slate-400"}`}>{ok ? "Realizado" : "Não realizado"}</p>
+                    <p className="text-sm text-text-primary">{label}</p>
+                    <p className={`text-xs mt-1 ${ok ? "text-success" : "text-text-muted"}`}>{ok ? "Realizado" : "Não realizado"}</p>
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-slate-200 shadow-sm">
-            <CardHeader><CardTitle className="text-slate-900">Parecer Técnico</CardTitle></CardHeader>
+          <Card className="border-border shadow-sm">
+            <CardHeader><CardTitle className="text-text-primary">Parecer Técnico</CardTitle></CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-700 leading-relaxed">{inspecao.parecer}</p>
+              <p className="text-sm text-text-secondary leading-relaxed">{inspecao.parecer}</p>
             </CardContent>
           </Card>
 
           {laudo && (
             <Link href={`/laudos/${laudo.id}`}>
-              <Card className="border-slate-200 shadow-sm hover:bg-slate-50 cursor-pointer transition-colors">
+              <Card className="border-border shadow-sm hover:bg-card-hover cursor-pointer transition-colors">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                    <FileText className="h-5 w-5 text-primary" />
                     <div>
-                      <p className="text-sm font-medium text-slate-900">Laudo: {laudo.numeroLaudo}</p>
-                      <p className="text-xs text-slate-500">Emitido em {laudo.dataEmissao}</p>
+                      <p className="text-sm font-medium text-text-primary">Laudo: {laudo.numeroLaudo}</p>
+                      <p className="text-xs text-text-secondary">Emitido em {laudo.dataEmissao}</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="border-slate-200">Visualizar</Badge>
+                  <Badge variant="outline" className="border-border">Visualizar</Badge>
                 </CardContent>
               </Card>
             </Link>
@@ -127,42 +127,42 @@ export default function InspecaoDetalhe() {
         </TabsContent>
 
         <TabsContent value="medicoes" className="mt-4">
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader>
-              <CardTitle className="text-slate-900 flex items-center gap-2">
-                <Ruler className="h-4 w-4 text-blue-600" />
+              <CardTitle className="text-text-primary flex items-center gap-2">
+                <Ruler className="h-4 w-4 text-primary" />
                 Medições de Espessura
               </CardTitle>
             </CardHeader>
             <CardContent>
               {inspecao.medicoes.length === 0 ? (
-                <p className="text-sm text-slate-400 italic">Nenhuma medição registrada</p>
+                <p className="text-sm text-text-muted italic">Nenhuma medição registrada</p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-slate-200 bg-slate-50">
-                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Ponto</th>
-                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Atual (mm)</th>
-                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Anterior (mm)</th>
-                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Variação</th>
-                        <th className="text-left py-2 px-3 text-slate-500 font-medium">Obs</th>
+                      <tr className="border-b border-border bg-background">
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Ponto</th>
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Atual (mm)</th>
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Anterior (mm)</th>
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Variação</th>
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Obs</th>
                       </tr>
                     </thead>
                     <tbody>
                       {inspecao.medicoes.map((med) => (
-                        <tr key={med.id} className="border-b border-slate-100">
-                          <td className="py-2 px-3 font-medium text-slate-900">{med.ponto}</td>
-                          <td className="py-2 px-3 text-slate-700">{med.espessura}</td>
-                          <td className="py-2 px-3 text-slate-700">{med.espessuraAnterior ?? "—"}</td>
+                        <tr key={med.id} className="border-b border-border">
+                          <td className="py-2 px-3 font-medium text-text-primary">{med.ponto}</td>
+                          <td className="py-2 px-3 text-text-secondary">{med.espessura}</td>
+                          <td className="py-2 px-3 text-text-secondary">{med.espessuraAnterior ?? "—"}</td>
                           <td className="py-2 px-3">
                             {med.espessuraAnterior ? (
-                              <span className={med.espessura < med.espessuraAnterior ? "text-red-600" : "text-emerald-600"}>
+                              <span className={med.espessura < med.espessuraAnterior ? "text-red-600" : "text-success"}>
                                 {((med.espessura - med.espessuraAnterior) / med.espessuraAnterior * 100).toFixed(1)}%
                               </span>
                             ) : "—"}
                           </td>
-                          <td className="py-2 px-3 text-slate-400 text-xs">{med.observacao}</td>
+                          <td className="py-2 px-3 text-text-muted text-xs">{med.observacao}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -175,15 +175,15 @@ export default function InspecaoDetalhe() {
 
         <TabsContent value="anomalias" className="mt-4 space-y-3">
           {inspecao.anomalias.length === 0 ? (
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="border-border shadow-sm">
               <CardContent className="py-8 text-center">
-                <AlertTriangle className="h-8 w-8 text-emerald-500 mx-auto mb-2" />
-                <p className="text-sm text-slate-500">Nenhuma anomalia encontrada</p>
+                <AlertTriangle className="h-8 w-8 text-success mx-auto mb-2" />
+                <p className="text-sm text-text-secondary">Nenhuma anomalia encontrada</p>
               </CardContent>
             </Card>
           ) : (
             inspecao.anomalias.map((ano) => (
-              <Card key={ano.id} className="border-slate-200 shadow-sm">
+              <Card key={ano.id} className="border-border shadow-sm">
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
@@ -192,14 +192,14 @@ export default function InspecaoDetalhe() {
                         ano.gravidade === "alta" ? "destructive" :
                         ano.gravidade === "media" ? "default" : "secondary"
                       } className="capitalize">{ano.gravidade}</Badge>
-                      <span className="text-sm text-slate-900">{ano.descricao}</span>
+                      <span className="text-sm text-text-primary">{ano.descricao}</span>
                     </div>
                     <Badge variant={ano.resolvida ? "default" : "secondary"}>
                       {ano.resolvida ? "Resolvida" : "Pendente"}
                     </Badge>
                   </div>
                   {ano.planoAcao && (
-                    <p className="text-xs text-slate-500 mt-2">Plano de ação: {ano.planoAcao}</p>
+                    <p className="text-xs text-text-secondary mt-2">Plano de ação: {ano.planoAcao}</p>
                   )}
                 </CardContent>
               </Card>
@@ -208,28 +208,28 @@ export default function InspecaoDetalhe() {
         </TabsContent>
 
         <TabsContent value="dispositivos" className="mt-4">
-          <Card className="border-slate-200 shadow-sm">
+          <Card className="border-border shadow-sm">
             <CardHeader>
-              <CardTitle className="text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-blue-600" />
+              <CardTitle className="text-text-primary flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-primary" />
                 Dispositivos de Segurança
               </CardTitle>
             </CardHeader>
             <CardContent>
               {inspecao.dispositivosSeguranca.length === 0 ? (
-                <p className="text-sm text-slate-400 italic">Nenhum dispositivo registrado</p>
+                <p className="text-sm text-text-muted italic">Nenhum dispositivo registrado</p>
               ) : (
                 <div className="space-y-2">
                   {inspecao.dispositivosSeguranca.map((d) => (
-                    <div key={d.id} className="flex items-center justify-between p-3 rounded-lg border border-slate-100 bg-slate-50">
+                    <div key={d.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-background">
                       <div className="flex items-center gap-3">
-                        <div className={`w-2 h-2 rounded-full ${d.inspecaoOk ? "bg-emerald-500" : "bg-red-500"}`} />
+                        <div className={`w-2 h-2 rounded-full ${d.inspecaoOk ? "bg-success" : "bg-red-500"}`} />
                         <div>
-                          <p className="text-sm text-slate-900 font-medium capitalize">{d.tipo.replace("_", " ")}</p>
-                          <p className="text-xs text-slate-500">{d.tag}</p>
+                          <p className="text-sm text-text-primary font-medium capitalize">{d.tipo.replace("_", " ")}</p>
+                          <p className="text-xs text-text-secondary">{d.tag}</p>
                         </div>
                       </div>
-                      <div className="text-right text-xs text-slate-500">{d.observacao}</div>
+                      <div className="text-right text-xs text-text-secondary">{d.observacao}</div>
                     </div>
                   ))}
                 </div>

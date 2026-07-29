@@ -46,18 +46,18 @@ export default function Laudos() {
     <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Laudos Técnicos</h1>
-          <p className="text-slate-500 text-sm mt-1">Relatórios de inspeção de segurança emitidos</p>
+          <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Laudos Técnicos</h1>
+          <p className="text-text-secondary text-sm mt-1">Relatórios de inspeção de segurança emitidos</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
-            <FileText className="h-8 w-8 text-blue-600" />
+            <FileText className="h-8 w-8 text-primary" />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{data.length}</p>
-              <p className="text-xs text-slate-500">Total de laudos</p>
+              <p className="text-2xl font-bold text-text-primary">{data.length}</p>
+              <p className="text-xs text-text-secondary">Total de laudos</p>
             </div>
           </CardContent>
         </Card>
@@ -65,19 +65,19 @@ export default function Laudos() {
           <CardContent className="p-4 flex items-center gap-3">
             <Building2 className="h-8 w-8 text-violet-600" />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{empresas.length}</p>
-              <p className="text-xs text-slate-500">Empresas atendidas</p>
+              <p className="text-2xl font-bold text-text-primary">{empresas.length}</p>
+              <p className="text-xs text-text-secondary">Empresas atendidas</p>
             </div>
           </CardContent>
         </Card>
         <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
-            <User className="h-8 w-8 text-slate-600" />
+            <User className="h-8 w-8 text-text-secondary" />
             <div>
-              <p className="text-2xl font-bold text-slate-900">
+              <p className="text-2xl font-bold text-text-primary">
                 {new Set(data.map((d) => d.plhNome)).size}
               </p>
-              <p className="text-xs text-slate-500">PLHs responsáveis</p>
+              <p className="text-xs text-text-secondary">PLHs responsáveis</p>
             </div>
           </CardContent>
         </Card>
@@ -86,7 +86,7 @@ export default function Laudos() {
       <div className="flex items-center gap-3 flex-wrap">
         <div className="min-w-[280px]">
           <Select value={filtroCliente} onValueChange={(v) => setFiltroCliente(v ?? "")}>
-          <SelectTrigger className="border-slate-200 bg-white h-9 text-sm w-full">
+          <SelectTrigger className="border-border bg-white h-9 text-sm w-full">
             <SelectValue placeholder="Todas as empresas" />
           </SelectTrigger>
           <SelectContent>
@@ -100,13 +100,13 @@ export default function Laudos() {
       </div>
 
       {loading ? (
-        <p className="text-slate-500">Carregando...</p>
+        <p className="text-text-secondary">Carregando...</p>
       ) : filtradas.length === 0 ? (
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="py-16 text-center">
             <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-600 text-lg">Nenhum laudo encontrado</p>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-text-secondary text-lg">Nenhum laudo encontrado</p>
+            <p className="text-text-muted text-sm mt-1">
               {filtroCliente ? "Tente alterar o filtro" : "Os laudos são gerados automaticamente após cada inspeção"}
             </p>
           </CardContent>
@@ -119,25 +119,25 @@ export default function Laudos() {
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
-                        <FileText className="h-4 w-4 text-blue-600" />
+                      <div className="w-9 h-9 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center shrink-0">
+                        <FileText className="h-4 w-4 text-primary" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="text-sm font-semibold text-slate-900">{l.numeroLaudo}</p>
-                          <Badge variant="outline" className="text-xs border-slate-200 text-slate-600 font-mono">{l.eq?.tag}</Badge>
+                          <p className="text-sm font-semibold text-text-primary">{l.numeroLaudo}</p>
+                          <Badge variant="outline" className="text-xs border-border text-text-secondary font-mono">{l.eq?.tag}</Badge>
                         </div>
-                        <p className="text-xs text-slate-500 truncate mt-0.5">{l.eq?.descricao}</p>
+                        <p className="text-xs text-text-secondary truncate mt-0.5">{l.eq?.descricao}</p>
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-                          <span className="flex items-center gap-1 text-xs text-blue-600">
+                          <span className="flex items-center gap-1 text-xs text-primary">
                             <Building2 className="h-3 w-3 shrink-0" />
                             {l.cliente?.nome}
                           </span>
-                          <span className="flex items-center gap-1 text-xs text-slate-500">
+                          <span className="flex items-center gap-1 text-xs text-text-secondary">
                             <Calendar className="h-3 w-3 shrink-0" />
                             {l.dataEmissao}
                           </span>
-                          <span className="flex items-center gap-1 text-xs text-slate-500 hidden sm:inline-flex">
+                          <span className="flex items-center gap-1 text-xs text-text-secondary hidden sm:inline-flex">
                             <User className="h-3 w-3 shrink-0" />
                             {l.plhNome}
                           </span>
@@ -146,10 +146,10 @@ export default function Laudos() {
                     </div>
                     <div className="flex items-center gap-3 shrink-0 sm:pl-3">
                       <div className="text-right">
-                        <p className="text-xs font-medium text-slate-700">Próx. inspeção</p>
-                        <p className="text-xs text-slate-500">{l.dataProximaInspecao}</p>
+                        <p className="text-xs font-medium text-text-secondary">Próx. inspeção</p>
+                        <p className="text-xs text-text-secondary">{l.dataProximaInspecao}</p>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
+                      <ArrowRight className="h-4 w-4 text-text-muted shrink-0" />
                     </div>
                   </div>
                 </CardContent>

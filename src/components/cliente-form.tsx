@@ -39,44 +39,44 @@ export function ClienteForm({ initial, onSubmit, onCancel }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardContent className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Nome da Empresa</Label>
-              <Input value={form.nome} onChange={(e) => set("nome", e.target.value)} placeholder="Ex: Indústria ABC Ltda." required className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">Nome da Empresa</Label>
+              <Input value={form.nome} onChange={(e) => set("nome", e.target.value)} placeholder="Ex: Indústria ABC Ltda." required className="border-border bg-white" />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">CNPJ</Label>
-              <Input value={form.cnpj} onChange={(e) => set("cnpj", e.target.value)} placeholder="00.000.000/0001-00" required className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">CNPJ</Label>
+              <Input value={form.cnpj} onChange={(e) => set("cnpj", e.target.value)} placeholder="00.000.000/0001-00" required className="border-border bg-white" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Contato</Label>
-              <Input value={form.contato} onChange={(e) => set("contato", e.target.value)} placeholder="Nome do contato" required className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">Contato</Label>
+              <Input value={form.contato} onChange={(e) => set("contato", e.target.value)} placeholder="Nome do contato" required className="border-border bg-white" />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">E-mail</Label>
-              <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="contato@empresa.com" required className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">E-mail</Label>
+              <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="contato@empresa.com" required className="border-border bg-white" />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Telefone</Label>
-              <Input value={form.telefone} onChange={(e) => set("telefone", e.target.value)} placeholder="(11) 99999-8888" required className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">Telefone</Label>
+              <Input value={form.telefone} onChange={(e) => set("telefone", e.target.value)} placeholder="(11) 99999-8888" required className="border-border bg-white" />
             </div>
           </div>
           <div className="space-y-2">
-            <Label className="text-slate-600 text-xs">Endereço</Label>
-            <Input value={form.endereco} onChange={(e) => set("endereco", e.target.value)} placeholder="Rua, número, bairro - cidade, UF" required className="border-slate-200 bg-white" />
+            <Label className="text-text-secondary text-xs">Endereço</Label>
+            <Input value={form.endereco} onChange={(e) => set("endereco", e.target.value)} placeholder="Rua, número, bairro - cidade, UF" required className="border-border bg-white" />
           </div>
         </CardContent>
       </Card>
 
       <div className="flex items-center justify-end gap-3">
-        <Button type="button" variant="outline" onClick={onCancel} className="border-slate-200 text-slate-700">
+        <Button type="button" variant="outline" onClick={onCancel} className="border-border text-text-secondary">
           Cancelar
         </Button>
-        <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+        <Button type="submit" disabled={loading} variant="primary">
           {loading ? "Salvando..." : initial ? "Atualizar Cliente" : "Cadastrar Cliente"}
         </Button>
       </div>

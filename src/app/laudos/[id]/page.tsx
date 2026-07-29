@@ -49,45 +49,45 @@ export default function LaudoDetalhe() {
     })
   }, [params.id])
 
-  if (loading) return <div className="p-4 sm:p-8 text-slate-500">Carregando...</div>
-  if (!laudo) return <div className="p-4 sm:p-8 text-slate-500">Laudo não encontrado</div>
+  if (loading) return <div className="p-4 sm:p-8 text-text-secondary">Carregando...</div>
+  if (!laudo) return <div className="p-4 sm:p-8 text-text-secondary">Laudo não encontrado</div>
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <Link href="/laudos" className="text-slate-500 hover:text-slate-700 shrink-0">
+          <Link href="/laudos" className="text-text-secondary hover:text-text-primary shrink-0">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="min-w-0">
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight truncate">{laudo.numeroLaudo}</h1>
-            <p className="text-slate-500 text-sm truncate">{eq?.tag} — {eq?.descricao}</p>
-            {cliente && <p className="text-xs text-blue-600 truncate">{cliente.nome}</p>}
+            <h1 className="text-2xl font-semibold text-text-primary tracking-tight truncate">{laudo.numeroLaudo}</h1>
+            <p className="text-text-secondary text-sm truncate">{eq?.tag} — {eq?.descricao}</p>
+            {cliente && <p className="text-xs text-primary truncate">{cliente.nome}</p>}
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 no-print">
-          <Button variant="outline" onClick={handlePrint} className="border-slate-200 text-slate-700 w-full sm:w-auto">
+          <Button variant="outline" onClick={handlePrint} className="border-border text-text-secondary w-full sm:w-auto">
             <Printer className="h-4 w-4 mr-2" /> Imprimir
           </Button>
-          <Button onClick={handleDownloadPDF} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
+          <Button variant="primary" onClick={handleDownloadPDF} className="w-full sm:w-auto">
             <Download className="h-4 w-4 mr-2" /> Exportar PDF
           </Button>
         </div>
       </div>
 
-      <Card className="border-slate-200 shadow-sm print:shadow-none print:border-none">
+      <Card className="border-border shadow-sm print:shadow-none print:border-none">
         <CardContent className="p-8 print:p-0">
           {/* Cabeçalho do Laudo */}
           <div className="text-center mb-10">
-            <h2 className="text-xl font-bold uppercase tracking-wide text-slate-900">RELATÓRIO DE INSPEÇÃO DE SEGURANÇA</h2>
-            <p className="text-sm text-slate-500 mt-1">NR-13 — Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento</p>
+            <h2 className="text-xl font-bold uppercase tracking-wide text-text-primary">RELATÓRIO DE INSPEÇÃO DE SEGURANÇA</h2>
+            <p className="text-sm text-text-secondary mt-1">NR-13 — Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento</p>
             <Separator className="my-4 bg-slate-300" />
-            <p className="text-lg font-semibold text-slate-900">{laudo.numeroLaudo}</p>
+            <p className="text-lg font-semibold text-text-primary">{laudo.numeroLaudo}</p>
           </div>
 
           {/* Identificação do Equipamento */}
           <section className="mb-8">
-            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">1. Identificação do Equipamento</h3>
+            <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">1. Identificação do Equipamento</h3>
             <table className="w-full text-sm">
               <tbody>
                 {[
@@ -105,9 +105,9 @@ export default function LaudoDetalhe() {
                   ["PMTA:", eq ? `${eq.pmta} kPa` : ""],
                   ["Categoria:", eq?.categoria ?? ""],
                 ].map(([label, value]) => (
-                  <tr key={label} className="border-b border-slate-200">
-                    <td className="py-2 pr-4 font-semibold text-slate-700 w-1/3">{label}</td>
-                    <td className="py-2 text-slate-900">{value}</td>
+                  <tr key={label} className="border-b border-border">
+                    <td className="py-2 pr-4 font-semibold text-text-secondary w-1/3">{label}</td>
+                    <td className="py-2 text-text-primary">{value}</td>
                   </tr>
                 ))}
               </tbody>
@@ -116,7 +116,7 @@ export default function LaudoDetalhe() {
 
           {/* Dados da Inspeção */}
           <section className="mb-8">
-            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">2. Dados da Inspeção</h3>
+            <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">2. Dados da Inspeção</h3>
             <table className="w-full text-sm">
               <tbody>
                 {[
@@ -128,9 +128,9 @@ export default function LaudoDetalhe() {
                   ["Teste Hidrostático:", inspecao?.testeHidrostatico ? "Realizado" : "Não Realizado"],
                   ["SPIE:", inspecao?.temSPIE ? "Sim" : "Não"],
                 ].map(([label, value]) => (
-                  <tr key={label} className="border-b border-slate-200">
-                    <td className="py-2 pr-4 font-semibold text-slate-700 w-1/3">{label}</td>
-                    <td className="py-2 text-slate-900">{value}</td>
+                  <tr key={label} className="border-b border-border">
+                    <td className="py-2 pr-4 font-semibold text-text-secondary w-1/3">{label}</td>
+                    <td className="py-2 text-text-primary">{value}</td>
                   </tr>
                 ))}
               </tbody>
@@ -140,23 +140,23 @@ export default function LaudoDetalhe() {
           {/* Medições */}
           {inspecao && inspecao.medicoes.length > 0 && (
             <section className="mb-8">
-              <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">3. Medições de Espessura (Ultrassom)</h3>
+              <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">3. Medições de Espessura (Ultrassom)</h3>
               <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="bg-slate-100">
-                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Ponto</th>
-                    <th className="border border-slate-300 px-3 py-2 text-right text-slate-700">Espessura (mm)</th>
-                    <th className="border border-slate-300 px-3 py-2 text-right text-slate-700">Anterior (mm)</th>
-                    <th className="border border-slate-300 px-3 py-2 text-right text-slate-700">Variação (%)</th>
+                  <tr className="bg-card-hover">
+                    <th className="border border-border px-3 py-2 text-left text-text-secondary">Ponto</th>
+                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Espessura (mm)</th>
+                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Anterior (mm)</th>
+                    <th className="border border-border px-3 py-2 text-right text-text-secondary">Variação (%)</th>
                   </tr>
                 </thead>
                 <tbody>
                   {inspecao.medicoes.map((med) => (
                     <tr key={med.id}>
-                      <td className="border border-slate-300 px-3 py-2 text-slate-900">{med.ponto}</td>
-                      <td className="border border-slate-300 px-3 py-2 text-right text-slate-900">{med.espessura}</td>
-                      <td className="border border-slate-300 px-3 py-2 text-right text-slate-500">{med.espessuraAnterior ?? "—"}</td>
-                      <td className="border border-slate-300 px-3 py-2 text-right text-slate-900">
+                      <td className="border border-border px-3 py-2 text-text-primary">{med.ponto}</td>
+                      <td className="border border-border px-3 py-2 text-right text-text-primary">{med.espessura}</td>
+                      <td className="border border-border px-3 py-2 text-right text-text-secondary">{med.espessuraAnterior ?? "—"}</td>
+                      <td className="border border-border px-3 py-2 text-right text-text-primary">
                         {med.espessuraAnterior
                           ? ((med.espessura - med.espessuraAnterior) / med.espessuraAnterior * 100).toFixed(1) + "%"
                           : "—"}
@@ -171,12 +171,12 @@ export default function LaudoDetalhe() {
           {/* Anomalias */}
           {inspecao && inspecao.anomalias.length > 0 && (
             <section className="mb-8">
-              <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">4. Anomalias Encontradas</h3>
+              <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">4. Anomalias Encontradas</h3>
               {inspecao.anomalias.map((ano, i) => (
-                <div key={ano.id} className="mb-3 p-3 border border-slate-300 rounded">
-                  <p className="font-semibold text-sm text-slate-900">Anomalia {i + 1}</p>
-                  <p className="text-sm mt-1 text-slate-700">{ano.descricao}</p>
-                  <div className="flex gap-4 mt-2 text-xs text-slate-600">
+                <div key={ano.id} className="mb-3 p-3 border border-border rounded">
+                  <p className="font-semibold text-sm text-text-primary">Anomalia {i + 1}</p>
+                  <p className="text-sm mt-1 text-text-secondary">{ano.descricao}</p>
+                  <div className="flex gap-4 mt-2 text-xs text-text-secondary">
                     <span>Gravidade: <strong className="uppercase">{ano.gravidade}</strong></span>
                     <span>Plano de Ação: {ano.planoAcao}</span>
                   </div>
@@ -188,21 +188,21 @@ export default function LaudoDetalhe() {
           {/* Dispositivos */}
           {inspecao && inspecao.dispositivosSeguranca.length > 0 && (
             <section className="mb-8">
-              <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">5. Dispositivos de Segurança</h3>
+              <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">5. Dispositivos de Segurança</h3>
               <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="bg-slate-100">
-                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Tipo</th>
-                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Tag</th>
-                    <th className="border border-slate-300 px-3 py-2 text-left text-slate-700">Situação</th>
+                  <tr className="bg-card-hover">
+                    <th className="border border-border px-3 py-2 text-left text-text-secondary">Tipo</th>
+                    <th className="border border-border px-3 py-2 text-left text-text-secondary">Tag</th>
+                    <th className="border border-border px-3 py-2 text-left text-text-secondary">Situação</th>
                   </tr>
                 </thead>
                 <tbody>
                   {inspecao.dispositivosSeguranca.map((d) => (
                     <tr key={d.id}>
-                      <td className="border border-slate-300 px-3 py-2 capitalize text-slate-900">{d.tipo.replace("_", " ")}</td>
-                      <td className="border border-slate-300 px-3 py-2 text-slate-900">{d.tag}</td>
-                      <td className="border border-slate-300 px-3 py-2 text-slate-700">{d.inspecaoOk ? "Aprovado" : "Reprovado"}{d.observacao ? ` — ${d.observacao}` : ""}</td>
+                      <td className="border border-border px-3 py-2 capitalize text-text-primary">{d.tipo.replace("_", " ")}</td>
+                      <td className="border border-border px-3 py-2 text-text-primary">{d.tag}</td>
+                      <td className="border border-border px-3 py-2 text-text-secondary">{d.inspecaoOk ? "Aprovado" : "Reprovado"}{d.observacao ? ` — ${d.observacao}` : ""}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -212,26 +212,26 @@ export default function LaudoDetalhe() {
 
           {/* Parecer */}
           <section className="mb-8">
-            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">6. Parecer Conclusivo</h3>
-            <p className="text-sm leading-relaxed text-slate-700">{inspecao?.parecer}</p>
+            <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">6. Parecer Conclusivo</h3>
+            <p className="text-sm leading-relaxed text-text-secondary">{inspecao?.parecer}</p>
           </section>
 
           {/* Assinatura */}
           <section className="mb-8">
-            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">7. Responsável Técnico</h3>
-            <div className="border-2 border-slate-300 rounded-lg p-6 text-center mt-4">
-              <p className="font-semibold text-slate-900">{laudo.plhNome}</p>
-              <p className="text-sm text-slate-600">{laudo.plhCrea}</p>
-              <div className="mt-8 mb-4 border-b border-slate-400 max-w-xs mx-auto" />
-              <p className="text-sm text-slate-600">Assinatura do Profissional Legalmente Habilitado (PLH)</p>
+            <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">7. Responsável Técnico</h3>
+            <div className="border-2 border-border rounded-lg p-6 text-center mt-4">
+              <p className="font-semibold text-text-primary">{laudo.plhNome}</p>
+              <p className="text-sm text-text-secondary">{laudo.plhCrea}</p>
+              <div className="mt-8 mb-4 border-b border-text-muted max-w-xs mx-auto" />
+              <p className="text-sm text-text-secondary">Assinatura do Profissional Legalmente Habilitado (PLH)</p>
             </div>
           </section>
 
           {/* Próxima Inspeção */}
           <section>
-            <h3 className="text-base font-bold uppercase bg-slate-100 px-3 py-2 rounded mb-4 text-slate-800">8. Próxima Inspeção</h3>
+            <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">8. Próxima Inspeção</h3>
             <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center">
-              <p className="text-sm text-slate-700">Data prevista para próxima inspeção:</p>
+              <p className="text-sm text-text-secondary">Data prevista para próxima inspeção:</p>
               <p className="text-xl font-bold text-amber-700 mt-1">{laudo.dataProximaInspecao}</p>
             </div>
           </section>

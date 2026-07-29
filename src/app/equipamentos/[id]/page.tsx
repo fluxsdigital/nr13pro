@@ -15,7 +15,7 @@ export default function EquipamentoDetalhe() {
   const eq = getEquipamento(params.id as string)
 
   if (!eq) {
-    return <div className="p-4 sm:p-8 text-slate-500">Equipamento não encontrado</div>
+    return <div className="p-4 sm:p-8 text-text-secondary">Equipamento não encontrado</div>
   }
 
   const cliente = getClientePorEquipamento(eq.id)
@@ -33,26 +33,26 @@ export default function EquipamentoDetalhe() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{eq.tag}</h1>
-            <Badge variant="outline" className="border-slate-200 text-slate-600 capitalize">{eq.tipo}</Badge>
+            <h1 className="text-2xl font-semibold text-text-primary tracking-tight">{eq.tag}</h1>
+            <Badge variant="outline" className="border-border text-text-secondary capitalize">{eq.tipo}</Badge>
             {eq.categoria && <Badge>{eq.categoria}</Badge>}
           </div>
-          <p className="text-slate-500 mt-1 truncate">{eq.descricao}</p>
+          <p className="text-text-secondary mt-1 truncate">{eq.descricao}</p>
           {cliente && (
-            <p className="text-xs text-blue-600 mt-1 truncate">
+            <p className="text-xs text-primary mt-1 truncate">
               Cliente: {cliente.nome}
             </p>
           )}
         </div>
         <div className="flex flex-col sm:flex-row gap-2 shrink-0">
           <Link href={`/equipamentos/${eq.id}/editar`}>
-            <Button variant="outline" className="border-slate-200 text-slate-700 w-full sm:w-auto">
+            <Button variant="outline" className="border-border text-text-secondary w-full sm:w-auto">
               <Pencil className="h-4 w-4 mr-2" />
               Editar
             </Button>
           </Link>
           <Link href={`/inspecoes/nova?equipamento=${eq.id}`}>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
+            <Button variant="primary" className="w-full sm:w-auto">
               <ClipboardCheck className="h-4 w-4 mr-2" />
               Nova Inspeção
             </Button>
@@ -61,80 +61,80 @@ export default function EquipamentoDetalhe() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="border-slate-200 shadow-sm lg:col-span-2">
+        <Card className="border-border shadow-sm lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-slate-900">Dados Técnicos</CardTitle>
+            <CardTitle className="text-text-primary">Dados Técnicos</CardTitle>
           </CardHeader>
           <CardContent>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
               <div>
-                <dt className="text-slate-500">Fabricante</dt>
-                <dd className="text-slate-900 font-medium">{eq.fabricante}</dd>
+                <dt className="text-text-secondary">Fabricante</dt>
+                <dd className="text-text-primary font-medium">{eq.fabricante}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Nº de Série</dt>
-                <dd className="text-slate-900 font-medium">{eq.numeroSerie}</dd>
+                <dt className="text-text-secondary">Nº de Série</dt>
+                <dd className="text-text-primary font-medium">{eq.numeroSerie}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Ano de Fabricação</dt>
-                <dd className="text-slate-900 font-medium">{eq.anoFabricacao}</dd>
+                <dt className="text-text-secondary">Ano de Fabricação</dt>
+                <dd className="text-text-primary font-medium">{eq.anoFabricacao}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Pressão de Operação (kPa)</dt>
-                <dd className="text-slate-900 font-medium">{eq.pressaoOperacao}</dd>
+                <dt className="text-text-secondary">Pressão de Operação (kPa)</dt>
+                <dd className="text-text-primary font-medium">{eq.pressaoOperacao}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Volume (m³)</dt>
-                <dd className="text-slate-900 font-medium">{eq.volume}</dd>
+                <dt className="text-text-secondary">Volume (m³)</dt>
+                <dd className="text-text-primary font-medium">{eq.volume}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">PMTA (kPa)</dt>
-                <dd className="text-slate-900 font-medium">{eq.pmta}</dd>
+                <dt className="text-text-secondary">PMTA (kPa)</dt>
+                <dd className="text-text-primary font-medium">{eq.pmta}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">P.V (produto)</dt>
-                <dd className="text-slate-900 font-medium">
+                <dt className="text-text-secondary">P.V (produto)</dt>
+                <dd className="text-text-primary font-medium">
                   {(eq.pressaoOperacao * eq.volume).toLocaleString("pt-BR")}
                 </dd>
               </div>
               <div>
-                <dt className="text-slate-500">Fluido</dt>
-                <dd className="text-slate-900 font-medium">{eq.fluido} (Classe {eq.classeFluido})</dd>
+                <dt className="text-text-secondary">Fluido</dt>
+                <dd className="text-text-primary font-medium">{eq.fluido} (Classe {eq.classeFluido})</dd>
               </div>
               <div className="col-span-2">
-                <dt className="text-slate-500">Classe do Fluido</dt>
-                <dd className="text-slate-600 text-xs mt-0.5">{descricaoClasseFluido(eq.classeFluido)}</dd>
+                <dt className="text-text-secondary">Classe do Fluido</dt>
+                <dd className="text-text-secondary text-xs mt-0.5">{descricaoClasseFluido(eq.classeFluido)}</dd>
               </div>
               <div>
-                <dt className="text-slate-500">Localização</dt>
-                <dd className="text-slate-900 font-medium">{eq.localizacao}</dd>
+                <dt className="text-text-secondary">Localização</dt>
+                <dd className="text-text-primary font-medium">{eq.localizacao}</dd>
               </div>
             </dl>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-slate-900">Classificação NR-13</CardTitle>
+            <CardTitle className="text-text-primary">Classificação NR-13</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {catInfo && (
-              <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
-                <p className="text-sm font-medium text-slate-900">{catInfo.nome}</p>
-                <p className="text-xs text-slate-500 mt-1">{catInfo.risco}</p>
+              <div className="p-3 rounded-lg bg-primary-subtle border border-primary/20">
+                <p className="text-sm font-medium text-text-primary">{catInfo.nome}</p>
+                <p className="text-xs text-text-secondary mt-1">{catInfo.risco}</p>
               </div>
             )}
             {periodicidade && (
               <div className="space-y-2">
-                <p className="text-sm text-slate-500 font-medium">Periodicidade (sem SPIE)</p>
+                <p className="text-sm text-text-secondary font-medium">Periodicidade (sem SPIE)</p>
                 <div className="flex gap-2">
-                  <div className="flex-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-center">
-                    <p className="text-xs text-slate-500">Externo</p>
-                    <p className="text-xl font-bold text-blue-600">{periodicidade.externo} ano(s)</p>
+                  <div className="flex-1 p-3 rounded-lg bg-background border border-border text-center">
+                    <p className="text-xs text-text-secondary">Externo</p>
+                    <p className="text-xl font-bold text-primary">{periodicidade.externo} ano(s)</p>
                   </div>
-                  <div className="flex-1 p-3 rounded-lg bg-slate-50 border border-slate-200 text-center">
-                    <p className="text-xs text-slate-500">Interno</p>
-                    <p className="text-xl font-bold text-blue-600">{periodicidade.interno} ano(s)</p>
+                  <div className="flex-1 p-3 rounded-lg bg-background border border-border text-center">
+                    <p className="text-xs text-text-secondary">Interno</p>
+                    <p className="text-xl font-bold text-primary">{periodicidade.interno} ano(s)</p>
                   </div>
                 </div>
               </div>
@@ -144,19 +144,19 @@ export default function EquipamentoDetalhe() {
       </div>
 
       <Tabs defaultValue="inspecoes" className="w-full">
-        <TabsList className="bg-slate-100 border border-slate-200 overflow-x-auto flex-nowrap">
+        <TabsList className="bg-card-hover border border-border overflow-x-auto flex-nowrap">
           <TabsTrigger value="inspecoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Inspeções</TabsTrigger>
           <TabsTrigger value="laudos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Laudos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="inspecoes" className="mt-4">
           {inspecoesEq.length === 0 ? (
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="border-border shadow-sm">
               <CardContent className="py-16 text-center">
-                <ClipboardCheck className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-500">Nenhuma inspeção registrada para este equipamento</p>
+                <ClipboardCheck className="h-12 w-12 text-text-muted mx-auto mb-3" />
+                <p className="text-text-secondary">Nenhuma inspeção registrada para este equipamento</p>
                 <Link href={`/inspecoes/nova?equipamento=${eq.id}`}>
-                  <Button variant="outline" className="mt-4 border-slate-200 text-slate-700">
+                  <Button variant="outline" className="mt-4 border-border text-text-secondary">
                     Iniciar Primeira Inspeção
                   </Button>
                 </Link>
@@ -168,22 +168,22 @@ export default function EquipamentoDetalhe() {
                 const l = getLaudoPorInspecao(ins.id)
                 return (
                   <Link key={ins.id} href={`/inspecoes/${ins.id}`} className="block">
-                    <Card className="border-slate-200 shadow-sm hover:bg-slate-50 transition-colors">
+                    <Card className="border-border shadow-sm hover:bg-card-hover transition-colors">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-4">
-                            <div className={`w-2 h-2 rounded-full ${ins.concluida ? "bg-emerald-500" : "bg-amber-500"}`} />
+                            <div className={`w-2 h-2 rounded-full ${ins.concluida ? "bg-success" : "bg-amber-500"}`} />
                             <div>
-                              <p className="text-sm font-medium text-slate-900 capitalize">{ins.tipo.replace("_", " ")}</p>
-                              <p className="text-xs text-slate-500">{ins.dataInicio} a {ins.dataTermino}</p>
+                              <p className="text-sm font-medium text-text-primary capitalize">{ins.tipo.replace("_", " ")}</p>
+                              <p className="text-xs text-text-secondary">{ins.dataInicio} a {ins.dataTermino}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
-                            {l && <Badge variant="outline" className="text-xs border-slate-200">{l.numeroLaudo}</Badge>}
+                            {l && <Badge variant="outline" className="text-xs border-border">{l.numeroLaudo}</Badge>}
                             <Badge variant={ins.concluida ? "default" : "secondary"}>
                               {ins.concluida ? "Concluída" : "Em andamento"}
                             </Badge>
-                            <ArrowRight className="h-4 w-4 text-slate-400" />
+                            <ArrowRight className="h-4 w-4 text-text-muted" />
                           </div>
                         </div>
                       </CardContent>
@@ -198,16 +198,16 @@ export default function EquipamentoDetalhe() {
         <TabsContent value="laudos" className="mt-4">
           {laudo ? (
             <Link href={`/laudos/${laudo.id}`}>
-              <Card className="border-slate-200 shadow-sm hover:bg-slate-50 transition-colors">
+              <Card className="border-border shadow-sm hover:bg-card-hover transition-colors">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-blue-600" />
+                    <FileText className="h-5 w-5 text-primary" />
                     <div>
-                      <p className="text-sm font-medium text-slate-900">{laudo.numeroLaudo}</p>
-                      <p className="text-xs text-slate-500">Emitido em {laudo.dataEmissao}</p>
+                      <p className="text-sm font-medium text-text-primary">{laudo.numeroLaudo}</p>
+                      <p className="text-xs text-text-secondary">Emitido em {laudo.dataEmissao}</p>
                     </div>
                   </div>
-                  <div className="text-right text-xs text-slate-500">
+                  <div className="text-right text-xs text-text-secondary">
                     <p>{laudo.plhNome}</p>
                     <p>{laudo.plhCrea}</p>
                   </div>
@@ -215,10 +215,10 @@ export default function EquipamentoDetalhe() {
               </Card>
             </Link>
           ) : (
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="border-border shadow-sm">
               <CardContent className="py-16 text-center">
-                <FileText className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-                <p className="text-slate-500">Nenhum laudo emitido para este equipamento</p>
+                <FileText className="h-12 w-12 text-text-muted mx-auto mb-3" />
+                <p className="text-text-secondary">Nenhum laudo emitido para este equipamento</p>
               </CardContent>
             </Card>
           )}

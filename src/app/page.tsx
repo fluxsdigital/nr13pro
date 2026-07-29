@@ -46,15 +46,15 @@ export default function Dashboard() {
     <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Dashboard</h1>
-          <p className="text-slate-500 text-sm mt-1">Gestão das atividades de inspeção NR-13</p>
+          <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Dashboard</h1>
+          <p className="text-text-secondary text-sm mt-1">Gestão das atividades de inspeção NR-13</p>
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-          <label className="text-xs text-slate-500">Filtrar por cliente:</label>
+          <label className="text-xs text-text-secondary">Filtrar por cliente:</label>
           <select
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
-            className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto"
+            className="text-sm border border-border rounded-lg px-3 py-1.5 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary w-full sm:w-auto"
           >
             <option value="todas">Todas as empresas</option>
             {clientes.map((c) => (
@@ -69,66 +69,66 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600">Clientes Ativos</CardTitle>
-                <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
-                  <Building2 className="h-4 w-4 text-blue-600" />
+                <CardTitle className="text-sm font-medium text-text-secondary">Clientes Ativos</CardTitle>
+                <div className="w-8 h-8 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center">
+                  <Building2 className="h-4 w-4 text-primary" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-slate-900">{totalClientes}</div>
-                <p className="text-xs text-slate-400 mt-1">indústrias contratantes</p>
+                <div className="text-3xl font-bold text-text-primary">{totalClientes}</div>
+                <p className="text-xs text-text-muted mt-1">indústrias contratantes</p>
               </CardContent>
             </Card>
 
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600">Equipamentos</CardTitle>
+                <CardTitle className="text-sm font-medium text-text-secondary">Equipamentos</CardTitle>
                 <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
                   <FlaskConical className="h-4 w-4 text-violet-600" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-slate-900">{totalEquipamentos}</div>
-                <p className="text-xs text-slate-400 mt-1">sob responsabilidade</p>
+                <div className="text-3xl font-bold text-text-primary">{totalEquipamentos}</div>
+                <p className="text-xs text-text-muted mt-1">sob responsabilidade</p>
               </CardContent>
             </Card>
 
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600">Inspeções Concluídas</CardTitle>
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                  <ClipboardCheck className="h-4 w-4 text-emerald-600" />
+                <CardTitle className="text-sm font-medium text-text-secondary">Inspeções Concluídas</CardTitle>
+                <div className="w-8 h-8 rounded-lg bg-success-subtle border border-success/30 flex items-center justify-center">
+                  <ClipboardCheck className="h-4 w-4 text-success" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-slate-900">{inspecoesConcluidas}</div>
-                <p className="text-xs text-slate-400 mt-1">{certificadosPendentes.length} aguardando laudo</p>
+                <div className="text-3xl font-bold text-text-primary">{inspecoesConcluidas}</div>
+                <p className="text-xs text-text-muted mt-1">{certificadosPendentes.length} aguardando laudo</p>
               </CardContent>
             </Card>
 
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600">Laudos Emitidos</CardTitle>
-                <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
-                  <FileText className="h-4 w-4 text-blue-600" />
+                <CardTitle className="text-sm font-medium text-text-secondary">Laudos Emitidos</CardTitle>
+                <div className="w-8 h-8 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-primary" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-slate-900">{laudosEmitidos}</div>
-                <p className="text-xs text-slate-400 mt-1">entregues aos clientes</p>
+                <div className="text-3xl font-bold text-text-primary">{laudosEmitidos}</div>
+                <p className="text-xs text-text-muted mt-1">entregues aos clientes</p>
               </CardContent>
             </Card>
 
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-slate-600">Pendentes</CardTitle>
+                <CardTitle className="text-sm font-medium text-text-secondary">Pendentes</CardTitle>
                 <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center">
                   <AlertTriangle className="h-4 w-4 text-red-600" />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-slate-900">{inspecoesPendentes + semInspecaoGeral}</div>
-                <p className="text-xs text-slate-400 mt-1">
+                <div className="text-3xl font-bold text-text-primary">{inspecoesPendentes + semInspecaoGeral}</div>
+                <p className="text-xs text-text-muted mt-1">
                   {inspecoesPendentes} em andamento, {semInspecaoGeral} sem inspeção
                 </p>
               </CardContent>
@@ -138,8 +138,8 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-slate-900 text-lg">Progresso por Cliente</CardTitle>
-                <Link href="/equipamentos" className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                <CardTitle className="text-text-primary text-lg">Progresso por Cliente</CardTitle>
+                <Link href="/equipamentos" className="text-xs text-primary hover:text-primary flex items-center gap-1">
                   Ver todos <ArrowRight className="h-3 w-3" />
                 </Link>
               </CardHeader>
@@ -151,12 +151,12 @@ export default function Dashboard() {
                       <button
                         key={cli.id}
                         onClick={() => setFiltro(cli.id)}
-                        className="w-full block p-4 rounded-lg border border-slate-100 bg-white hover:bg-slate-50 transition-colors text-left"
+                        className="w-full block p-4 rounded-lg border border-border bg-white hover:bg-background transition-colors text-left"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
-                            <p className="text-sm font-semibold text-slate-900">{cli.nome}</p>
-                            <p className="text-xs text-slate-500 mt-0.5">{cli.cnpj}</p>
+                            <p className="text-sm font-semibold text-text-primary">{cli.nome}</p>
+                            <p className="text-xs text-text-secondary mt-0.5">{cli.cnpj}</p>
                           </div>
                           <Badge variant="secondary" className="text-xs">
                             {p.total} equip.
@@ -164,13 +164,13 @@ export default function Dashboard() {
                         </div>
                         <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-2">
                           <div
-                            className="h-full bg-emerald-500 rounded-full transition-all"
+                            className="h-full bg-success rounded-full transition-all"
                             style={{ width: `${p.pct}%` }}
                           />
                         </div>
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-emerald-600 font-medium">{p.pct}% inspecionado</span>
-                          <div className="flex gap-3 text-slate-500">
+                          <span className="text-success font-medium">{p.pct}% inspecionado</span>
+                          <div className="flex gap-3 text-text-secondary">
                             <span className="flex items-center gap-1">
                               <CheckCircle2 className="h-3 w-3 text-emerald-500" />
                               {p.comLaudo}
@@ -198,8 +198,8 @@ export default function Dashboard() {
 
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-slate-900 text-lg">Atividade Recente</CardTitle>
-                <Link href="/inspecoes" className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                <CardTitle className="text-text-primary text-lg">Atividade Recente</CardTitle>
+                <Link href="/inspecoes" className="text-xs text-primary hover:text-primary flex items-center gap-1">
                   Ver todas <ArrowRight className="h-3 w-3" />
                 </Link>
               </CardHeader>
@@ -212,22 +212,22 @@ export default function Dashboard() {
                       <Link
                         key={ins.id}
                         href={`/inspecoes/${ins.id}`}
-                        className="flex items-center justify-between p-3 rounded-lg border border-slate-100 bg-white hover:bg-slate-50 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-lg border border-border bg-white hover:bg-background transition-colors"
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <Calendar className="h-4 w-4 text-blue-600 shrink-0" />
+                          <Calendar className="h-4 w-4 text-primary shrink-0" />
                           <div className="min-w-0">
-                            <p className="text-sm font-medium text-slate-900 truncate">
+                            <p className="text-sm font-medium text-text-primary truncate">
                               {eq?.tag} — {eq?.descricao}
                             </p>
-                            <p className="text-xs text-slate-400 truncate">{cliNome}</p>
+                            <p className="text-xs text-text-muted truncate">{cliNome}</p>
                           </div>
                         </div>
                         <div className="text-right shrink-0">
                           <Badge variant={ins.concluida ? "default" : "secondary"} className="text-xs">
                             {ins.concluida ? "Concluída" : "Em andamento"}
                           </Badge>
-                          <p className="text-xs text-slate-400 mt-1">
+                          <p className="text-xs text-text-muted mt-1">
                             {ins.dataInicio} {ins.dataTermino ? `a ${ins.dataTermino}` : ""}
                           </p>
                         </div>
@@ -242,8 +242,8 @@ export default function Dashboard() {
           {certificadosPendentes.length > 0 && (
             <Card className="card-kpi">
               <CardHeader>
-                <CardTitle className="text-slate-900 flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-text-primary flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-primary" />
                   Certificados Disponíveis para Emissão
                 </CardTitle>
               </CardHeader>
@@ -256,16 +256,16 @@ export default function Dashboard() {
                       <Link
                         key={ins.id}
                         href={`/laudos/novo?inspecao=${ins.id}`}
-                        className="flex items-center justify-between p-3 rounded-lg border border-blue-100 bg-blue-50 hover:bg-blue-100 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-lg border border-primary/20 bg-primary-subtle hover:bg-primary-subtle transition-colors"
                       >
                         <div className="flex items-center gap-3">
-                          <FileText className="h-4 w-4 text-blue-600" />
+                          <FileText className="h-4 w-4 text-primary" />
                           <div>
-                            <p className="text-sm font-medium text-slate-900">{eq?.tag} — {eq?.descricao}</p>
-                            <p className="text-xs text-slate-500">{cli?.nome} • Inspeção concluída em {ins.dataTermino}</p>
+                            <p className="text-sm font-medium text-text-primary">{eq?.tag} — {eq?.descricao}</p>
+                            <p className="text-xs text-text-secondary">{cli?.nome} • Inspeção concluída em {ins.dataTermino}</p>
                           </div>
                         </div>
-                        <Badge variant="default" className="bg-blue-600 text-xs">Emitir laudo</Badge>
+                        <Badge variant="default" className="bg-primary text-xs">Emitir laudo</Badge>
                       </Link>
                     )
                   })}
@@ -299,18 +299,18 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
         <div className="flex items-center gap-3">
           <button
             onClick={onVoltar}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium shrink-0"
+            className="text-sm text-primary hover:text-primary font-medium shrink-0"
           >
             &larr; Voltar
           </button>
           <div className="h-5 w-px bg-slate-200" />
           <div className="min-w-0">
-            <h2 className="text-xl font-semibold text-slate-900 truncate">{cli.nome}</h2>
-            <p className="text-xs text-slate-500 truncate">{cli.cnpj} • {cli.contato}</p>
+            <h2 className="text-xl font-semibold text-text-primary truncate">{cli.nome}</h2>
+            <p className="text-xs text-text-secondary truncate">{cli.cnpj} • {cli.contato}</p>
           </div>
         </div>
         <Link href={`/inspecoes/nova?cliente=${clienteId}`} className="shrink-0">
-          <button className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm font-medium w-full sm:w-auto">
+          <button className="text-sm bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg shadow-sm font-medium w-full sm:w-auto">
             Nova Inspeção
           </button>
         </Link>
@@ -319,26 +319,26 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="card-kpi">
           <CardContent className="p-4 text-center">
-            <p className="text-2xl font-bold text-slate-900">{p.total}</p>
-            <p className="text-xs text-slate-500">Total Equip.</p>
+            <p className="text-2xl font-bold text-text-primary">{p.total}</p>
+            <p className="text-xs text-text-secondary">Total Equip.</p>
           </CardContent>
         </Card>
         <Card className="card-kpi">
           <CardContent className="p-4 text-center">
-            <p className="text-2xl font-bold text-emerald-600">{p.comLaudo}</p>
-            <p className="text-xs text-slate-500">Inspecionados</p>
+            <p className="text-2xl font-bold text-success">{p.comLaudo}</p>
+            <p className="text-xs text-text-secondary">Inspecionados</p>
           </CardContent>
         </Card>
         <Card className="card-kpi">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold text-amber-600">{p.emAndamento}</p>
-            <p className="text-xs text-slate-500">Em Andamento</p>
+            <p className="text-xs text-text-secondary">Em Andamento</p>
           </CardContent>
         </Card>
         <Card className="card-kpi">
           <CardContent className="p-4 text-center">
-            <p className="text-2xl font-bold text-slate-400">{p.semInspecao}</p>
-            <p className="text-xs text-slate-500">Pendentes</p>
+            <p className="text-2xl font-bold text-text-muted">{p.semInspecao}</p>
+            <p className="text-xs text-text-secondary">Pendentes</p>
           </CardContent>
         </Card>
       </div>
@@ -346,32 +346,32 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
       <Card className="card-kpi">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-medium text-slate-700">Progresso de Inspeções</p>
-            <span className="text-sm font-bold text-emerald-600">{p.pct}%</span>
+            <p className="text-sm font-medium text-text-secondary">Progresso de Inspeções</p>
+            <span className="text-sm font-bold text-success">{p.pct}%</span>
           </div>
           <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${p.pct}%` }} />
+            <div className="h-full bg-success rounded-full transition-all" style={{ width: `${p.pct}%` }} />
           </div>
-          <p className="text-xs text-slate-400 mt-2">
+          <p className="text-xs text-text-muted mt-2">
             {p.comLaudo} de {p.total} equipamentos inspecionados e com laudo emitido
           </p>
         </CardContent>
       </Card>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardHeader>
-          <CardTitle className="text-slate-900 text-base">Equipamentos</CardTitle>
+          <CardTitle className="text-text-primary text-base">Equipamentos</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50">
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Tag</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Descrição</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Status</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Laudo</th>
-                  <th className="text-left py-3 px-4 text-slate-500 font-medium text-xs uppercase tracking-wider">Próx. Inspeção</th>
+                <tr className="border-b border-border bg-background">
+                  <th className="text-left py-3 px-4 text-text-secondary font-medium text-xs uppercase tracking-wider">Tag</th>
+                  <th className="text-left py-3 px-4 text-text-secondary font-medium text-xs uppercase tracking-wider">Descrição</th>
+                  <th className="text-left py-3 px-4 text-text-secondary font-medium text-xs uppercase tracking-wider">Status</th>
+                  <th className="text-left py-3 px-4 text-text-secondary font-medium text-xs uppercase tracking-wider">Laudo</th>
+                  <th className="text-left py-3 px-4 text-text-secondary font-medium text-xs uppercase tracking-wider">Próx. Inspeção</th>
                 </tr>
               </thead>
               <tbody>
@@ -401,31 +401,31 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
                   return (
                     <tr
                       key={eq.id}
-                      className="border-b border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors"
+                      className="border-b border-border hover:bg-background cursor-pointer transition-colors"
                       onClick={() => window.location.href = `/equipamentos/${eq.id}`}
                     >
-                      <td className="py-3 px-4 font-medium text-slate-900">{eq.tag}</td>
-                      <td className="py-3 px-4 text-slate-600">{eq.descricao}</td>
+                      <td className="py-3 px-4 font-medium text-text-primary">{eq.tag}</td>
+                      <td className="py-3 px-4 text-text-secondary">{eq.descricao}</td>
                       <td className="py-3 px-4">
                         <Badge variant={statusColor} className="text-xs">{statusLabel}</Badge>
                       </td>
                       <td className="py-3 px-4 text-xs">
                         {laudo ? (
-                          <Link href={`/laudos/${laudo.id}`} className="text-blue-600 hover:underline">
+                          <Link href={`/laudos/${laudo.id}`} className="text-primary hover:underline">
                             {laudo.numeroLaudo}
                           </Link>
                         ) : ultima?.concluida ? (
                           <Link
                             href={`/laudos/novo?inspecao=${ultima.id}`}
-                            className="text-blue-600 hover:underline font-medium"
+                            className="text-primary hover:underline font-medium"
                           >
                             Emitir
                           </Link>
                         ) : (
-                          <span className="text-slate-400">—</span>
+                          <span className="text-text-muted">—</span>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-xs text-slate-500">
+                      <td className="py-3 px-4 text-xs text-text-secondary">
                         {laudo?.dataProximaInspecao ?? "—"}
                       </td>
                     </tr>
@@ -438,10 +438,10 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
       </Card>
 
       {certificadosDisponiveis.length > 0 && (
-        <Card className="border-slate-200 shadow-sm border-blue-200">
+        <Card className="border-border shadow-sm border-primary/20">
           <CardHeader>
-            <CardTitle className="text-slate-900 flex items-center gap-2 text-base">
-              <FileText className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-text-primary flex items-center gap-2 text-base">
+              <FileText className="h-4 w-4 text-primary" />
               Certificados Disponíveis para Emissão
             </CardTitle>
           </CardHeader>
@@ -453,16 +453,16 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
                   <Link
                     key={ins.id}
                     href={`/laudos/novo?inspecao=${ins.id}`}
-                    className="flex items-center justify-between p-3 rounded-lg border border-blue-100 bg-blue-50 hover:bg-blue-100 transition-colors"
+                    className="flex items-center justify-between p-3 rounded-lg border border-primary/20 bg-primary-subtle hover:bg-primary-subtle transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <CheckCircle2 className="h-4 w-4 text-success" />
                       <div>
-                        <p className="text-sm font-medium text-slate-900">{eq?.tag} — {eq?.descricao}</p>
-                        <p className="text-xs text-slate-500">Inspeção concluída em {ins.dataTermino}</p>
+                        <p className="text-sm font-medium text-text-primary">{eq?.tag} — {eq?.descricao}</p>
+                        <p className="text-xs text-text-secondary">Inspeção concluída em {ins.dataTermino}</p>
                       </div>
                     </div>
-                    <Badge variant="default" className="bg-blue-600 text-xs">Emitir laudo</Badge>
+                    <Badge variant="default" className="bg-primary text-xs">Emitir laudo</Badge>
                   </Link>
                 )
               })}

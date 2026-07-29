@@ -88,13 +88,13 @@ function NovoLaudoForm() {
   if (!inspecaoId) {
     return (
       <div className="p-4 sm:p-8 max-w-2xl mx-auto space-y-6">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="py-16 text-center">
             <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-600 text-lg">Nenhuma inspeção selecionada</p>
-            <p className="text-slate-400 text-sm mt-1">Selecione uma inspeção concluída para gerar o laudo</p>
+            <p className="text-text-secondary text-lg">Nenhuma inspeção selecionada</p>
+            <p className="text-text-muted text-sm mt-1">Selecione uma inspeção concluída para gerar o laudo</p>
             <Link href="/inspecoes">
-              <Button variant="outline" className="mt-4 border-slate-200 text-slate-700">Ver Inspeções</Button>
+              <Button variant="outline" className="mt-4 border-border text-text-secondary">Ver Inspeções</Button>
             </Link>
           </CardContent>
         </Card>
@@ -102,61 +102,61 @@ function NovoLaudoForm() {
     )
   }
 
-  if (loading) return <div className="p-4 sm:p-8 text-slate-500">Carregando...</div>
-  if (!inspecao || !equipamento) return <div className="p-4 sm:p-8 text-slate-500">Inspeção não encontrada</div>
+  if (loading) return <div className="p-4 sm:p-8 text-text-secondary">Carregando...</div>
+  if (!inspecao || !equipamento) return <div className="p-4 sm:p-8 text-text-secondary">Inspeção não encontrada</div>
 
   return (
     <div className="p-4 sm:p-8 max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Gerar Laudo Técnico</h1>
-        <p className="text-slate-500 text-sm mt-1 truncate">
+        <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Gerar Laudo Técnico</h1>
+        <p className="text-text-secondary text-sm mt-1 truncate">
           {equipamento.tag} — {equipamento.descricao}
           {cliente && ` • ${cliente.nome}`}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-slate-900 text-sm">Dados do Laudo</CardTitle>
+            <CardTitle className="text-text-primary text-sm">Dados do Laudo</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">Nº do Laudo</Label>
-                <Input value={numeroLaudo} onChange={(e) => setNumeroLaudo(e.target.value)} required className="border-slate-200 bg-white font-mono" />
+                <Label className="text-text-secondary text-xs">Nº do Laudo</Label>
+                <Input value={numeroLaudo} onChange={(e) => setNumeroLaudo(e.target.value)} required className="border-border bg-white font-mono" />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">Data de Emissão</Label>
-                <Input type="date" value={dataEmissao} onChange={(e) => setDataEmissao(e.target.value)} required className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">Data de Emissão</Label>
+                <Input type="date" value={dataEmissao} onChange={(e) => setDataEmissao(e.target.value)} required className="border-border bg-white" />
               </div>
             </div>
-            <Separator className="bg-slate-200" />
+            <Separator className="bg-border" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">PLH - Nome</Label>
-                <Input value={plhNome} onChange={(e) => setPlhNome(e.target.value)} required className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">PLH - Nome</Label>
+                <Input value={plhNome} onChange={(e) => setPlhNome(e.target.value)} required className="border-border bg-white" />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">PLH - CREA</Label>
-                <Input value={plhCrea} onChange={(e) => setPlhCrea(e.target.value)} required className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">PLH - CREA</Label>
+                <Input value={plhCrea} onChange={(e) => setPlhCrea(e.target.value)} required className="border-border bg-white" />
               </div>
             </div>
-            <Separator className="bg-slate-200" />
+            <Separator className="bg-border" />
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Data da Próxima Inspeção</Label>
-              <Input type="date" value={dataProxima} onChange={(e) => setDataProxima(e.target.value)} required className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">Data da Próxima Inspeção</Label>
+              <Input type="date" value={dataProxima} onChange={(e) => setDataProxima(e.target.value)} required className="border-border bg-white" />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Observações</Label>
-              <Textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={3} className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">Observações</Label>
+              <Textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={3} className="border-border bg-white" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm bg-blue-50 border-blue-100">
+        <Card className="border-border shadow-sm bg-primary-subtle border-primary/20">
           <CardContent className="p-4">
-            <p className="text-xs text-blue-700">
+            <p className="text-xs text-primary">
               O laudo será gerado com base na inspeção <strong>{inspecao.tipo.replace("_", " ")}</strong> realizada em {inspecao.dataInicio}.
               Certifique-se de que todos os exames, medições e anomalias foram registrados antes da emissão.
             </p>
@@ -164,10 +164,10 @@ function NovoLaudoForm() {
         </Card>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
-          <Button type="button" variant="outline" onClick={() => router.back()} className="border-slate-200 text-slate-700">
+          <Button type="button" variant="outline" onClick={() => router.back()} className="border-border text-text-secondary">
             Cancelar
           </Button>
-          <Button type="submit" disabled={saving} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+          <Button type="submit" variant="primary" disabled={saving}>
             <FileText className="h-4 w-4 mr-2" />
             {saving ? "Gerando..." : "Emitir Laudo"}
           </Button>
@@ -179,7 +179,7 @@ function NovoLaudoForm() {
 
 export default function NovoLaudo() {
   return (
-    <Suspense fallback={<div className="p-8 text-slate-500">Carregando...</div>}>
+    <Suspense fallback={<div className="p-8 text-text-secondary">Carregando...</div>}>
       <NovoLaudoForm />
     </Suspense>
   )

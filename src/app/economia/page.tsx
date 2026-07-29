@@ -36,52 +36,52 @@ export default function Economia() {
     <div className="p-4 sm:p-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Calculadora de Economia</h1>
-          <p className="text-slate-500 text-sm mt-1">
+          <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Calculadora de Economia</h1>
+          <p className="text-text-secondary text-sm mt-1">
             Ferramenta comercial para apresentar a indústrias o ROI da conformidade NR-13
           </p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 text-xs text-blue-700 shrink-0 self-start">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary-subtle border border-primary/20 text-xs text-primary shrink-0 self-start">
           <FileText className="h-3.5 w-3.5" />
           Use com seus clientes
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-slate-900 flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-text-primary flex items-center gap-2">
+              <Building2 className="h-4 w-4 text-primary" />
               Dados da Indústria Cliente
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Nome da Indústria</Label>
+              <Label className="text-text-secondary text-xs">Nome da Indústria</Label>
               <Input
                 type="text"
                 value={nomeCliente}
                 onChange={(e) => setNomeCliente(e.target.value)}
                 placeholder="Ex: Indústria ABC Ltda."
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">Total de Equipamentos</Label>
-                <Input type="number" value={equipamentos} onChange={(e) => setEquipamentos(Number(e.target.value))} className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">Total de Equipamentos</Label>
+                <Input type="number" value={equipamentos} onChange={(e) => setEquipamentos(Number(e.target.value))} className="border-border bg-white" />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">Inspeções Vencidas</Label>
-                <Input type="number" value={inspecoesVencidas} onChange={(e) => setInspecoesVencidas(Number(e.target.value))} className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">Inspeções Vencidas</Label>
+                <Input type="number" value={inspecoesVencidas} onChange={(e) => setInspecoesVencidas(Number(e.target.value))} className="border-border bg-white" />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Porte da Empresa</Label>
+              <Label className="text-text-secondary text-xs">Porte da Empresa</Label>
               <div className="grid grid-cols-3 gap-2">
                 {(["pequeno", "medio", "grande"] as const).map((key) => (
                   <div key={key} className={`p-2 rounded-lg text-center text-xs cursor-pointer border transition-colors ${
-                    porte === key ? "border-blue-600 bg-blue-50 text-blue-700 font-medium" : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
+                    porte === key ? "border-primary bg-primary-subtle text-primary font-medium" : "border-border bg-white text-text-secondary hover:border-slate-300"
                   }`} onClick={() => setPorte(key)}>
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </div>
@@ -91,101 +91,101 @@ export default function Economia() {
             <Separator className="bg-slate-200" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">Custo Diário Operacional (R$)</Label>
-                <Input type="number" value={diariaOperacional} onChange={(e) => setDiariaOperacional(Number(e.target.value))} className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">Custo Diário Operacional (R$)</Label>
+                <Input type="number" value={diariaOperacional} onChange={(e) => setDiariaOperacional(Number(e.target.value))} className="border-border bg-white" />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-600 text-xs">Custo Médio/Inspeção (R$)</Label>
-                <Input type="number" value={custoInspecao} onChange={(e) => setCustoInspecao(Number(e.target.value))} className="border-slate-200 bg-white" />
+                <Label className="text-text-secondary text-xs">Custo Médio/Inspeção (R$)</Label>
+                <Input type="number" value={custoInspecao} onChange={(e) => setCustoInspecao(Number(e.target.value))} className="border-border bg-white" />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Inspeções por Ano</Label>
-              <Input type="number" value={qtdInspecoesAno} onChange={(e) => setQtdInspecoesAno(Number(e.target.value))} className="border-slate-200 bg-white" />
+              <Label className="text-text-secondary text-xs">Inspeções por Ano</Label>
+              <Input type="number" value={qtdInspecoesAno} onChange={(e) => setQtdInspecoesAno(Number(e.target.value))} className="border-border bg-white" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardHeader>
-            <CardTitle className="text-slate-900 flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-emerald-600" />
+            <CardTitle className="text-text-primary flex items-center gap-2">
+              <TrendingUp className="h-4 w-4 text-success" />
               Economia para a Indústria
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-center">
-              <p className="text-sm text-emerald-700 font-medium">ECONOMIA TOTAL ESTIMADA</p>
-              <p className="text-3xl font-bold text-emerald-700 mt-1">{formatarMoeda(totalEconomia)}</p>
-              <p className="text-xs text-slate-500 mt-1">por ano</p>
+            <div className="p-4 rounded-lg bg-success-subtle border border-success/30 text-center">
+              <p className="text-sm text-success font-medium">ECONOMIA TOTAL ESTIMADA</p>
+              <p className="text-3xl font-bold text-success mt-1">{formatarMoeda(totalEconomia)}</p>
+              <p className="text-xs text-text-secondary mt-1">por ano</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { icon: AlertTriangle, label: "Multas Evitadas (NR-28)", value: multasEvitadas, color: "text-red-600" },
                 { icon: TrendingUp, label: "Paradas Evitadas", value: paradasEvitadas, color: "text-orange-600" },
-                { icon: ShieldCheck, label: "Otimização c/ SPIE", value: economiaSPIE, color: "text-blue-600" },
+                { icon: ShieldCheck, label: "Otimização c/ SPIE", value: economiaSPIE, color: "text-primary" },
                 { icon: Percent, label: "Desconto em Seguro", value: descontoSeguro, color: "text-purple-600" },
               ].map(({ icon: Icon, label, value, color }) => (
-                <div key={label} className="p-3 rounded-lg border border-slate-100 bg-slate-50">
+                <div key={label} className="p-3 rounded-lg border border-border bg-background">
                   <div className="flex items-center gap-2 mb-1">
                     <Icon className={`h-3 w-3 ${color}`} />
-                    <p className="text-xs text-slate-500">{label}</p>
+                    <p className="text-xs text-text-secondary">{label}</p>
                   </div>
-                  <p className="text-sm font-semibold text-slate-900">{formatarMoeda(value)}</p>
+                  <p className="text-sm font-semibold text-text-primary">{formatarMoeda(value)}</p>
                 </div>
               ))}
             </div>
 
             <Separator className="bg-slate-200" />
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Seu Retorno como Engenheiro</p>
+            <p className="text-xs font-medium text-text-secondary uppercase tracking-wider">Seu Retorno como Engenheiro</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-3 rounded-lg border border-slate-100 bg-slate-50 text-center">
-                <p className="text-xs text-slate-500">Custo do SaaS / ano</p>
-                <p className="text-lg font-bold text-slate-900">{formatarMoeda(investimentoAnual)}</p>
+              <div className="p-3 rounded-lg border border-border bg-background text-center">
+                <p className="text-xs text-text-secondary">Custo do SaaS / ano</p>
+                <p className="text-lg font-bold text-text-primary">{formatarMoeda(investimentoAnual)}</p>
               </div>
-              <div className="p-3 rounded-lg border border-slate-100 bg-slate-50 text-center">
-                <p className="text-xs text-slate-500">ROI</p>
-                <p className="text-lg font-bold text-emerald-600">{roi.toFixed(0)}%</p>
+              <div className="p-3 rounded-lg border border-border bg-background text-center">
+                <p className="text-xs text-text-secondary">ROI</p>
+                <p className="text-lg font-bold text-success">{roi.toFixed(0)}%</p>
               </div>
             </div>
-            <div className="p-3 rounded-lg bg-blue-50 border border-blue-100 text-center">
-              <p className="text-xs text-slate-500">Payback</p>
-              <p className="text-xl font-bold text-blue-700">{paybackDias} dias</p>
+            <div className="p-3 rounded-lg bg-primary-subtle border border-primary/20 text-center">
+              <p className="text-xs text-text-secondary">Payback</p>
+              <p className="text-xl font-bold text-primary">{paybackDias} dias</p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-slate-200 shadow-sm bg-white">
+      <Card className="border-border shadow-sm bg-white">
         <CardHeader>
-          <CardTitle className="text-slate-900 flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
+          <CardTitle className="text-text-primary flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" />
             Proposta de Valor - Conformidade NR-13
           </CardTitle>
         </CardHeader>
         <CardContent className="p-8">
           <div className="text-center mb-8">
-            <h3 className="text-lg font-semibold text-slate-900">PROPOSTA DE VALOR</h3>
-            <p className="text-sm text-slate-500">Economia estimada com a conformidade NR-13</p>
-            {nomeCliente && <p className="text-sm font-medium text-blue-700 mt-1">Cliente: {nomeCliente}</p>}
+            <h3 className="text-lg font-semibold text-text-primary">PROPOSTA DE VALOR</h3>
+            <p className="text-sm text-text-secondary">Economia estimada com a conformidade NR-13</p>
+            {nomeCliente && <p className="text-sm font-medium text-primary mt-1">Cliente: {nomeCliente}</p>}
           </div>
 
           <table className="w-full text-sm mb-6">
             <tbody>
-              <tr className="border-b border-slate-200">
-                <td className="py-2 font-semibold text-slate-700">Empresa</td>
+              <tr className="border-b border-border">
+                <td className="py-2 font-semibold text-text-secondary">Empresa</td>
                 <td className="py-2 text-right">{nomeCliente || "—"}</td>
               </tr>
-              <tr className="border-b border-slate-200">
-                <td className="py-2 font-semibold text-slate-700">Total de Equipamentos</td>
+              <tr className="border-b border-border">
+                <td className="py-2 font-semibold text-text-secondary">Total de Equipamentos</td>
                 <td className="py-2 text-right">{equipamentos}</td>
               </tr>
-              <tr className="border-b border-slate-200">
-                <td className="py-2 font-semibold text-slate-700">Inspeções Vencidas</td>
+              <tr className="border-b border-border">
+                <td className="py-2 font-semibold text-text-secondary">Inspeções Vencidas</td>
                 <td className="py-2 text-right text-red-600">{inspecoesVencidas}</td>
               </tr>
-              <tr className="border-b border-slate-200">
-                <td className="py-2 font-semibold text-slate-700">Porte</td>
+              <tr className="border-b border-border">
+                <td className="py-2 font-semibold text-text-secondary">Porte</td>
                 <td className="py-2 text-right capitalize">{porte}</td>
               </tr>
             </tbody>
@@ -193,29 +193,29 @@ export default function Economia() {
           <Separator className="bg-slate-200 my-4" />
           <table className="w-full text-sm mb-6">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="text-left py-2 px-3 font-semibold text-slate-700">Item</th>
-                <th className="text-right py-2 px-3 font-semibold text-slate-700">Valor</th>
+              <tr className="bg-background border-b border-border">
+                <th className="text-left py-2 px-3 font-semibold text-text-secondary">Item</th>
+                <th className="text-right py-2 px-3 font-semibold text-text-secondary">Valor</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-slate-100">
+              <tr className="border-b border-border">
                 <td className="py-2 px-3">Multas Evitadas (NR-28)</td>
                 <td className="py-2 px-3 text-right text-red-600">{formatarMoeda(multasEvitadas)}</td>
               </tr>
-              <tr className="border-b border-slate-100">
+              <tr className="border-b border-border">
                 <td className="py-2 px-3">Paradas de Produção Evitadas</td>
                 <td className="py-2 px-3 text-right text-orange-600">{formatarMoeda(paradasEvitadas)}</td>
               </tr>
-              <tr className="border-b border-slate-100">
+              <tr className="border-b border-border">
                 <td className="py-2 px-3">Otimização com SPIE (55%)</td>
-                <td className="py-2 px-3 text-right text-blue-600">{formatarMoeda(economiaSPIE)}</td>
+                <td className="py-2 px-3 text-right text-primary">{formatarMoeda(economiaSPIE)}</td>
               </tr>
-              <tr className="border-b border-slate-100">
+              <tr className="border-b border-border">
                 <td className="py-2 px-3">Desconto em Seguro</td>
                 <td className="py-2 px-3 text-right text-purple-600">{formatarMoeda(descontoSeguro)}</td>
               </tr>
-              <tr className="bg-emerald-50 font-bold">
+              <tr className="bg-success-subtle font-bold">
                 <td className="py-3 px-3 text-emerald-800">TOTAL ANUAL ESTIMADO</td>
                 <td className="py-3 px-3 text-right text-emerald-800">{formatarMoeda(totalEconomia)}</td>
               </tr>
@@ -223,9 +223,9 @@ export default function Economia() {
           </table>
           <Separator className="bg-slate-200 my-6" />
 
-          <div className="rounded-lg bg-blue-50 border border-blue-100 p-4 text-sm text-slate-700 space-y-2">
-            <p className="font-medium text-blue-700">Como usar esta ferramenta:</p>
-            <ol className="list-decimal list-inside space-y-1 text-xs text-slate-600">
+          <div className="rounded-lg bg-primary-subtle border border-primary/20 p-4 text-sm text-text-secondary space-y-2">
+            <p className="font-medium text-primary">Como usar esta ferramenta:</p>
+            <ol className="list-decimal list-inside space-y-1 text-xs text-text-secondary">
               <li>Preencha os dados da indústria nos campos ao lado</li>
               <li>A economia é calculada automaticamente</li>
               <li>Apresente este relatório ao cliente como argumento comercial</li>

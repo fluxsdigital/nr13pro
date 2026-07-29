@@ -57,11 +57,11 @@ export default function Inspecoes() {
     <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Inspeções</h1>
-          <p className="text-slate-500 text-sm mt-1">Histórico de inspeções realizadas</p>
+          <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Inspeções</h1>
+          <p className="text-text-secondary text-sm mt-1">Histórico de inspeções realizadas</p>
         </div>
         <Link href="/inspecoes/nova" className="shrink-0">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
+          <Button variant="primary" className="w-full sm:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Nova Inspeção
           </Button>
@@ -71,21 +71,21 @@ export default function Inspecoes() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
-            <ClipboardCheck className="h-8 w-8 text-blue-600" />
+            <ClipboardCheck className="h-8 w-8 text-primary" />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{totalCount}</p>
-              <p className="text-xs text-slate-500">Total</p>
+              <p className="text-2xl font-bold text-text-primary">{totalCount}</p>
+              <p className="text-xs text-text-secondary">Total</p>
             </div>
           </CardContent>
         </Card>
         <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
-            <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center">
-              <div className="h-3 w-3 rounded-full bg-emerald-500" />
+            <div className="h-8 w-8 rounded-full bg-success-subtle flex items-center justify-center">
+              <div className="h-3 w-3 rounded-full bg-success" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-900">{concluidasCount}</p>
-              <p className="text-xs text-slate-500">Concluídas</p>
+              <p className="text-2xl font-bold text-text-primary">{concluidasCount}</p>
+              <p className="text-xs text-text-secondary">Concluídas</p>
             </div>
           </CardContent>
         </Card>
@@ -95,8 +95,8 @@ export default function Inspecoes() {
               <div className="h-3 w-3 rounded-full bg-amber-500" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-900">{andamentoCount}</p>
-              <p className="text-xs text-slate-500">Em andamento</p>
+              <p className="text-2xl font-bold text-text-primary">{andamentoCount}</p>
+              <p className="text-xs text-text-secondary">Em andamento</p>
             </div>
           </CardContent>
         </Card>
@@ -105,7 +105,7 @@ export default function Inspecoes() {
       <div className="flex items-center gap-3 flex-wrap">
         <div className="min-w-[280px]">
           <Select value={filtroCliente} onValueChange={(v) => setFiltroCliente(v ?? "")}>
-            <SelectTrigger className="border-slate-200 bg-white h-9 text-sm w-full">
+            <SelectTrigger className="border-border bg-white h-9 text-sm w-full">
               <SelectValue placeholder="Todas as empresas" />
             </SelectTrigger>
             <SelectContent>
@@ -118,7 +118,7 @@ export default function Inspecoes() {
         </div>
         <div className="min-w-[200px]">
           <Select value={filtroStatus} onValueChange={(v) => setFiltroStatus(v as StatusFiltro)}>
-            <SelectTrigger className="border-slate-200 bg-white h-9 text-sm w-full">
+            <SelectTrigger className="border-border bg-white h-9 text-sm w-full">
               <SelectValue placeholder="Todos os status" />
             </SelectTrigger>
             <SelectContent>
@@ -133,7 +133,7 @@ export default function Inspecoes() {
             variant="ghost"
             size="sm"
             onClick={() => { setFiltroCliente(""); setFiltroStatus("") }}
-            className="text-slate-500 text-xs"
+            className="text-text-secondary text-xs"
           >
             Limpar filtros
           </Button>
@@ -141,13 +141,13 @@ export default function Inspecoes() {
       </div>
 
       {loading ? (
-        <p className="text-slate-500">Carregando...</p>
+        <p className="text-text-secondary">Carregando...</p>
       ) : filtradas.length === 0 ? (
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="py-16 text-center">
             <ClipboardCheck className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-600 text-lg">Nenhuma inspeção encontrada</p>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-text-secondary text-lg">Nenhuma inspeção encontrada</p>
+            <p className="text-text-muted text-sm mt-1">
               {filtroCliente || filtroStatus
                 ? "Tente alterar os filtros"
                 : "Inicie a primeira inspeção clicando no botão acima"}
@@ -162,17 +162,17 @@ export default function Inspecoes() {
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-0.5 ${ins.concluida ? "bg-emerald-500" : "bg-amber-500"}`} />
+                      <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-0.5 ${ins.concluida ? "bg-success" : "bg-amber-500"}`} />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <p className="text-sm font-semibold text-slate-900 capitalize truncate">{ins.tipo.replace("_", " ")}</p>
-                          <Badge variant="outline" className="text-xs border-slate-200 text-slate-600 font-mono shrink-0">{ins.eq?.tag}</Badge>
+                          <p className="text-sm font-semibold text-text-primary capitalize truncate">{ins.tipo.replace("_", " ")}</p>
+                          <Badge variant="outline" className="text-xs border-border text-text-secondary font-mono shrink-0">{ins.eq?.tag}</Badge>
                         </div>
-                        <p className="text-xs text-slate-500 truncate mt-0.5">{ins.eq?.descricao}</p>
+                        <p className="text-xs text-text-secondary truncate mt-0.5">{ins.eq?.descricao}</p>
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
-                          <p className="text-xs font-medium text-blue-600 truncate">{ins.cliente?.nome}</p>
-                          <span className="text-xs text-slate-400 hidden sm:inline">•</span>
-                          <p className="text-xs text-slate-500">{ins.dataInicio}{ins.dataTermino ? ` — ${ins.dataTermino}` : ""}</p>
+                          <p className="text-xs font-medium text-primary truncate">{ins.cliente?.nome}</p>
+                          <span className="text-xs text-text-muted hidden sm:inline">•</span>
+                          <p className="text-xs text-text-secondary">{ins.dataInicio}{ins.dataTermino ? ` — ${ins.dataTermino}` : ""}</p>
                         </div>
                       </div>
                     </div>
@@ -184,7 +184,7 @@ export default function Inspecoes() {
                         </Badge>
                       )}
                       {ins.laudoId && (
-                        <Badge className="bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100 text-xs">
+                        <Badge className="bg-primary-subtle text-primary border-primary/20 hover:bg-primary-subtle text-xs">
                           <FileText className="h-3 w-3 mr-1" />
                           Com laudo
                         </Badge>
@@ -192,7 +192,7 @@ export default function Inspecoes() {
                       <Badge variant={ins.concluida ? "default" : "secondary"} className="text-xs">
                         {ins.concluida ? "Concluída" : "Em andamento"}
                       </Badge>
-                      <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
+                      <ArrowRight className="h-4 w-4 text-text-muted shrink-0" />
                     </div>
                   </div>
                 </CardContent>

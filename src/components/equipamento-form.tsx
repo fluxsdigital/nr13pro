@@ -80,16 +80,16 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardContent className="p-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Cliente</Label>
+              <Label className="text-text-secondary text-xs">Cliente</Label>
               <select
                 value={form.clienteId}
                 onChange={(e) => set("clienteId", e.target.value)}
                 required
-                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="">Selecione...</option>
                 {clientes.map((c) => (
@@ -98,11 +98,11 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
               </select>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Tipo de Equipamento</Label>
+              <Label className="text-text-secondary text-xs">Tipo de Equipamento</Label>
               <select
                 value={form.tipo}
                 onChange={(e) => set("tipo", e.target.value)}
-                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {tipoOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -113,115 +113,115 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Tag</Label>
+              <Label className="text-text-secondary text-xs">Tag</Label>
               <Input
                 value={form.tag}
                 onChange={(e) => set("tag", e.target.value)}
                 placeholder="Ex: V-101"
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Descrição</Label>
+              <Label className="text-text-secondary text-xs">Descrição</Label>
               <Input
                 value={form.descricao}
                 onChange={(e) => set("descricao", e.target.value)}
                 placeholder="Ex: Reservatório de Ar Comprimido"
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Fabricante</Label>
+              <Label className="text-text-secondary text-xs">Fabricante</Label>
               <Input
                 value={form.fabricante}
                 onChange={(e) => set("fabricante", e.target.value)}
                 placeholder="Ex: VasosTech"
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Nº de Série</Label>
+              <Label className="text-text-secondary text-xs">Nº de Série</Label>
               <Input
                 value={form.numeroSerie}
                 onChange={(e) => set("numeroSerie", e.target.value)}
                 placeholder="Ex: VT-2024-001"
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Ano de Fabricação</Label>
+              <Label className="text-text-secondary text-xs">Ano de Fabricação</Label>
               <Input
                 type="number"
                 value={form.anoFabricacao}
                 onChange={(e) => set("anoFabricacao", Number(e.target.value))}
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardContent className="p-6 space-y-4">
-          <p className="text-sm font-medium text-slate-700">Parâmetros Operacionais</p>
+          <p className="text-sm font-medium text-text-secondary">Parâmetros Operacionais</p>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Pressão de Operação (kPa)</Label>
+              <Label className="text-text-secondary text-xs">Pressão de Operação (kPa)</Label>
               <Input
                 type="number"
                 value={form.pressaoOperacao}
                 onChange={(e) => set("pressaoOperacao", Number(e.target.value))}
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Volume (m³)</Label>
+              <Label className="text-text-secondary text-xs">Volume (m³)</Label>
               <Input
                 type="number"
                 value={form.volume}
                 onChange={(e) => set("volume", Number(e.target.value))}
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">PMTA (kPa)</Label>
+              <Label className="text-text-secondary text-xs">PMTA (kPa)</Label>
               <Input
                 type="number"
                 value={form.pmta}
                 onChange={(e) => set("pmta", Number(e.target.value))}
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Fluido</Label>
+              <Label className="text-text-secondary text-xs">Fluido</Label>
               <Input
                 value={form.fluido}
                 onChange={(e) => set("fluido", e.target.value)}
                 placeholder="Ex: Ar Comprimido"
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Classe do Fluido</Label>
+              <Label className="text-text-secondary text-xs">Classe do Fluido</Label>
               <select
                 value={form.classeFluido}
                 onChange={(e) => set("classeFluido", e.target.value)}
-                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {classeOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -229,35 +229,35 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
               </select>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-600 text-xs">Localização</Label>
+              <Label className="text-text-secondary text-xs">Localização</Label>
               <Input
                 value={form.localizacao}
                 onChange={(e) => set("localizacao", e.target.value)}
                 placeholder="Ex: Compressores - Prédio 1"
                 required
-                className="border-slate-200 bg-white"
+                className="border-border bg-white"
               />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="border-border shadow-sm">
         <CardContent className="p-6">
-          <p className="text-sm font-medium text-slate-700 mb-3">Prévia da Classificação NR-13</p>
-          <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+          <p className="text-sm font-medium text-text-secondary mb-3">Prévia da Classificação NR-13</p>
+          <div className="p-3 rounded-lg bg-slate-50 border border-border">
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div>
-                <span className="text-slate-500">P.V:</span>{" "}
-                <span className="font-medium text-slate-900">{pv.toLocaleString("pt-BR")}</span>
+                <span className="text-text-secondary">P.V:</span>{" "}
+                <span className="font-medium text-text-primary">{pv.toLocaleString("pt-BR")}</span>
               </div>
               <div>
-                <span className="text-slate-500">Grupo:</span>{" "}
-                <span className="font-medium text-slate-900">{grupo ? `Grupo ${grupo}` : "—"}</span>
+                <span className="text-text-secondary">Grupo:</span>{" "}
+                <span className="font-medium text-text-primary">{grupo ? `Grupo ${grupo}` : "—"}</span>
               </div>
               <div>
-                <span className="text-slate-500">Categoria:</span>{" "}
-                <span className="font-medium text-blue-700">{previewCategoria}</span>
+                <span className="text-text-secondary">Categoria:</span>{" "}
+                <span className="font-medium text-primary">{previewCategoria}</span>
               </div>
             </div>
           </div>
@@ -265,10 +265,10 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
       </Card>
 
       <div className="flex items-center justify-end gap-3">
-        <Button type="button" variant="outline" onClick={onCancel} className="border-slate-200 text-slate-700">
+        <Button type="button" variant="outline" onClick={onCancel} className="border-border text-text-secondary">
           Cancelar
         </Button>
-        <Button type="submit" disabled={loading} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+        <Button type="submit" disabled={loading} variant="primary">
           {loading ? "Salvando..." : initial ? "Atualizar Equipamento" : "Cadastrar Equipamento"}
         </Button>
       </div>

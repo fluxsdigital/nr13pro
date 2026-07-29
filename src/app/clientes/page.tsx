@@ -109,11 +109,11 @@ export default function Clientes() {
     <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Empresas Clientes</h1>
-          <p className="text-slate-500 text-sm mt-1">Gerencie as indústrias contratantes</p>
+          <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Empresas Clientes</h1>
+          <p className="text-text-secondary text-sm mt-1">Gerencie as indústrias contratantes</p>
         </div>
         <Link href="/clientes/novo" className="shrink-0">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
+          <Button variant="primary" className="w-full sm:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Novo Cliente
           </Button>
@@ -121,30 +121,30 @@ export default function Clientes() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
-            <Building2 className="h-8 w-8 text-blue-600 shrink-0" />
+            <Building2 className="h-8 w-8 text-primary shrink-0" />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{data.length}</p>
-              <p className="text-xs text-slate-500">Total de clientes</p>
+              <p className="text-2xl font-bold text-text-primary">{data.length}</p>
+              <p className="text-xs text-text-secondary">Total de clientes</p>
             </div>
           </CardContent>
         </Card>
-        <Card className={cn("border shadow-sm", countUrgentes > 0 ? "border-red-200 bg-red-50" : "border-slate-200")}>
+        <Card className={cn("border shadow-sm", countUrgentes > 0 ? "border-red-200 bg-red-50" : "border-border")}>
           <CardContent className="p-4 flex items-center gap-3">
-            <AlertTriangle className={cn("h-8 w-8 shrink-0", countUrgentes > 0 ? "text-red-500" : "text-slate-300")} />
+            <AlertTriangle className={cn("h-8 w-8 shrink-0", countUrgentes > 0 ? "text-red-500" : "text-text-muted")} />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{countUrgentes}</p>
-              <p className="text-xs text-slate-500">Inspeções vencidas</p>
+              <p className="text-2xl font-bold text-text-primary">{countUrgentes}</p>
+              <p className="text-xs text-text-secondary">Inspeções vencidas</p>
             </div>
           </CardContent>
         </Card>
-        <Card className={cn("border shadow-sm", countAtencao > 0 ? "border-amber-200 bg-amber-50" : "border-slate-200")}>
+        <Card className={cn("border shadow-sm", countAtencao > 0 ? "border-amber-200 bg-amber-50" : "border-border")}>
           <CardContent className="p-4 flex items-center gap-3">
-            <AlertCircle className={cn("h-8 w-8 shrink-0", countAtencao > 0 ? "text-amber-500" : "text-slate-300")} />
+            <AlertCircle className={cn("h-8 w-8 shrink-0", countAtencao > 0 ? "text-amber-500" : "text-text-muted")} />
             <div>
-              <p className="text-2xl font-bold text-slate-900">{countAtencao}</p>
-              <p className="text-xs text-slate-500">Próximas 60 dias</p>
+              <p className="text-2xl font-bold text-text-primary">{countAtencao}</p>
+              <p className="text-xs text-text-secondary">Próximas 60 dias</p>
             </div>
           </CardContent>
         </Card>
@@ -152,10 +152,10 @@ export default function Clientes() {
 
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <div className="relative w-full sm:flex-1 sm:max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <Input
             placeholder="Buscar por nome, CNPJ ou contato..."
-            className="pl-10 border-slate-200 bg-white"
+            className="pl-10 border-border bg-card"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -170,8 +170,8 @@ export default function Clientes() {
                 filtroStatus === t
                   ? t === "urgente" ? "bg-red-50 text-red-700 border-red-200"
                     : t === "atencao" ? "bg-amber-50 text-amber-700 border-amber-200"
-                    : "bg-blue-50 text-blue-700 border-blue-200"
-                  : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+                    : "bg-primary-subtle text-primary border-primary/20"
+                  : "bg-card text-text-secondary border-border hover:bg-card-hover"
               )}
             >
               {t === "todas" ? "Todas" : t === "urgente" ? "Vencidas" : "Próximas"}
@@ -181,11 +181,11 @@ export default function Clientes() {
       </div>
 
       {filtered.length === 0 ? (
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="border-border shadow-sm">
           <CardContent className="py-16 text-center">
-            <Building2 className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-            <p className="text-slate-600 text-lg">Nenhuma empresa encontrada</p>
-            <p className="text-slate-400 text-sm mt-1">
+            <Building2 className="h-16 w-16 text-text-muted mx-auto mb-4" />
+            <p className="text-text-secondary text-lg">Nenhuma empresa encontrada</p>
+            <p className="text-text-muted text-sm mt-1">
               {search || filtroStatus !== "todas" ? "Tente alterar os filtros" : "Cadastre a primeira empresa clicando no botão acima"}
             </p>
           </CardContent>
@@ -212,18 +212,18 @@ export default function Clientes() {
                             "w-9 h-9 rounded-lg border flex items-center justify-center shrink-0",
                             urgency === "urgente" ? "bg-red-50 border-red-100" :
                             urgency === "atencao" ? "bg-amber-50 border-amber-100" :
-                            "bg-blue-50 border-blue-100"
+                            "bg-primary-subtle border-primary/20"
                           )}>
                             <Building2 className={cn(
                               "h-5 w-5",
                               urgency === "urgente" ? "text-red-500" :
                               urgency === "atencao" ? "text-amber-500" :
-                              "text-blue-600"
+                              "text-primary"
                             )} />
                           </div>
                           <div className="min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <p className="text-sm font-semibold text-slate-900 truncate">{cli.nome}</p>
+                              <p className="text-sm font-semibold text-text-primary truncate">{cli.nome}</p>
                               {urgency === "urgente" && (
                                 <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-100 text-xs">
                                   <AlertTriangle className="h-3 w-3 mr-1" />
@@ -237,17 +237,17 @@ export default function Clientes() {
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-xs text-slate-500">{cli.cnpj}</p>
+                            <p className="text-xs text-text-secondary">{cli.cnpj}</p>
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-                              <span className="flex items-center gap-1 text-xs text-slate-500">
+                              <span className="flex items-center gap-1 text-xs text-text-secondary">
                                 <Mail className="h-3 w-3 shrink-0" />
                                 {cli.contato}
                               </span>
-                              <span className="flex items-center gap-1 text-xs text-slate-500">
+                              <span className="flex items-center gap-1 text-xs text-text-secondary">
                                 <Phone className="h-3 w-3 shrink-0" />
                                 {cli.telefone}
                               </span>
-                              <span className="text-xs text-slate-400 truncate">{cli.email}</span>
+                              <span className="text-xs text-text-muted truncate">{cli.email}</span>
                             </div>
                             {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0) && (
                               <div className="flex items-center gap-3 mt-2">
@@ -264,13 +264,13 @@ export default function Clientes() {
                                   </span>
                                 )}
                                 {status.unknown > 0 && (
-                                  <span className="flex items-center gap-1 text-xs text-slate-400">
+                                  <span className="flex items-center gap-1 text-xs text-text-muted">
                                     <HelpCircle className="h-3 w-3" />
                                     {status.unknown} sem inspeção
                                   </span>
                                 )}
                                 {status.safe > 0 && (
-                                  <span className="flex items-center gap-1 text-xs text-emerald-600">
+                                  <span className="flex items-center gap-1 text-xs text-success">
                                     <CheckCircle2 className="h-3 w-3" />
                                     {status.safe} em dia
                                   </span>
@@ -281,7 +281,7 @@ export default function Clientes() {
                         </div>
                         <div className="flex items-center gap-2 shrink-0 sm:pl-3">
                           <Link href={`/clientes/${cli.id}/editar`} onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600">
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-text-muted hover:text-primary">
                               <Pencil className="h-3.5 w-3.5" />
                             </Button>
                           </Link>
@@ -291,7 +291,7 @@ export default function Clientes() {
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </Button>
-                          <ArrowRight className="h-4 w-4 text-slate-400 shrink-0 hidden sm:block" />
+                          <ArrowRight className="h-4 w-4 text-text-muted shrink-0 hidden sm:block" />
                         </div>
                       </div>
                     </CardContent>
