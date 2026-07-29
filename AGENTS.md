@@ -75,9 +75,9 @@ src/components/ui/      ← primitives: Button/Container/Section/FadeIn/Floating
 - Features: stagger 0.04s, 3D tilt per card, hover -4px lift + icon bounce + color transitions
 
 ## UI Conventions
-- `max-w-5xl mx-auto` on app pages, padding `p-4 sm:p-6` (list) or `p-4 sm:p-8` (detail/form)
+- Full-width pages (no max-width constraint), padding `p-4 sm:p-6` (list) or `p-4 sm:p-8` (detail/form)
 - Landing: `Container` wrapper with `max-w-6xl`
-- Loading/empty states: `<div className="p-4 sm:p-8 text-slate-500">...</div>`
+- Loading/empty states: `<div className="p-4 sm:p-8 text-text-secondary">...</div>`
 - Select triggers: `w-full` (override), wrapper `min-w-[280px]`
 - Filter values: `""` means "all"
 - Card spacing: `mb-6 last:mb-0`
@@ -93,3 +93,80 @@ src/components/ui/      ← primitives: Button/Container/Section/FadeIn/Floating
 ## Button (src/components/ui/button.tsx)
 - CVA-based with variants: primary/secondary/ghost/outline/default/destructive
 - Sizes: sm/md/lg/default/icon/icon-sm
+
+## NR-13 Domain Knowledge (from real PDFs in `/pdf/`)
+
+### Inspeção de Vaso de Pressão — Estrutura do Relatório
+- **Dados Iniciais**: razão social, endereço, CNPJ, CREA do PLH, ART vinculada
+- **Características do Vaso**: diâmetro, altura/comprimento, material de construção, pintura
+- **Dados Operacionais**: fluido de trabalho, volume, pressão de projeto, PMTA, pressão de operação, pressão de teste hidrostático, temperatura de projeto/operação
+- **Categorização NR-13**: P.V (MPa.m³), classe de fluido (A/B/C/D), grupo de risco (1-5), categoria (I-V)
+  - Produto P.V > 8 → aplica-se NR-13
+  - Exemplo real: P.V = 5,95 MPa.m³, Classe C, Grupo 3, Categoria III (VITAMEDIC)
+  - Exemplo real: P.V = 0,64 MPa.m³ → 639,30 > 8, Classe B, Grupo 2, Categoria IV (João Ricioli)
+- **Documentação**: prontuário (original ou reconstituído), relatório de inspeção, livro de registro de segurança, certificados de calibração, PAR (Projeto de Alteração ou Reparo)
+- **Identificação**: placa de identificação indelével (fabricante, nº identificação, ano fabricação, PMTA, código de projeto), adesivo auxiliar com categoria
+- **Exames**: Exame Externo (3 anos), Exame Interno (6 anos), Medição de espessura por ultrassom
+  - Quando não há acesso visual, exame interno pode ser substituído por ultrassom (item 13.5.4.6)
+- **Teste Hidrostático**: obrigatório para vasos fabricados a partir de 02/05/2014; anteriores a critério do PLH
+- **Dispositivos de Segurança**: válvula de segurança deve ser desmontada, inspecionada e calibrada com prazo ≤ inspeção periódica interna (13.5.4.9)
+
+### Documentos Gerados pelo Sistema
+1. **Relatório Técnico de Inspeção** — documento principal com todas as seções acima
+2. **Certificado de Inspeção e Teste de Válvula de Segurança** — dados da válvula (tag, fabricante, pressão abertura/vedação, altura do regulador), resultados em 3 ciclos, condições ambientais, padrões utilizados
+3. **Certificado de Calibração** — para manômetros e outros instrumentos: dados do instrumento, padrões utilizados, resultados com erro de indicação, histerese, repetitividade, incerteza expandida (k=2, 95% confiança), curva de erro, próxima calibração
+4. **Laudo/Termo de Inspeção** — conclusão final liberando ou não o equipamento
+
+### Medição de Espessura por Ultrassom
+- Aparelho: GE KRAUTKRAMER DMS2, transdutor TC560 / 5 MHz
+- Velocidade sônica: 5920 m/s (aço carbono)
+- Técnica: pontual A-SCAN
+- Bloco de calibração: 5,00 / 25,00 mm
+- Pontos medidos: tampo superior (3+ pontos), costado (6+ pontos), tampo inferior (3+ pontos)
+- Dados registrados: espessura mensurada, espessura de construção, tempo de operação, perda total, taxa de corrosão, menor espessura para PMTA
+
+### Cálculo de PMTA (casco cilíndrico)
+```
+PMTA = (S * E * e) / (R + 0.6 * e)
+Onde:
+  S = Tensão Admissível Básica do Material (kgf/cm²)
+  E = Coeficiente de eficiência de solda
+  e = espessura medida (menor ponto)
+  R = Raio interno do cilindro (cm)
+```
+- Exemplo real: S=1203.3, E=0.65, e=4.5mm, R=25.9cm → PMTA = 13.43 kgf/cm²
+- PMTA calculada deve ser ≥ PMTA atual do vaso
+
+### Cálculo de PMTA (tampo elíptico)
+```
+PMTA = (S * E * e) / (R * K + 0.1 * e)
+Onde:
+  K = Fator de relação de semi eixos (tipicamente 1.00)
+```
+- Exemplo real: S=1203.3, E=0.7, e=4.7mm, R=25.9cm, K=1.00 → PMTA = 15.29 kgf/cm²
+
+### Prazos de Inspeção (NR-13)
+- **Exame Externo**: até 3 anos (categoria mais baixa) ou 1 ano (categorias mais altas)
+- **Exame Interno**: até 6 anos (categoria mais baixa) ou 2 anos (categorias mais altas)
+- **Válvula de Segurança**: calibração ≤ prazo da inspeção interna
+- **Manômetros**: calibração anual (típico)
+
+### Fluxo de Inspeção (real)
+1. Dados do equipamento e cliente
+2. Tipo de inspeção (inicial/periódica/extraordinária)
+3. Exames (externo, interno, ultrassom, hidrostático)
+4. Medições de espessura
+5. Anomalias encontradas (com gravidade: baixa/média/alta/crítica)
+6. Dispositivos de segurança (válvulas, manômetros)
+7. Parecer técnico conclusivo
+8. Recomendações e não conformidades
+9. Próximas inspeções (datas)
+
+### Campos Comuns em Relatórios Reais
+- Número do relatório + ART (Anotação de Responsabilidade Técnica)
+- PLH (Profissional Legalmente Habilitado) com CREA
+- Data início / data término
+- Condições ambientais (temperatura, umidade)
+- Padrões utilizados na calibração com nº certificado e validade
+- Incerteza expandida (k=2, 95%)
+- Observações e notas técnicas
