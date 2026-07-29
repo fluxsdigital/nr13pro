@@ -1,582 +1,574 @@
 # NR-13 Pro — Design System
 
-## 1. Conceito da Marca
+> **Filosofia**: Um sistema de inspeção industrial que parece ter sido construído por uma empresa de tecnologia de alto nível. Nada de ERP antigo. Nada de excessos. Precisão cirúrgica em cada pixel.
 
-### Naming
-**"Precision Control"** — o sistema deve parecer o painel de controle de uma planta industrial moderna. Cada elemento comunica exatidão, como instrumentos calibrados.
+---
 
-### Metáfora Visual
-Sala de controle de refinaria / cockpit de aeronave executiva.
-- Fundo limpo como painel de aço escovado
-- Cores funcionais como luzes indicadoras de instrumentos
-- Tipografia de alta legibilidade como displays de equipamentos
-- Espaçamento generoso como equipamentos bem organizados em uma bancada
+## 1. Identidade & Posicionamento
 
-### Posicionamento
-Não somos um "sistema de inspeção genérico". Somos a ferramenta que engenheiros de verdade escolhem porque é precisa, confiável e bem projetada.
+### Conceito
+NR-13 Pro não é um "sistema de inspeção". É uma **plataforma de engenharia de precisão**. Cada elemento visual comunica confiabilidade, clareza e sofisticação técnica — como o painel de controle de uma planta industrial moderna, projetado por uma empresa de tecnologia.
 
-### O que NÃO fazer
-- Nada de gradientes chamativos
-- Nada de texturas falsas (skeumorphism)
-- Nada de cores extremamente saturadas
-- Nada de sombras dramáticas
-- Nada de ícones cartoon
+### Inspiração Filosófica
+- **Anthropic/Claude**: Clareza cristalina, hierarquia visual impecável, confiança transmitida por simplicidade
+- **Linear**: UI cirúrgica, espaçamento generoso, ausência total de ruído visual
+- **Stripe Dashboard**: Dados financeiros com elegância, tipografia como elemento central
+- **Raycast**: Velocidade e precisão, densidade de informação sem poluição
+- **Notion**: Flexibilidade com consistência, blocos visuais claros
+
+### O que NÃO somos
+- ❌ ERP antigo com tabelas cinzentas e botões genéricos
+- ❌ Dashboard genérico com gráficos chamativos
+- ❌ Sistema corporativo "seguro" que parece ter sido feito em 2010
+- ❌ Produto com excesso de cores, bordas, sombras e gradientes
 
 ---
 
 ## 2. Paleta de Cores
 
 ### Filosofia
-Cores frias e controladas. Azul como autoridade técnica (não azul genérico de banco). Tons neutros lembram aço escovado. Status colors são como luzes de painel: verdes suaves, âmbares precisos, vermelhos cirúrgicos.
+Cores frias, contidas, elegantes. O azul petróleo remete à indústria sem ser óbvio. O fundo aquecido (#FAFAF8) reduz fadiga visual em longas jornadas. Status colors são suaves — nada de vermelhos berrantes ou verdes fluorescentes.
 
 ### Light Theme
 
-| Token | HEX | Uso |
-|---|---|---|
-| **Primary** | `#2059D1` | Botões principais, links, elementos focais |
-| Primary Hover | `#1A4AB8` | Hover de primary |
-| Primary Active | `#153C9E` | Active/pressed |
-| Primary Subtle | `#EFF4FF` | Fundo sutil de badges/alertas primary |
-| | | |
-| **Secondary** | `#4F5B6A` | Ações secundárias, textos de botão outline |
-| Secondary Hover | `#3A4553` | |
-| | | |
-| **Accent** | `#7C3AED` | Detalhes especiais, selo de certificação |
-| | | |
-| **Success** | `#16A34A` | Status "apto", concluído |
-| Success Subtle | `#F0FDF4` | Fundo de badge success |
-| | | |
-| **Warning** | `#D97706` | Próximo ao vencimento, alertas médios |
-| Warning Subtle | `#FFFBEB` | Fundo de badge warning |
-| | | |
-| **Danger** | `#DC2626` | Vencido, crítico, não conforme |
-| Danger Subtle | `#FEF2F2` | Fundo de badge danger |
-| | | |
-| **Info** | `#0284C7` | Informativo |
-| Info Subtle | `#F0F9FF` | Fundo de badge info |
-| | | |
-| **Background** | `#F6F8FA` | Fundo da página (cool gray levíssimo) |
-| **Surface** | `#FFFFFF` | Fundo de cards, modais, sidebars |
-| **Card** | `#FFFFFF` | Background de card |
-| **Card Hover** | `#FAFBFC` | |
-| | | |
-| **Border** | `#E2E5EA` | Borders padrão |
-| **Divider** | `#EFF1F3` | Divisores entre seções |
-| | | |
-| **Text Primary** | `#0F1729` | Títulos, body principal |
-| **Text Secondary** | `#475569` | Textos de suporte |
-| **Text Muted** | `#94A3B8` | Placeholders, metadados |
-| **Text Disabled** | `#CBD5E1` | Estados desabilitados |
-| | | |
-| **Sidebar** | `#0E162B` | Sidebar dark premium |
-| **Sidebar Hover** | `#1A2341` | Hover em items da sidebar |
-| **Sidebar Text** | `#E2E8F0` | Texto na sidebar |
-| **Sidebar Text Muted** | `#64748B` | Texto secundário na sidebar |
-| | | |
-| **Header** | `#FFFFFF` | Topbar/header |
-| | | |
-| **Table Header** | `#F1F5F9` | Cabeçalho de tabela |
-| **Table Hover** | `#F8FAFC` | Hover row |
-| **Table Stripe** | `#FAFBFC` | Zebra stripe |
-| | | |
-| **Input BG** | `#FFFFFF` | Background de input |
-| **Input Border** | `#D1D5DB` | Borda de input |
-| **Input Focus** | `#2059D1` | Ring de foco |
-| **Input Placeholder** | `#94A3B8` | Placeholder text |
-| | | |
-| **Overlay** | `#000000` @ 20% | Modal/Sheet overlay |
+#### Primary — Azul Petróleo
+| Token | Hex | Uso |
+|-------|-----|-----|
+| 50 | #F0F6F8 | Fundo sutil |
+| 100 | #DCEAEF | Badges sutis |
+| 200 | #B9D5DE | Bordas leves |
+| 300 | #8CBDCC | |
+| 400 | #5A9CB3 | |
+| **500** | **#1A4D5C** | **Primary — botões, links, elementos focais** |
+| 600 | #15424F | Hover primary |
+| 700 | #0F3641 | Active primary |
+| 800 | #0A2A33 | |
+| 900 | #061D24 | |
 
-### Status Colors (Badges)
+#### Neutral — Slate
+| Token | Hex | Uso |
+|-------|-----|-----|
+| 50 | #F8F9FA | Fundo de tabela |
+| 100 | #F1F3F5 | Hover de linha |
+| 200 | #E2E5EA | Borders |
+| 300 | #CBD0D8 | Divider |
+| 400 | #9CA3AF | Placeholder |
+| **500** | **#6B7280** | **Texto secundário** |
+| 600 | #4B5563 | |
+| **700** | **#374151** | **Texto body** |
+| 800 | #1F2937 | |
+| **900** | **#111827** | **Texto primary (quase preto)** |
 
-| Status | BG | Text | Border |
-|---|---|---|---|
-| Apto / Concluído | `#F0FDF4` | `#166534` | `#BBF7D0` |
-| Em andamento | `#EFF6FF` | `#1E40AF` | `#BFDBFE` |
-| Por vencer (30d) | `#FFFBEB` | `#92400E` | `#FDE68A` |
-| Vencido | `#FEF2F2` | `#991B1B` | `#FECACA` |
-| Inativo | `#F1F5F9` | `#475569` | `#E2E8F0` |
+#### Accent — Azul Claro
+| Token | Hex |
+|-------|-----|
+| 500 | #3B82F6 |
+
+Usado apenas em elementos de destaque muito específicos (links em contextos informativos).
+
+#### Semantic Colors
+| Token | Hex | Uso |
+|-------|-----|-----|
+| **Success** | #0D9488 | Concluído, aprovado, apto |
+| Success Subtle | #F0FDFA | Fundo de badge success |
+| **Warning** | #B45309 | Por vencer, atenção |
+| Warning Subtle | #FFFBEB | Fundo de badge warning |
+| **Danger** | #BE123C | Vencido, crítico, não conforme |
+| Danger Subtle | #FFF1F2 | Fundo de badge danger |
+| **Info** | #0369A1 | Informativo |
+| Info Subtle | #F0F9FF | Fundo de badge info |
+
+> Nota: Success é um verde-teal (não verde grama). Danger é um vermelho cereja escuro (não vermelho sangue). Ambos são mais sofisticados e menos agressivos visualmente.
+
+#### Background & Surface
+| Token | Hex | Uso |
+|-------|-----|-----|
+| **Page Background** | #FAFAF8 | Fundo da página — warm white, reduz fadiga |
+| **Surface** | #FFFFFF | Cards, modais, sidebars |
+| **Card** | #FFFFFF | Background de card |
+| **Card Hover** | #F8F9FA | Hover sutil |
+| **Border** | #E2E5EA | Bordas padrão |
+| **Divider** | #EFF1F3 | Separadores |
+
+#### Sidebar (Light)
+| Token | Hex |
+|-------|-----|
+| Sidebar BG | #0F172A |
+| Sidebar Hover | #1E293B |
+| Sidebar Text | #F1F5F9 |
+| Sidebar Text Muted | #64748B |
+| Sidebar Border | #1E293B |
 
 ---
 
 ### Dark Theme
 
-| Token | HEX |
-|---|---|
-| **Primary** | `#4880FF` |
-| Primary Hover | `#5F92FF` |
-| Primary Active | `#3A6FE6` |
-| Primary Subtle | `#1E2A4A` |
-| | |
-| **Secondary** | `#8896A9` |
-| | |
-| **Accent** | `#A78BFA` |
-| | |
-| **Success** | `#22C55E` |
-| Success Subtle | `#132E1A` |
-| | |
-| **Warning** | `#F59E0B` |
-| Warning Subtle | `#2E2410` |
-| | |
-| **Danger** | `#EF4444` |
-| Danger Subtle | `#2E1313` |
-| | |
-| **Info** | `#38BDF8` |
-| Info Subtle | `#0C2330` |
-| | |
-| **Background** | `#0B1120` | Fundo da página — nota: não preto puro |
-| **Surface** | `#111B2E` | Cards e modais |
-| **Card** | `#111B2E` |
-| **Card Hover** | `#162240` |
-| | | |
-| **Border** | `#1E2A3D` |
-| **Divider** | `#1A2640` |
-| | | |
-| **Text Primary** | `#F1F5F9` |
-| **Text Secondary** | `#94A3B8` |
-| **Text Muted** | `#64748B` |
-| **Text Disabled** | `#334155` |
-| | | |
-| **Sidebar** | `#070C18` | Mais escuro que o background para profundidade |
-| **Sidebar Hover** | `#0F1A2E` |
-| **Sidebar Text** | `#E2E8F0` |
-| **Sidebar Text Muted** | `#475569` |
-| | | |
-| **Header** | `#0F1928` |
-| | | |
-| **Table Header** | `#162240` |
-| **Table Hover** | `#141F35` |
-| **Table Stripe** | `#131E33` |
-| | | |
-| **Input BG** | `#0F1928` |
-| **Input Border** | `#1E2A3D` |
-| **Input Focus** | `#4880FF` |
-| **Input Placeholder** | `#475569` |
-| | | |
-| **Overlay** | `#000000` @ 50% |
+Inspirado no tema escuro da Anthropic. Fundo não é preto puro — é um carvão quente (#171717). Cards levemente mais claros (#1F1F1F). Texto nunca é branco puro.
+
+| Token | Hex | Nota |
+|-------|-----|------|
+| **Page Background** | #171717 | Carvão quente, não preto — reduz cansaço |
+| **Surface** | #1F1F1F | Cards e modais |
+| **Card** | #1F1F1F | |
+| **Card Hover** | #272727 | |
+| **Border** | #2E2E2E | |
+| **Divider** | #2A2A2A | |
+| **Text Primary** | #EDEDED | Off-white |
+| **Text Secondary** | #A3A3A3 | |
+| **Text Muted** | #737373 | |
+| **Primary 500** | #58A6C4 | Azul mais claro para contraste em fundo escuro |
+| **Primary Hover** | #6FBAD8 | |
+| **Sidebar BG** | #111111 | Ligeiramente mais escuro que o fundo |
+| **Sidebar Hover** | #1F1F1F | |
+| **Sidebar Text** | #EDEDED | |
+| **Sidebar Border** | #2E2E2E | |
+| **Success** | #2DD4BF | |
+| **Warning** | #F59E0B | |
+| **Danger** | #FB7185 | |
+| **Info** | #38BDF8 | |
 
 ---
 
 ## 3. Tipografia
 
-### Escolha
+### Escolha da Fonte
 
-| Uso | Fonte | Razão |
-|---|---|---|
-| **UI geral** | **Inter** (sans) | Projetada para telas. Excelente legibilidade em tamanhos pequenos. Eixo "industrial/preciso" combinado com a estética. Pesos de 100 a 900. Já está no projeto. |
-| **Display / Títulos** | Inter (mesma) | Manter uma só fonte evita ruído visual. Inter nos pesos 700 e 600 já entrega hierarquia suficiente. |
+**Primary: Inter** (Google Fonts)
 
-Caso queira contraste adicional no futuro: **Instrument Sans** (Google Fonts) para displays — tem esse nome sugestivo e funciona lindamente em headings. Mas para este projeto, **Inter pura é a decisão correta** por consistência e performance.
+**Razão da escolha:**
+Inter foi projetada especificamente para interfaces de tela por Rasmus Andersson (ex-Designer do Facebook/Instagram). É a escolha correta para este produto por 5 razões:
+
+1. **Legibilidade extrema em tamanhos pequenos** — essencial para um sistema usado 8h+ por dia por inspetores e engenheiros
+2. **Eixo "industrial/preciso"** — o design da Inter tem influência de tipografia de sinalização e displays técnicos, combinando perfeitamente com o tema de engenharia
+3. **Vasta gama de pesos (100-900)** — permite hierarquia tipográfica rica sem usar múltiplas fontes
+4. **Abertura generosa (x-height alta)** — reduz fadiga visual em leitura prolongada
+5. **Adotada por empresas de tecnologia de alto nível** — Figma, GitHub, Mozilla, Linear, Notion, Raycast
+
+**Monospace**: JetBrains Mono (para tags, medições, dados técnicos)
 
 ### Escala Tipográfica
 
 | Style | Size | Weight | Line Height | Letter Spacing | Uso |
-|---|---|---|---|---|---|
-| **Display** | 32px / 2rem | 700 (Bold) | 1.2 | -0.025em | Título da página |
-| **H1** | 24px / 1.5rem | 600 (Semibold) | 1.3 | -0.02em | Título de seção |
-| **H2** | 20px / 1.25rem | 600 | 1.35 | -0.015em | Subtítulo de seção |
-| **H3** | 16px / 1rem | 600 | 1.4 | -0.01em | Título de card |
-| **H4** | 14px / 0.875rem | 600 | 1.4 | 0 | Título de grupo |
-| **Body** | 14px / 0.875rem | 400 (Regular) | 1.5 | 0 | Texto padrão |
+|-------|------|--------|-------------|----------------|-----|
+| **Display** | 30px / 1.875rem | 600 | 1.2 | -0.03em | Título de página |
+| **H1** | 22px / 1.375rem | 600 | 1.3 | -0.02em | Título de seção |
+| **H2** | 18px / 1.125rem | 600 | 1.35 | -0.015em | Subtítulo |
+| **H3** | 15px / 0.9375rem | 600 | 1.4 | -0.01em | Título de card |
+| **Body** | 14px / 0.875rem | 400 | 1.6 | 0 | Texto padrão |
 | **Small** | 13px / 0.8125rem | 400 | 1.5 | 0 | Texto auxiliar |
-| **Caption** | 12px / 0.75rem | 400 | 1.4 | 0 | Metadados, timestamps |
-| **Button** | 14px / 0.875rem | 500 (Medium) | 1 | 0 | Botões |
-| **Table Header** | 12px / 0.75rem | 600 | 1 | +0.03em | Cabeçalho de tabela (uppercase) |
-| **Overline** | 11px / 0.6875rem | 600 | 1 | +0.05em | Rótulos pequenos (uppercase) |
+| **Caption** | 12px / 0.75rem | 400 | 1.4 | 0 | Metadados |
+| **Overline** | 11px / 0.6875rem | 500 | 1.2 | +0.06em | Rótulos (uppercase) |
+| **Button** | 14px / 0.875rem | 500 | 1 | 0 | Botões |
+| **Table Head** | 11px / 0.6875rem | 600 | 1 | +0.05em | Header de tabela (uppercase) |
+| **Code** | 13px / 0.8125rem | 400 | 1.5 | 0 | Tags, medições (JetBrains Mono) |
+
+> Escala mais enxuta que o design system anterior. Removemos H4 e reduzimos tamanhos de display/h1/h2 para maior refinamento. Texto 14px no body (não 16px) porque Inter tem x-height alta e 14px é mais eficiente para telas densas de informação.
 
 ---
 
-## 4. Sistema de Espaçamento
+## 4. Grid & Espaçamento
+
+Sistema baseado em 8px.
 
 | Token | px | rem | Uso |
-|---|---|---|---|
-| **space-1** | 4 | 0.25 | Ícones pequenos |
-| **space-2** | 8 | 0.5 | Gap entre elementos próximos |
-| **space-3** | 12 | 0.75 | Gap entre label e input |
-| **space-4** | 16 | 1 | Padding dentro de cards |
-| **space-5** | 20 | 1.25 | Gap entre cards |
-| **space-6** | 24 | 1.5 | Padding de página, entre seções |
-| **space-8** | 32 | 2 | Entre seções grandes |
-| **space-10** | 40 | 2.5 | Margem de página |
-| **space-12** | 48 | 3 | Espaço hero |
-| **space-16** | 64 | 4 | Entre blocos principais |
-
-Regra: sempre múltiplos de 4. Nunca valores quebrados.
+|-------|----|-----|-----|
+| space-0.5 | 4 | 0.25 | Micro-ajustes |
+| **space-1** | **8** | 0.5 | Gap entre elementos próximos |
+| space-1.5 | 12 | 0.75 | Gap entre label e input |
+| **space-2** | **16** | 1 | Padding dentro de cards |
+| space-2.5 | 20 | 1.25 | |
+| **space-3** | **24** | 1.5 | Padding de página, entre seções |
+| space-4 | 32 | 2 | Entre seções grandes |
+| space-5 | 40 | 2.5 | |
+| space-6 | 48 | 3 | |
+| space-8 | 64 | 4 | |
+| space-10 | 80 | 5 | |
+| space-12 | 96 | 6 | |
 
 ---
 
 ## 5. Border Radius
 
-| Token | Valor | Uso |
-|---|---|---|
-| **radius-sm** | 4px | Badges, tabelas |
-| **radius-md** | 6px | Inputs, selects, botões pequenos |
-| **radius-lg** | 8px | Cards, botões primários, modais |
-| **radius-xl** | 12px | Drawers, sheets |
-| **radius-full** | 9999px | Avatares, pills |
+| Token | px | Uso |
+|-------|----|-----|
+| **sm** | 4 | Badges, avatares |
+| **md** | 6 | Inputs, selects, tooltips |
+| **lg** | 8 | Cards, botões, modais, dropdowns |
+| **xl** | 12 | Dialogs grandes, sheets |
+| **full** | 9999 | Avatares, pills |
 
-Cards e botões com **8px** — moderno sem ser infantil. Inputs com **6px** para ainda parecerem precisos.
+> Cards com 8px — suficiente para parecer moderno sem ser "infantil" (arredondamentos muito grandes tiram a seriedade). Inputs com 6px — mais precisos.
 
 ---
 
 ## 6. Sombras
 
-Nada dramático. Sombras sutis que sugerem elevação sem chamar atenção.
+Mínimas. Inspiradas na Anthropic — quase imperceptíveis, apenas para sugerir elevação.
 
 | Token | Valor |
-|---|---|
-| **shadow-xs** | `0 1px 2px rgba(15,23,41,0.04)` |
-| **shadow-sm** | `0 1px 3px rgba(15,23,41,0.05), 0 1px 2px rgba(15,23,41,0.04)` |
-| **shadow-md** | `0 4px 6px rgba(15,23,41,0.05), 0 2px 4px rgba(15,23,41,0.04)` |
-| **shadow-lg** | `0 10px 15px rgba(15,23,41,0.06), 0 4px 6px rgba(15,23,41,0.04)` |
-| **shadow-xl** | `0 20px 25px rgba(15,23,41,0.08), 0 8px 10px rgba(15,23,41,0.04)` |
+|-------|-------|
+| **shadow-xs** | `0 1px 2px rgba(0,0,0,0.03)` |
+| **shadow-sm** | `0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)` |
+| **shadow-md** | `0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02)` |
+| **shadow-lg** | `0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.02)` |
+| **shadow-xl** | `0 20px 25px rgba(0,0,0,0.06), 0 8px 10px rgba(0,0,0,0.02)` |
 
-Para dark theme: mesma lógica mas com cor `#000000` e opacidade maior.
+> Opacidades muito baixas. A sombra não deve ser notada conscientemente — apenas criar uma sensação sutil de camadas.
 
----
-
-## 7. Ícones
-
-| Decisão | Escolha | Justificativa |
-|---|---|---|
-| **Biblioteca** | **Lucide** | Já instalada. Open source, consistente, linha fina elegante. |
-| **Stroke** | `2px` (default do Lucide) | Suficiente para contraste sem pesar. |
-| **Tamanho padrão** | `16px` (h-4 w-4) | Em botões e labels |
-| **Tamanho médio** | `20px` (h-5 w-5) | Em cards e KPIs |
-| **Tamanho grande** | `24px` (h-6 w-6) | Em estados vazios |
-| **Cor** | Inherit ou `text-muted` | Ícones decorativos nunca chamam mais atenção que o texto |
-
-Regra: ícone sempre **apoia** o texto, nunca substitui sem legenda. Em botões, ícone + label.
+Para dark theme: mesma lógica, opacidade ligeiramente maior.
 
 ---
 
-## 8. Componentes
+## 7. Componentes
 
-### Botões
+### Button
 
 | Propriedade | Primary | Secondary | Outline | Ghost | Danger |
-|---|---|---|---|---|---|
-| **BG** | `var(--primary)` | `var(--secondary)` | transparent | transparent | `var(--danger)` |
-| **Texto** | white | white | `var(--text-primary)` | `var(--text-secondary)` | white |
-| **Border** | none | none | `var(--border)` | none | none |
-| **Hover BG** | primary-hover | secondary-hover | `var(--surface)` | `var(--table-hover)` | danger dark |
+|-------------|---------|-----------|---------|-------|--------|
+| **BG** | Primary 500 | Slate 100 | transparent | transparent | Danger |
+| **Text** | white | Slate 700 | Slate 700 | Slate 500 | white |
+| **Border** | none | none | Slate 200 | none | none |
+| **Hover BG** | Primary 600 | Slate 200 | Slate 50 | Slate 100 | Danger darker |
 | **Padding** | 10px 18px | 10px 18px | 10px 18px | 8px 14px | 10px 18px |
-| **Radius** | `8px` | `8px` | `8px` | `6px` | `8px` |
-| **Font** | 14px / 500 | 14px / 500 | 14px / 500 | 14px / 500 | 14px / 500 |
+| **Radius** | 8px | 8px | 8px | 6px | 8px |
+| **Font** | 14px/500 | 14px/500 | 14px/500 | 14px/500 | 14px/500 |
 | **Shadow** | none | none | none | none | none |
-| **Icon size** | 16px | 16px | 16px | 16px | 16px |
 
-Variações: `size="sm"` → 8px padding, 13px font. `size="lg"` → 14px padding, 16px font.
+- Sm: 8px padding Y, 13px font
+- Icon button: 32x32, ghost, 16px icon
+- Transição: 150ms ease
 
-### Cards
+### Input
 
-- **BG**: `var(--card)`
-- **Border**: `var(--border)` com `1px solid`
-- **Radius**: `8px`
-- **Shadow**: `shadow-sm` (padrão), `shadow-md` (elevado)
-- **Padding**: `var(--space-4)` ou `var(--space-6)`
-- **Hover**: `var(--card-hover)` bg + `shadow-md` transition 200ms
-
-### Inputs
-
-- **BG**: `var(--input-bg)`
-- **Border**: `1px solid var(--input-border)`
-- **Radius**: `6px`
+- **BG**: white
+- **Border**: Slate 200, 1px solid
+- **Radius**: 6px
 - **Padding**: 10px 12px
-- **Font**: 14px / 400
-- **Placeholder**: `var(--text-muted)`
-- **Focus**: `ring-2 ring-[var(--input-focus)]` + border transparent
-- **Disabled**: `opacity-50` + `cursor-not-allowed`
+- **Font**: 14px/400
+- **Placeholder**: Slate 400
+- **Focus**: Ring azul petróleo (2px, 25% opacity) + border transparent
+- **Disabled**: Slate 50 bg + Slate 300 text, cursor-not-allowed
 
 ### Select
 
-- Mesmo estilo de input
-- Dropdown com `shadow-lg`, `radius-lg`, border sutil
-- Option hover: `var(--table-hover)`
-- Selected: `var(--primary-subtle)` + primary text
+- Mesmo estilo do input
+- Dropdown: shadow-md, radius 8px, padding 4px
+- Option hover: Slate 100 bg
+- Selected: Primary 50 bg + Primary 600 text
 
-### Modais
+### Card
 
-- **Overlay**: `var(--overlay)` (backdrop-blur-sm support)
-- **Content**: `var(--surface)`, `radius-xl`, `shadow-xl`
+- **BG**: Surface (white)
+- **Border**: 1px solid Border
+- **Radius**: 8px
+- **Padding**: 16px (space-2)
+- **Shadow**: shadow-xs (quase imperceptível)
+- **Hover**: shadow-sm + border subtle change (200ms ease)
+
+### Stats Card (KPI)
+
+- Mesmo estilo do card
+- Ícone minimalista de 20px
+- Valor: 24px/600
+- Label: 12px/400/Slate 500
+- Padding: 16px (ícone incluso)
+- Sem bordas internas — tudo com espaçamento
+
+### Table
+
+- **Header**: Slate 50 bg, 11px/600 uppercase, 0.05em tracking, Slate 500
+- **Rows**: border-bottom Slate 100
+- **Cells**: padding 10px 16px, 14px/400
+- **Hover**: Slate 50 bg (200ms)
+- **Stripes**: Slate 50/50 em even (opcional, apenas em tabelas densas)
+- **Font**: Inter body
+
+### Badge
+
+- **Padding**: 2px 8px
+- **Radius**: 4px
+- **Font**: 12px/500
+- Cores conforme semantic colors (subtle bg + dark text)
+- Sem borda (apenas bg + texto)
+
+### Modal/Dialog
+
+- **Overlay**: rgba(0,0,0,0.25)
+- **Content**: Surface, radius 12px, shadow-xl
 - **Padding**: 24px
-- **Header**: divider abaixo, título H3
-- **Footer**: divider acima, botões alinhados à direita
-
-### Drawer (Sheet)
-
-- **BG**: `var(--surface)`
-- **Width**: 320px (small), 400px (default), 640px (large)
-- **Radius**: `radius-xl` no lado oposto
-- **Shadow**: `shadow-xl`
-- **Padding**: 24px
+- **Width**: 480px (default)
+- **Animation**: scale 0.97→1 + fade, 200ms ease-out
 
 ### Sidebar
 
-- **BG**: `var(--sidebar)` — dark, não preto puro
-- **Width**: 256px (64 rem)
-- **Item height**: 40px
-- **Item active**: bg sutil + primary text
-- **Item hover**: `var(--sidebar-hover)`
-- **Divider**: menos contraste
-- **Font**: 14px / 500 inactive, 14px / 600 active
-- **Ícones**: 16px, muted quando inativo
-
-### Tabela
-
-- **Header**: bg `var(--table-header)`, font 12px/600 uppercase tracking-wide, color `var(--text-secondary)`
-- **Rows**: border-bottom com `var(--border)`, hover com `var(--table-hover)`
-- **Cells**: padding 12px 16px
-- **Font**: 14px / 400
-- **Striped**: `var(--table-stripe)` em even rows (opcional)
-
-### Badges
-
-- **Padding**: 2px 10px
-- **Radius**: `radius-sm` (4px) — cantos retos combinam com o tema industrial
-- **Font**: 12px / 500
-- **Cor**: conforme tabela de status colors
-
-### Alerts
-
-- **Padding**: 12px 16px
-- **Radius**: `8px`
-- **Border**: left-4 solid na cor correspondente
-- **Icon**: 16px, cor do alerta
-
-### Toast (Sonner)
-
-- **Style**: Moderno, richColors
-- **Radius**: `8px`
-- **Shadow**: `shadow-lg`
-
-### Progress Bar
-
-- **BG**: `var(--border)`
-- **Fill**: `var(--primary)` ou cor de status
-- **Radius**: `full`
-- **Height**: 6px
-- **Animação**: smooth transition
+- **BG**: #0F172A (light) / #111111 (dark)
+- **Width**: 240px expanded, 60px collapsed
+- **Item height**: 36px
+- **Item active**: Primary 500 text + left bar 2px
+- **Item hover**: Sidebar hover bg
+- **Font**: 14px/500
+- **Ícones**: 16px
 
 ### Tabs
 
-- **List**: border-bottom `var(--border)`
-- **Tab**: padding 10px 16px, font 14px/500
-- **Active**: color `var(--primary)` + border-bottom 2px
-- **Hover**: `var(--table-hover)` bg
+- **List**: border-bottom 1px Border
+- **Tab**: padding 8px 14px, 13px/500
+- **Active**: Primary 500 text + border-bottom 2px Primary
+- **Hover**: Slate 50 bg
+- Sem sombras ou bg no active — apenas texto + linha
 
-### Calendário / DatePicker
+### Toast
 
-- Clean, sem bordas agressivas
-- Day hover: `var(--table-hover)`, selected: `var(--primary)` with white text
-- Today: ring sutil
-- Fora do mês: `var(--text-muted)`
+- Sonner com richColors
+- Radius 8px
+- Font 14px/400
+- Shadow-md
+- Icon discreto
 
-### Pagination
+### Alert
 
-- Previous/Next: ghost buttons
-- Page numbers: 32px squares, radius 6px
-- Active page: `var(--primary)` white text
-- Hover: `var(--table-hover)`
-
-### Stepper
-
-- Horizontal, números em círculos
-- Active step: primary fill
-- Completed: success fill + check icon
-- Pending: border + muted text
-- Connector line: `var(--border)`, completed: `var(--primary)`
-
----
-
-## 9. Dashboard
-
-### Princípios
-- **Hierarquia clara**: KPIs no topo, gráficos abaixo, detalhes depois
-- **Espaço em branco generoso**: sem sensação de "grid lotado"
-- **Dados primeiro**: gráficos limpos, sem decoração
-
-### Layout
-
-```
-┌──────────────────────────────────────────┐
-│  Dashboard                  [Filtro]     │  ← Header com título + filtro período
-├──────────┬──────────┬──────────┬─────────┤
-│   Total   │  Ativos   │  Críticos │  Venc.  │  ← KPI cards (4 colunas)
-│   142     │  118      │  12       │  8      │
-├──────────┴──────────┴──────────┴─────────┤
-│                                           │
-│  ┌──────────────────┐ ┌────────────────┐  │  ← Gráficos lado a lado
-│  │ Inspeções/mês    │ │ Cat. Risco     │  │
-│  │ (bar chart)      │ │ (donut chart)  │  │
-│  └──────────────────┘ └────────────────┘  │
-│                                           │
-│  ┌──────────────────────────────────────┐ │
-│  │ Equipamentos Próximos ao Vencimento │ │  ← Tabela compacta
-│  │ Tag  │ Equip.   │ Data   │ Status  │ │
-│  └──────────────────────────────────────┘ │
-└──────────────────────────────────────────┘
-```
-
-### KPI Cards
-- **Ícone**: 20px, cor do tema, fundo subtle circular (32px)
-- **Valor**: 24px / 700
-- **Label**: 13px / 500 / text-secondary
-- **Trend**: opcional, mini badge com +X%
-- **Padding**: 16px
+- **Padding**: 12px 16px
 - **Radius**: 8px
-- **Border**: 1px solid border
-- **Shadow**: shadow-sm
+- **BG**: subtle cor correspondente (sem borda esquerda grossa)
+- **Icon**: 16px
+- **Font**: 14px/400
 
-### Gráficos (Recharts)
-- **Cores**: usar chart-1 a chart-5 do tema
-- **Grid**: none ou linhas tracejadas sutis
-- **Axis**: font 12px, text-muted
-- **Tooltip**: radius 6px, shadow-lg
-- **Legend**: font 12px, layout horizontal
-- **Bar chart**: radius 4px nos topos, gap entre barras
-- **Donut**: inner radius 60%, stroke none
+### Skeleton
 
-### Filtros
-- Selects e DatePicker em flex-row, alinhados à direita do título
-- "Aplicar" apenas se necessário; preferir onChange automático
+- **BG**: Slate 100
+- **Animation**: pulse (opacity fade, 1500ms)
+- **Radius**: 4px
 
----
+### Empty State
 
-## 10. Tema Claro (descritivo)
-
-O fundo da página é um cinza azulado muito claro (`#F6F8FA`) que lembra uma superfície de aço escovado limpo. Cards brancos (`#FFFFFF`) flutuam com sombras mínimas e bordas sutis. A tipografia é predominantemente escura (`#0F1729`) com hierarquia clara.
-
-Os inputs têm fundo branco e borda cinza que muda para o anel azul no foco. A sidebar é escura (`#0E162B`) criando contraste forte e delimitando a navegação do conteúdo.
-
-Badges usam cantos levemente retos (4px) e cores suaves nos fundos, passando uma sensação de indicadores de painel.
-
-Gráficos usam cores pastel-saturadas (chart-1 a 5) que se destacam sem gritar.
-
-A sensação geral é de uma ferramenta profissional, assinável, limpa.
+- **Icon**: 48px, Slate 300
+- **Title**: 16px/600 Slate 700
+- **Description**: 14px/400 Slate 400
+- **Action**: Button opcional
 
 ---
 
-## 11. Tema Escuro
+## 8. Dashboard Layout
 
-Não é uma inversão do claro.
-
-O background é azul marinho profundo (`#0B1120`) — não preto puro, que cansa menos. Cards são ligeiramente mais claros (`#111B2E`) com bordas sutis (`#1E2A3D`). A sidebar é ainda mais escura (`#070C18`) criando três camadas de profundidade.
-
-O primary azul no escuro é mais claro (`#4880FF`) para manter contraste WCAG AA em fundos escuros. Textos nunca são branco puro — uso `#F1F5F9` para primary, `#94A3B8` para secondary.
-
-Inputs têm fundo `#0F1928` (quase o background) com borda `#1E2A3D`. No foco, o ring primary brilha.
-
-Status colors são mais vibrantes que no claro para compensar o fundo escuro, mas ainda controladas.
-
-A sensação é de um cockpit noturno — instrumentos iluminados com precisão, sem ofuscamento.
+```
+┌────────────────────────────────────────────────────────┐
+│  Dashboard                              [Filtro]        │
+│  Visão geral das inspeções                              │
+├────────────┬────────────┬────────────┬──────────────────┤
+│            │            │            │                  │
+│ 12         │ 8          │ 3          │ 1                │
+│ Inspeções  │ Concluídas │ Andamento  │ Vencidas         │
+│            │            │            │                  │
+├────────────┴────────────┴────────────┴──────────────────┤
+│                                                          │
+│  ┌─────────────────────────────┐ ┌─────────────────────┐│
+│  │ Próximas Inspeções          │ │ Status NR-13        ││
+│  │                             │ │                     ││
+│  │ V-101 — 15/06/2026   ⏰ 30d │ │ ● Categoria I   3   ││
+│  │ CAL-201 — 22/08/2026  🔴 7d │ │ ● Categoria II  5  ││
+│  │ V-301 — 10/09/2026   🟡 60d│ │ ● Categoria III 7  ││
+│  │                             │ │                     ││
+│  └─────────────────────────────┘ └─────────────────────┘│
+│                                                          │
+│  ┌──────────────────────────────────────────────────────┐│
+│  │ Válvulas Críticas (próximas 30 dias)                ││
+│  │                                                     ││
+│  │ TAG      │ Equip.          │ Cliente   │ Status     ││
+│  │ V-101    │ Separador       │ PetroVale │ 🔴 Vence 7d││
+│  │ CAL-201  │ Caldeira        │ Aços Forte│ 🔴 Vence 7d││
+│  │ V-301    │ Acumulador      │ Aços Forte│ 🟡 30 dias ││
+│  └──────────────────────────────────────────────────────┘│
+│                                                          │
+│  ┌──────────────────────────────────────┐               │
+│  │ Atividade Recente                    │               │
+│  │                                      │               │
+│  │ ○ Inspeção V-101 concluída — ontem   │               │
+│  │ ○ Laudo CAL-201 emitido — 3 dias     │               │
+│  │ ○ Nova inspeção V-301 iniciada — 5d  │               │
+│  └──────────────────────────────────────┘               │
+└──────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 12. Design Tokens (JSON)
+## 9. Ícones
+
+**Lucide React** — já instalada, open source, linha fina (1.5px stroke), elegante.
+
+- **Tamanho padrão**: 16px (em botões, labels)
+- **Tamanho médio**: 20px (em cards, KPIs)
+- **Tamanho grande**: 24px (estados vazios)
+- **Tamanho KPI**: 20px em container 36px
+- **Stroke**: 1.5px (padrão do Lucide)
+- **Cor**: inherit ou Slate 400
+
+Nunca usar ícones filled. Apenas outline.
+
+---
+
+## 10. Motion & Animação
+
+| Situação | Propriedade | Duração | Timing |
+|----------|-------------|---------|--------|
+| Hover (card, button) | transform, shadow, border | 150ms | ease-out |
+| Focus (input) | ring, border | 150ms | ease-out |
+| Modal open | opacity + scale (0.96→1) | 200ms | ease-out |
+| Modal close | opacity + scale (1→0.96) | 150ms | ease-in |
+| Sidebar expand | width | 300ms | ease-out |
+| Dropdown open | opacity + translateY(-4→0) | 150ms | ease-out |
+| Page transition | opacity 0→1 | 200ms | ease-out |
+| Skeleton | opacity pulse | 1500ms | ease-in-out |
+| Toast enter | translateY + opacity | 300ms | ease-out |
+
+**Princípio**: Animações curtas (150-300ms). Nada de 500ms+. Nada de bounce. Nada de stagger. Apenas transições funcionais que não chamam atenção.
+
+---
+
+## 11. Estados
+
+| Estado | Aparência |
+|--------|-----------|
+| **Hover** | Elevação sutil (shadow-sm), cor 1 shade mais escura |
+| **Focus** | Ring azul petróleo 2px, ~25% opacity |
+| **Pressed** | Transform scale(0.98) em botões, cor active |
+| **Disabled** | Opacity 50%, cursor not-allowed, sem sombra |
+| **Loading** | Spinner/Shimmer, opacidade 70% no conteúdo |
+| **Selected** | Primary 50 bg, Primary 600 text |
+| **Error** | Danger subtle bg, Danger text, border Danger |
+| **Success** | Success subtle bg, Success text |
+| **Warning** | Warning subtle bg, Warning text |
+| **Empty** | Ícone grande muted + texto descritivo |
+
+---
+
+## 12. UX — Princípios
+
+### Redução de Fadiga Visual (objetivo #1)
+
+1. **Background warm white** (#FAFAF8) ao invés de branco puro (#FFFFFF) — reduz o contraste agressivo do branco absoluto, especialmente em ambientes com luz mista
+2. **Dark theme disponível** — para uso em campo (ambientes externos) ou salas com pouca luz
+3. **Texto nunca preto puro** (#000 → #111827) — o contraste máximo cansa; um tom de preto muito escuro mas não absoluto é mais confortável
+4. **Sem cores saturadas** — vermelhos, verdes e amarelos são moderados (teal, cereja, âmbar)
+5. **Contraste suficiente mas não excessivo** — diferença de 3-4 shades entre bg e border, não 6-7
+
+### Facilidade de Leitura
+
+1. **Inter em 14px** — tamanho ideal para leitura de dados técnicos; grande o suficiente para legibilidade, pequeno o suficiente para densidade de informação
+2. **Line-height 1.6 no body** — espaçamento generoso entre linhas reduz fadiga
+3. **Hierarquia clara** — apenas 4 níveis de heading (Display, H1, H2, H3), sem confusão
+4. **Uppercase apenas em overlines e table headers** — nunca em body text
+5. **Tracking (letter-spacing)** — negativo em headings (aproxima letras), positivo em overlines (afasta)
+
+### Produtividade
+
+1. **Ações primárias sempre visíveis** — sem hover-reveal para botões de ação
+2. **Filtros persistentes** — não somem ao recarregar
+3. **Sticky bottom em wizards** — botões nunca ficam abaixo do fold
+4. **Empty states com call-to-action** — o usuário nunca fica perdido
+5. **Feedback imediato** — toast para toda ação, sem exceção
+
+### Hierarquia de Informação Crítica
+
+1. **O equipamento (TAG) é o centro** — sempre visível, em destaque
+2. **Cliente/Empresa** — segundo nível hierárquico
+3. **Categoria de risco** — sempre visível como badge
+4. **Datas de próxima inspeção** — nunca escondidas
+5. **Status color como indicador primário** — cor primeiro, texto segundo
+
+---
+
+## 13. Design Tokens (JSON)
 
 ```json
 {
   "nr13pro": {
     "colors": {
-      "primary": "#2059D1",
-      "primary-hover": "#1A4AB8",
-      "primary-active": "#153C9E",
-      "primary-subtle": "#EFF4FF",
-      "secondary": "#4F5B6A",
-      "secondary-hover": "#3A4553",
-      "accent": "#7C3AED",
-      "success": "#16A34A",
-      "success-subtle": "#F0FDF4",
-      "warning": "#D97706",
+      "primary": {
+        "50": "#F0F6F8",
+        "100": "#DCEAEF",
+        "200": "#B9D5DE",
+        "300": "#8CBDCC",
+        "400": "#5A9CB3",
+        "500": "#1A4D5C",
+        "600": "#15424F",
+        "700": "#0F3641",
+        "800": "#0A2A33",
+        "900": "#061D24"
+      },
+      "neutral": {
+        "50": "#F8F9FA",
+        "100": "#F1F3F5",
+        "200": "#E2E5EA",
+        "300": "#CBD0D8",
+        "400": "#9CA3AF",
+        "500": "#6B7280",
+        "600": "#4B5563",
+        "700": "#374151",
+        "800": "#1F2937",
+        "900": "#111827"
+      },
+      "accent": "#3B82F6",
+      "success": "#0D9488",
+      "success-subtle": "#F0FDFA",
+      "warning": "#B45309",
       "warning-subtle": "#FFFBEB",
-      "danger": "#DC2626",
-      "danger-subtle": "#FEF2F2",
-      "info": "#0284C7",
+      "danger": "#BE123C",
+      "danger-subtle": "#FFF1F2",
+      "info": "#0369A1",
       "info-subtle": "#F0F9FF",
-      "background": "#F6F8FA",
+      "background": "#FAFAF8",
       "surface": "#FFFFFF",
       "card": "#FFFFFF",
-      "card-hover": "#FAFBFC",
+      "card-hover": "#F8F9FA",
       "border": "#E2E5EA",
       "divider": "#EFF1F3",
-      "text-primary": "#0F1729",
-      "text-secondary": "#475569",
-      "text-muted": "#94A3B8",
+      "text-primary": "#111827",
+      "text-secondary": "#6B7280",
+      "text-muted": "#9CA3AF",
       "text-disabled": "#CBD5E1",
-      "sidebar": "#0E162B",
-      "sidebar-hover": "#1A2341",
-      "sidebar-text": "#E2E8F0",
+      "sidebar": "#0F172A",
+      "sidebar-hover": "#1E293B",
+      "sidebar-text": "#F1F5F9",
       "sidebar-text-muted": "#64748B",
-      "header": "#FFFFFF",
-      "table-header": "#F1F5F9",
-      "table-hover": "#F8FAFC",
-      "table-stripe": "#FAFBFC",
-      "input-bg": "#FFFFFF",
-      "input-border": "#D1D5DB",
-      "input-focus": "#2059D1",
-      "input-placeholder": "#94A3B8",
-      "overlay": "rgba(0,0,0,0.2)",
-      "chart-1": "#2059D1",
-      "chart-2": "#16A34A",
-      "chart-3": "#D97706",
-      "chart-4": "#7C3AED",
-      "chart-5": "#DC2626"
+      "sidebar-border": "#1E293B"
     },
     "colors-dark": {
-      "primary": "#4880FF",
-      "primary-hover": "#5F92FF",
-      "primary-active": "#3A6FE6",
-      "primary-subtle": "#1E2A4A",
-      "secondary": "#8896A9",
-      "accent": "#A78BFA",
-      "success": "#22C55E",
-      "success-subtle": "#132E1A",
+      "primary": {
+        "500": "#58A6C4",
+        "600": "#6FBAD8"
+      },
+      "background": "#171717",
+      "surface": "#1F1F1F",
+      "card": "#1F1F1F",
+      "card-hover": "#272727",
+      "border": "#2E2E2E",
+      "divider": "#2A2A2A",
+      "text-primary": "#EDEDED",
+      "text-secondary": "#A3A3A3",
+      "text-muted": "#737373",
+      "sidebar": "#111111",
+      "sidebar-hover": "#1F1F1F",
+      "sidebar-text": "#EDEDED",
+      "sidebar-text-muted": "#737373",
+      "sidebar-border": "#2E2E2E",
+      "success": "#2DD4BF",
       "warning": "#F59E0B",
-      "warning-subtle": "#2E2410",
-      "danger": "#EF4444",
-      "danger-subtle": "#2E1313",
-      "info": "#38BDF8",
-      "info-subtle": "#0C2330",
-      "background": "#0B1120",
-      "surface": "#111B2E",
-      "card": "#111B2E",
-      "card-hover": "#162240",
-      "border": "#1E2A3D",
-      "divider": "#1A2640",
-      "text-primary": "#F1F5F9",
-      "text-secondary": "#94A3B8",
-      "text-muted": "#64748B",
-      "text-disabled": "#334155",
-      "sidebar": "#070C18",
-      "sidebar-hover": "#0F1A2E",
-      "sidebar-text": "#E2E8F0",
-      "sidebar-text-muted": "#475569",
-      "header": "#0F1928",
-      "table-header": "#162240",
-      "table-hover": "#141F35",
-      "table-stripe": "#131E33",
-      "input-bg": "#0F1928",
-      "input-border": "#1E2A3D",
-      "input-focus": "#4880FF",
-      "input-placeholder": "#475569",
-      "overlay": "rgba(0,0,0,0.5)",
-      "chart-1": "#4880FF",
-      "chart-2": "#22C55E",
-      "chart-3": "#F59E0B",
-      "chart-4": "#A78BFA",
-      "chart-5": "#EF4444"
+      "danger": "#FB7185",
+      "info": "#38BDF8"
     },
     "spacing": {
-      "1": "4px",
-      "2": "8px",
-      "3": "12px",
-      "4": "16px",
-      "5": "20px",
-      "6": "24px",
-      "8": "32px",
-      "10": "40px",
-      "12": "48px",
-      "16": "64px"
+      "0.5": "4px",
+      "1": "8px",
+      "1.5": "12px",
+      "2": "16px",
+      "2.5": "20px",
+      "3": "24px",
+      "4": "32px",
+      "5": "40px",
+      "6": "48px",
+      "8": "64px",
+      "10": "80px",
+      "12": "96px"
     },
     "radius": {
       "sm": "4px",
@@ -586,25 +578,57 @@ A sensação é de um cockpit noturno — instrumentos iluminados com precisão,
       "full": "9999px"
     },
     "shadow": {
-      "xs": "0 1px 2px rgba(15,23,41,0.04)",
-      "sm": "0 1px 3px rgba(15,23,41,0.05), 0 1px 2px rgba(15,23,41,0.04)",
-      "md": "0 4px 6px rgba(15,23,41,0.05), 0 2px 4px rgba(15,23,41,0.04)",
-      "lg": "0 10px 15px rgba(15,23,41,0.06), 0 4px 6px rgba(15,23,41,0.04)",
-      "xl": "0 20px 25px rgba(15,23,41,0.08), 0 8px 10px rgba(15,23,41,0.04)"
+      "xs": "0 1px 2px rgba(0,0,0,0.03)",
+      "sm": "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+      "md": "0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02)",
+      "lg": "0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.02)",
+      "xl": "0 20px 25px rgba(0,0,0,0.06), 0 8px 10px rgba(0,0,0,0.02)"
     },
     "typography": {
-      "font-family": "Inter, ui-sans-serif, system-ui, sans-serif",
-      "display": { "size": "32px", "weight": "700", "lineHeight": "1.2", "letterSpacing": "-0.025em" },
-      "h1": { "size": "24px", "weight": "600", "lineHeight": "1.3", "letterSpacing": "-0.02em" },
-      "h2": { "size": "20px", "weight": "600", "lineHeight": "1.35", "letterSpacing": "-0.015em" },
-      "h3": { "size": "16px", "weight": "600", "lineHeight": "1.4", "letterSpacing": "-0.01em" },
-      "h4": { "size": "14px", "weight": "600", "lineHeight": "1.4", "letterSpacing": "0" },
-      "body": { "size": "14px", "weight": "400", "lineHeight": "1.5", "letterSpacing": "0" },
+      "font-family": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+      "font-mono": "\"JetBrains Mono\", ui-monospace, monospace",
+      "display": { "size": "30px", "weight": "600", "lineHeight": "1.2", "letterSpacing": "-0.03em" },
+      "h1": { "size": "22px", "weight": "600", "lineHeight": "1.3", "letterSpacing": "-0.02em" },
+      "h2": { "size": "18px", "weight": "600", "lineHeight": "1.35", "letterSpacing": "-0.015em" },
+      "h3": { "size": "15px", "weight": "600", "lineHeight": "1.4", "letterSpacing": "-0.01em" },
+      "body": { "size": "14px", "weight": "400", "lineHeight": "1.6", "letterSpacing": "0" },
       "small": { "size": "13px", "weight": "400", "lineHeight": "1.5", "letterSpacing": "0" },
       "caption": { "size": "12px", "weight": "400", "lineHeight": "1.4", "letterSpacing": "0" },
+      "overline": { "size": "11px", "weight": "500", "lineHeight": "1.2", "letterSpacing": "0.06em" },
       "button": { "size": "14px", "weight": "500", "lineHeight": "1", "letterSpacing": "0" },
-      "table-header": { "size": "12px", "weight": "600", "lineHeight": "1", "letterSpacing": "0.03em" },
-      "overline": { "size": "11px", "weight": "600", "lineHeight": "1", "letterSpacing": "0.05em" }
+      "table-header": { "size": "11px", "weight": "600", "lineHeight": "1", "letterSpacing": "0.05em" },
+      "code": { "size": "13px", "weight": "400", "lineHeight": "1.5", "letterSpacing": "0" }
+    },
+    "animation": {
+      "duration": {
+        "hover": "150ms",
+        "focus": "150ms",
+        "modal": "200ms",
+        "sidebar": "300ms",
+        "dropdown": "150ms",
+        "page": "200ms",
+        "skeleton": "1500ms",
+        "toast": "300ms"
+      },
+      "easing": {
+        "default": "ease-out",
+        "enter": "ease-out",
+        "exit": "ease-in"
+      }
+    },
+    "opacity": {
+      "disabled": "0.5",
+      "loading": "0.7",
+      "hover": "0.08",
+      "active": "0.12",
+      "overlay": "0.25"
+    },
+    "z-index": {
+      "dropdown": "50",
+      "sticky": "100",
+      "drawer": "200",
+      "modal": "300",
+      "toast": "400"
     }
   }
 }
@@ -612,68 +636,74 @@ A sensação é de um cockpit noturno — instrumentos iluminados com precisão,
 
 ---
 
-## 13. CSS Variables
+## 14. CSS Variables
 
 ```css
 :root {
-  /* Colors */
-  --primary: #2059D1;
-  --primary-hover: #1A4AB8;
-  --primary-active: #153C9E;
-  --primary-subtle: #EFF4FF;
-  --secondary: #4F5B6A;
-  --secondary-hover: #3A4553;
-  --accent: #7C3AED;
-  --success: #16A34A;
-  --success-subtle: #F0FDF4;
-  --warning: #D97706;
+  /* Primary - Petroleum Blue */
+  --primary-50: #F0F6F8;
+  --primary-100: #DCEAEF;
+  --primary-200: #B9D5DE;
+  --primary-300: #8CBDCC;
+  --primary-400: #5A9CB3;
+  --primary-500: #1A4D5C;
+  --primary-600: #15424F;
+  --primary-700: #0F3641;
+  --primary-800: #0A2A33;
+  --primary-900: #061D24;
+
+  /* Neutral - Slate */
+  --neutral-50: #F8F9FA;
+  --neutral-100: #F1F3F5;
+  --neutral-200: #E2E5EA;
+  --neutral-300: #CBD0D8;
+  --neutral-400: #9CA3AF;
+  --neutral-500: #6B7280;
+  --neutral-600: #4B5563;
+  --neutral-700: #374151;
+  --neutral-800: #1F2937;
+  --neutral-900: #111827;
+
+  /* Semantic */
+  --accent: #3B82F6;
+  --success: #0D9488;
+  --success-subtle: #F0FDFA;
+  --warning: #B45309;
   --warning-subtle: #FFFBEB;
-  --danger: #DC2626;
-  --danger-subtle: #FEF2F2;
-  --info: #0284C7;
+  --danger: #BE123C;
+  --danger-subtle: #FFF1F2;
+  --info: #0369A1;
   --info-subtle: #F0F9FF;
-  --background: #F6F8FA;
+
+  /* Background & Surface */
+  --background: #FAFAF8;
   --surface: #FFFFFF;
   --card: #FFFFFF;
-  --card-hover: #FAFBFC;
+  --card-hover: #F8F9FA;
   --border: #E2E5EA;
   --divider: #EFF1F3;
-  --text-primary: #0F1729;
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
+
+  /* Text */
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
   --text-disabled: #CBD5E1;
-  --sidebar: #0E162B;
-  --sidebar-hover: #1A2341;
-  --sidebar-text: #E2E8F0;
+
+  /* Sidebar */
+  --sidebar: #0F172A;
+  --sidebar-hover: #1E293B;
+  --sidebar-text: #F1F5F9;
   --sidebar-text-muted: #64748B;
-  --header: #FFFFFF;
-  --table-header: #F1F5F9;
-  --table-hover: #F8FAFC;
-  --table-stripe: #FAFBFC;
+  --sidebar-border: #1E293B;
+
+  /* Components */
   --input-bg: #FFFFFF;
-  --input-border: #D1D5DB;
-  --input-focus: #2059D1;
-  --input-placeholder: #94A3B8;
-  --overlay: rgba(0, 0, 0, 0.2);
-
-  /* Chart */
-  --chart-1: #2059D1;
-  --chart-2: #16A34A;
-  --chart-3: #D97706;
-  --chart-4: #7C3AED;
-  --chart-5: #DC2626;
-
-  /* Spacing */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-5: 20px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
+  --input-border: #CBD0D8;
+  --input-focus: #1A4D5C;
+  --input-placeholder: #9CA3AF;
+  --table-header: #F8F9FA;
+  --table-hover: #FAFAF8;
+  --table-stripe: #F8F9FA;
 
   /* Radius */
   --radius-sm: 4px;
@@ -683,162 +713,166 @@ A sensação é de um cockpit noturno — instrumentos iluminados com precisão,
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(15, 23, 41, 0.04);
-  --shadow-sm: 0 1px 3px rgba(15, 23, 41, 0.05), 0 1px 2px rgba(15, 23, 41, 0.04);
-  --shadow-md: 0 4px 6px rgba(15, 23, 41, 0.05), 0 2px 4px rgba(15, 23, 41, 0.04);
-  --shadow-lg: 0 10px 15px rgba(15, 23, 41, 0.06), 0 4px 6px rgba(15, 23, 41, 0.04);
-  --shadow-xl: 0 20px 25px rgba(15, 23, 41, 0.08), 0 8px 10px rgba(15, 23, 41, 0.04);
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.02);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.06), 0 8px 10px rgba(0,0,0,0.02);
 
-  /* Typography tokens (for reference — applied via Tailwind) */
-
-  /* Status badges */
-  --badge-apto-bg: #F0FDF4;
-  --badge-apto-text: #166534;
-  --badge-apto-border: #BBF7D0;
-  --badge-andamento-bg: #EFF6FF;
-  --badge-andamento-text: #1E40AF;
-  --badge-andamento-border: #BFDBFE;
-  --badge-vencer-bg: #FFFBEB;
-  --badge-vencer-text: #92400E;
-  --badge-vencer-border: #FDE68A;
-  --badge-vencido-bg: #FEF2F2;
-  --badge-vencido-text: #991B1B;
-  --badge-vencido-border: #FECACA;
-  --badge-inativo-bg: #F1F5F9;
-  --badge-inativo-text: #475569;
-  --badge-inativo-border: #E2E8F0;
+  /* Z-index */
+  --z-dropdown: 50;
+  --z-sticky: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
 }
 
 [data-theme="dark"] {
-  --primary: #4880FF;
-  --primary-hover: #5F92FF;
-  --primary-active: #3A6FE6;
-  --primary-subtle: #1E2A4A;
-  --secondary: #8896A9;
-  --secondary-hover: #6A7A8E;
-  --accent: #A78BFA;
-  --success: #22C55E;
-  --success-subtle: #132E1A;
+  --primary-50: #1A2A30;
+  --primary-100: #1E3640;
+  --primary-200: #254A58;
+  --primary-300: #2E6174;
+  --primary-400: #3F7E94;
+  --primary-500: #58A6C4;
+  --primary-600: #6FBAD8;
+
+  --neutral-50: #1F1F1F;
+  --neutral-100: #272727;
+  --neutral-200: #2E2E2E;
+  --neutral-300: #404040;
+  --neutral-400: #525252;
+  --neutral-500: #737373;
+  --neutral-600: #A3A3A3;
+  --neutral-700: #D4D4D4;
+  --neutral-800: #E5E5E5;
+  --neutral-900: #EDEDED;
+
+  --accent: #60A5FA;
+  --success: #2DD4BF;
+  --success-subtle: #134E4A;
   --warning: #F59E0B;
-  --warning-subtle: #2E2410;
-  --danger: #EF4444;
-  --danger-subtle: #2E1313;
+  --warning-subtle: #451A03;
+  --danger: #FB7185;
+  --danger-subtle: #4C0519;
   --info: #38BDF8;
-  --info-subtle: #0C2330;
-  --background: #0B1120;
-  --surface: #111B2E;
-  --card: #111B2E;
-  --card-hover: #162240;
-  --border: #1E2A3D;
-  --divider: #1A2640;
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
-  --text-disabled: #334155;
-  --sidebar: #070C18;
-  --sidebar-hover: #0F1A2E;
-  --sidebar-text: #E2E8F0;
-  --sidebar-text-muted: #475569;
-  --header: #0F1928;
-  --table-header: #162240;
-  --table-hover: #141F35;
-  --table-stripe: #131E33;
-  --input-bg: #0F1928;
-  --input-border: #1E2A3D;
-  --input-focus: #4880FF;
-  --input-placeholder: #475569;
-  --overlay: rgba(0, 0, 0, 0.5);
+  --info-subtle: #0C4A6E;
 
-  --chart-1: #4880FF;
-  --chart-2: #22C55E;
-  --chart-3: #F59E0B;
-  --chart-4: #A78BFA;
-  --chart-5: #EF4444;
+  --background: #171717;
+  --surface: #1F1F1F;
+  --card: #1F1F1F;
+  --card-hover: #272727;
+  --border: #2E2E2E;
+  --divider: #2A2A2A;
 
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.35), 0 4px 6px rgba(0, 0, 0, 0.25);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.4), 0 8px 10px rgba(0, 0, 0, 0.3);
+  --text-primary: #EDEDED;
+  --text-secondary: #A3A3A3;
+  --text-muted: #737373;
+  --text-disabled: #525252;
 
-  --badge-apto-bg: #132E1A;
-  --badge-apto-text: #86EFAC;
-  --badge-apto-border: #166534;
-  --badge-andamento-bg: #1E2A4A;
-  --badge-andamento-text: #93C5FD;
-  --badge-andamento-border: #1E40AF;
-  --badge-vencer-bg: #2E2410;
-  --badge-vencer-text: #FDE68A;
-  --badge-vencer-border: #92400E;
-  --badge-vencido-bg: #2E1313;
-  --badge-vencido-text: #FCA5A5;
-  --badge-vencido-border: #991B1B;
-  --badge-inativo-bg: #1E293B;
-  --badge-inativo-text: #94A3B8;
-  --badge-inativo-border: #334155;
+  --sidebar: #111111;
+  --sidebar-hover: #1F1F1F;
+  --sidebar-text: #EDEDED;
+  --sidebar-text-muted: #737373;
+  --sidebar-border: #2E2E2E;
+
+  --input-bg: #1F1F1F;
+  --input-border: #404040;
+  --input-focus: #58A6C4;
+  --input-placeholder: #525252;
+  --table-header: #1F1F1F;
+  --table-hover: #1F1F1F;
+  --table-stripe: #1A1A1A;
+
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.10);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.10);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.18), 0 4px 6px rgba(0,0,0,0.10);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.20), 0 8px 10px rgba(0,0,0,0.10);
 }
 ```
 
 ---
 
-## 14. Tailwind Config
-
-Já que o projeto usa **Tailwind CSS v4** com o CSS‑first config (não um `tailwind.config.ts`), o caminho correto é estender o tema via CSS. Adicione ao `globals.css`:
+## 15. Tailwind v4 + shadcn/ui
 
 ```css
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@custom-variant dark (&:is(.dark *));
+/* globals.css — @theme inline block */
 
 @theme inline {
-  /* Colors */
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --color-primary-active: var(--primary-active);
-  --color-primary-subtle: var(--primary-subtle);
-  --color-secondary: var(--secondary);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Primary */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+
+  /* Neutral */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+
+  /* shadcn mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--card);
+  --color-card-foreground: var(--text-primary);
+  --color-card-hover: var(--card-hover);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text-primary);
+  --color-primary: var(--primary-500);
+  --color-primary-hover: var(--primary-600);
+  --color-primary-foreground: #FFFFFF;
+  --color-secondary: var(--neutral-100);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--neutral-50);
+  --color-muted-foreground: var(--text-secondary);
   --color-accent: var(--accent);
+  --color-accent-foreground: #FFFFFF;
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: #FFFFFF;
+  --color-border: var(--border);
+  --color-input: var(--input-border);
+  --color-input-bg: var(--input-bg);
+  --color-ring: var(--input-focus);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-text);
+  --color-sidebar-primary: var(--primary-500);
+  --color-sidebar-primary-foreground: #FFFFFF;
+  --color-sidebar-accent: var(--sidebar-hover);
+  --color-sidebar-accent-foreground: var(--sidebar-text);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-text-muted);
   --color-success: var(--success);
   --color-success-subtle: var(--success-subtle);
   --color-warning: var(--warning);
   --color-warning-subtle: var(--warning-subtle);
-  --color-danger: var(--danger);
   --color-danger-subtle: var(--danger-subtle);
   --color-info: var(--info);
   --color-info-subtle: var(--info-subtle);
-  --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-card: var(--card);
-  --color-card-hover: var(--card-hover);
-  --color-border: var(--border);
   --color-divider: var(--divider);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
   --color-text-disabled: var(--text-disabled);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-hover: var(--sidebar-hover);
-  --color-sidebar-text: var(--sidebar-text);
-  --color-sidebar-text-muted: var(--sidebar-text-muted);
-  --color-header: var(--header);
   --color-table-header: var(--table-header);
   --color-table-hover: var(--table-hover);
   --color-table-stripe: var(--table-stripe);
-  --color-input-bg: var(--input-bg);
-  --color-input-border: var(--input-border);
-  --color-input-focus: var(--input-focus);
-  --color-input-placeholder: var(--input-placeholder);
-  --color-overlay: var(--overlay);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-
-  /* Spacing — Tailwind v4 already covers the scale via arbitrary values.
-     The CSS variables are for reference; use Tailwind's built-in spacing. */
 
   /* Radius */
   --radius-sm: 4px;
@@ -848,78 +882,38 @@ Já que o projeto usa **Tailwind CSS v4** com o CSS‑first config (não um `tai
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(15, 23, 41, 0.04);
-  --shadow-sm: 0 1px 3px rgba(15, 23, 41, 0.05), 0 1px 2px rgba(15, 23, 41, 0.04);
-  --shadow-md: 0 4px 6px rgba(15, 23, 41, 0.05), 0 2px 4px rgba(15, 23, 41, 0.04);
-  --shadow-lg: 0 10px 15px rgba(15, 23, 41, 0.06), 0 4px 6px rgba(15, 23, 41, 0.04);
-  --shadow-xl: 0 20px 25px rgba(15, 23, 41, 0.08), 0 8px 10px rgba(15, 23, 41, 0.04);
-
-  /* Font family */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.02);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.06), 0 8px 10px rgba(0,0,0,0.02);
 }
 ```
 
 ---
 
-## 15. Experiência do Usuário
+## 16. Princípios de Implementação
 
-### Princípios de UX para uso industrial prolongado
+### Como aplicar este Design System
 
-1. **Redução de fadiga visual**
-   - Background levemente off-white (não branco puro `#FFFFFF`) → `#F6F8FA`
-   - Texto primary com contraste alto mas não preto puro → `#0F1729` (muito próximo do preto mas mais macio)
-   - Sem animações desnecessárias
-   - Transitions curtas (150-200ms) e only onde útil
-   - Dark theme disponível para ambientes com pouca luz
+1. **Substituir `globals.css`** — usar as CSS variables + `@theme inline` block acima
+2. **Substituir cores em páginas** — `text-slate-600` → `text-neutral-600`, `bg-blue-50` → `bg-primary-50`
+3. **JetBrains Mono** — adicionar ao layout (Google Fonts) para tags e dados técnicos
+4. **Background** — mudar de `#F6F8FA` para `#FAFAF8`
+5. **Card shadows** — remover `shadow-sm` genérico, usar os tokens customizados ou o utility `.card-hover`
+6. **Dark theme** — toggle com `data-theme="dark"` no `<html>`
+7. **Tipografia** — Inter já configurada; ajustar scale (30/22/18/15/14/13/12)
 
-2. **Produtividade**
-   - Ações primárias sempre visíveis, sem hover-reveal
-   - Tabelas com informação densa mas bem espaçada
-   - Filtros persistentes (não somem ao recarregar)
-   - Atalhos de teclado para ações frequentes (N = nova inspeção, F = foco no filtro)
-   - Estado vazio com call-to-action claro
+### O que este sistema resolve
 
-3. **Confiança**
-   - Datas sempre visíveis
-   - Status colors semanticamente corretos
-   - Loading states com skeleton (não spinner genérico)
-   - Feedback visual imediato em ações (toast)
-   - Nenhum estado "congelado" sem explicação
-
-4. **Hierarquia industrial**
-   - O equipamento é o centro — sempre identificável por TAG
-   - Cliente/Empresa é o segundo nível hierárquico
-   - Categoria de risco sempre visível como badge
-   - Datas de próxima inspeção nunca escondidas
+- ❌ **Sistema antigo parecia ERP 2010** → Agora parece ferramenta de engenharia moderna
+- ❌ **Cansativo visualmente** → Background warm white, contraste reduzido, font otimizada
+- ❌ **Excesso de bordas e sombras** → Sombras quase imperceptíveis, bordas mínimas
+- ❌ **Cores genéricas** → Azul petróleo exclusivo, status colors sofisticados
+- ❌ **Sem personalidade** → Identidade clara de software de engenharia de precisão
+- ❌ **Fonte genérica** → Inter com escala refinada para leitura prolongada
 
 ---
 
-## 16. Estilo Industrial (diretrizes visuais)
-
-| Diretriz | Como aplicar |
-|---|---|
-| **Aço escovado** | Background `#F6F8FA` + bordas frias `#E2E5EA` |
-| **Precisão** | Alinhamento de grade estrito, padding consistente |
-| **Instrumentação** | Badges retos (4px), cores de status como indicadores LED |
-| **Engenharia** | Monospace em dados técnicos (tags, medições) via `font-mono` |
-| **Organização** | Grid limpo, seções bem divididas, whitespace generoso |
-
-O que NÃO usar:
-- ❌ Gradientes
-- ❌ Texturas de metal falsas
-- ❌ Skeumorphism
-- ❌ Sombras dramáticas
-- ❌ Cores excessivamente saturadas
-- ❌ Ícones preenchidos (filled)
-
----
-
-## 17. Resumo das Mudanças para Implementação
-
-1. **Substituir `globals.css`** — usar os novos tokens com `@theme inline`
-2. **Substituir cores shadcn** — `:root` com os novos valores de `--background`, `--foreground`, etc.
-3. **Atualizar sidebar** — já usa `bg-sidebar`, manter
-4. **Badges** — criar classes utilitárias ou usar `style="base-nova"` com as variáveis
-5. **Gráficos** — usar `var(--chart-1)` etc no Recharts
-6. **Dark mode** — adicionar toggle com `data-theme="dark"` no `<html>`
-7. **Tipografia** — Inter já configurada, ajustar escala de tamanhos no Tailwind
+> **NR-13 Pro — Design System v2.0**
+> Última atualização: Julho 2026
