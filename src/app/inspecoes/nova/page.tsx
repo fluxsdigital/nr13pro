@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { useState, Suspense } from "react"
+import { useState, Suspense, useRef } from "react"
 import { equipamentos } from "@/lib/store"
 import { inspecaoService, equipamentoService } from "@/lib/services"
 import { toast } from "sonner"
@@ -14,7 +14,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Camera, Plus, Trash2 } from "lucide-react"
+import { Camera, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 type Step = "equipamento" | "exames" | "medicoes" | "anomalias" | "dispositivos" | "parecer"
 
@@ -23,6 +24,7 @@ function NovaInspecaoForm() {
   const router = useRouter()
   const equipamentoId = searchParams.get("equipamento")
   const [step, setStep] = useState<Step>(equipamentoId ? "exames" : "equipamento")
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const [selectedEq, setSelectedEq] = useState(equipamentos.find((e) => e.id === equipamentoId) ?? null)
   const [tipo, setTipo] = useState("periodica")
@@ -107,6 +109,20 @@ function NovaInspecaoForm() {
     }
   }
 
+  const podeAvancar = (): boolean => {
+    if (step === "equipamento") return selectedEq !== null
+    return true
+  }
+
+  const avancar = () => {
+    const next = steps[currentIndex + 1]
+    if (next) { setStep(next.key); contentRef.current?.scrollTo(0, 0) }
+  }
+  const voltar = () => {
+    const prev = steps[currentIndex - 1]
+    if (prev) { setStep(prev.key); contentRef.current?.scrollTo(0, 0) }
+  }
+
   const renderEquipamento = () => (
     <div className="space-y-4">
       <Label className="text-slate-700">Selecione o Equipamento</Label>
@@ -114,11 +130,10 @@ function NovaInspecaoForm() {
         {equipamentos.map((eq) => (
           <div
             key={eq.id}
-            className={`p-4 rounded-lg border cursor-pointer transition-colors ${
-              selectedEq?.id === eq.id
-                ? "border-blue-600 bg-blue-50"
-                : "border-slate-200 bg-white hover:border-slate-300"
-            }`}
+            className={cn(
+              "p-4 rounded-lg border cursor-pointer transition-colors",
+              selectedEq?.id === eq.id ? "border-blue-600 bg-blue-50" : "border-slate-200 bg-white hover:border-slate-300"
+            )}
             onClick={() => setSelectedEq(eq)}
           >
             <div className="flex items-center justify-between">
@@ -137,14 +152,14 @@ function NovaInspecaoForm() {
   const renderExames = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-slate-700">Data de Início</Label>
-              <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} className="border-slate-200 bg-white w-full" />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-slate-700">Data de Término</Label>
-              <Input type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} className="border-slate-200 bg-white w-full" />
-            </div>
+        <div className="space-y-2">
+          <Label className="text-slate-700">Data de Início</Label>
+          <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} className="border-slate-200 bg-white w-full" />
+        </div>
+        <div className="space-y-2">
+          <Label className="text-slate-700">Data de Término</Label>
+          <Input type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} className="border-slate-200 bg-white w-full" />
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -176,9 +191,10 @@ function NovaInspecaoForm() {
           ].map(({ key, label, val, set }) => (
             <div
               key={key}
-              className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+              className={cn(
+                "p-3 rounded-lg border cursor-pointer transition-colors",
                 val ? "border-blue-600 bg-blue-50" : "border-slate-200 bg-white hover:border-slate-300"
-              }`}
+              )}
               onClick={() => set(!val)}
             >
               <p className="text-sm text-slate-900">{label}</p>
@@ -194,8 +210,8 @@ function NovaInspecaoForm() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Label className="text-base text-slate-900 font-medium">Medições de Espessura (Ultrassom)</Label>
-        <Button variant="outline" size="sm" onClick={adicionarMedicao} className="border-slate-200 text-slate-700">
-          <Plus className="h-3 w-3 mr-1" /> Adicionar Ponto
+        <Button variant="outline" size="sm" onClick={adicionarMedicao} className="border-slate-200 text-slate-700 shrink-0">
+          <Plus className="h-3 w-3 mr-1" /> Adicionar
         </Button>
       </div>
       {medicoes.map((med, i) => (
@@ -232,8 +248,8 @@ function NovaInspecaoForm() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Label className="text-base text-slate-900 font-medium">Anomalias Encontradas</Label>
-        <Button variant="outline" size="sm" onClick={adicionarAnomalia} className="border-slate-200 text-slate-700">
-          <Plus className="h-3 w-3 mr-1" /> Adicionar Anomalia
+        <Button variant="outline" size="sm" onClick={adicionarAnomalia} className="border-slate-200 text-slate-700 shrink-0">
+          <Plus className="h-3 w-3 mr-1" /> Adicionar
         </Button>
       </div>
       {anomalias.map((ano, i) => (
@@ -284,8 +300,8 @@ function NovaInspecaoForm() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Label className="text-base text-slate-900 font-medium">Dispositivos de Segurança</Label>
-        <Button variant="outline" size="sm" onClick={adicionarDispositivo} className="border-slate-200 text-slate-700">
-          <Plus className="h-3 w-3 mr-1" /> Adicionar Dispositivo
+        <Button variant="outline" size="sm" onClick={adicionarDispositivo} className="border-slate-200 text-slate-700 shrink-0">
+          <Plus className="h-3 w-3 mr-1" /> Adicionar
         </Button>
       </div>
       {dispositivos.map((disp, i) => (
@@ -318,9 +334,10 @@ function NovaInspecaoForm() {
           </div>
           <div className="flex items-center gap-3">
             <div
-              className={`flex-1 p-2 rounded-lg border cursor-pointer text-center transition-colors ${
+              className={cn(
+                "flex-1 p-2 rounded-lg border cursor-pointer text-center transition-colors",
                 disp.inspecaoOk ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-white text-slate-500"
-              }`}
+              )}
               onClick={() => { const d = [...dispositivos]; d[i] = { ...d[i], inspecaoOk: !d[i].inspecaoOk }; setDispositivos(d) }}
             >
               <span className="text-xs font-medium">{disp.inspecaoOk ? "Aprovado" : "Reprovado"}</span>
@@ -352,7 +369,7 @@ function NovaInspecaoForm() {
           value={parecer}
           onChange={(e) => setParecer(e.target.value)}
           placeholder="Descreva o parecer conclusivo sobre a integridade do equipamento..."
-          className="border-slate-200 bg-white min-h-[150px]"
+          className="border-slate-200 bg-white min-h-[120px]"
         />
       </div>
 
@@ -376,55 +393,62 @@ function NovaInspecaoForm() {
     }
   }
 
-  const podeAvancar = (): boolean => {
-    if (step === "equipamento") return selectedEq !== null
-    return true
-  }
-
-  const avancar = () => { const next = steps[currentIndex + 1]; if (next) setStep(next.key) }
-  const voltar = () => { const prev = steps[currentIndex - 1]; if (prev) setStep(prev.key) }
-
   return (
-    <div className="max-w-3xl mx-auto p-4 sm:p-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Nova Inspeção</h1>
-        <p className="text-slate-500 text-sm mt-1">Preencha os dados da inspeção de segurança</p>
-      </div>
-
-      <div className="flex items-center gap-2 overflow-x-auto pb-2">
-        {steps.map((s, i) => (
-          <div key={s.key} className="flex items-center gap-2 shrink-0">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
-              i <= currentIndex ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"
-            }`}>
-              {i + 1}
-            </div>
-            <span className={`text-xs whitespace-nowrap ${i <= currentIndex ? "text-slate-700 font-medium" : "text-slate-400"}`}>{s.label}</span>
-            {i < steps.length - 1 && <div className={`w-4 sm:w-6 h-px ${i < currentIndex ? "bg-blue-600" : "bg-slate-200"}`} />}
+    <div className="min-h-dvh flex flex-col p-4 sm:p-8">
+      <div className="max-w-4xl w-full mx-auto flex flex-col flex-1 gap-4 sm:gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 shrink-0">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-semibold text-slate-900 tracking-tight">Nova Inspeção</h1>
+            <p className="text-slate-500 text-xs sm:text-sm mt-0.5">Preencha os dados da inspeção de segurança</p>
           </div>
-        ))}
-      </div>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 shrink-0">
+            {steps.map((s, i) => (
+              <div key={s.key} className="flex items-center gap-2 shrink-0">
+                <div className={cn(
+                  "w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-medium transition-colors shrink-0",
+                  i <= currentIndex ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"
+                )}>
+                  {i + 1}
+                </div>
+                <span className={cn(
+                  "text-[11px] whitespace-nowrap",
+                  i <= currentIndex ? "text-slate-700 font-medium" : "text-slate-400"
+                )}>
+                  {s.label}
+                </span>
+                {i < steps.length - 1 && <div className={cn("w-3 sm:w-4 h-px", i < currentIndex ? "bg-blue-600" : "bg-slate-200")} />}
+              </div>
+            ))}
+          </div>
+        </div>
 
-      <Card className="border-slate-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-slate-900 text-lg capitalize">{steps[currentIndex].label.replace("_", " ")}</CardTitle>
-        </CardHeader>
-        <CardContent>{renderStep()}</CardContent>
-      </Card>
+        <div ref={contentRef} className="flex-1 overflow-y-auto min-h-0">
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader className="p-4 sm:p-6 pb-3">
+              <CardTitle className="text-slate-900 text-base sm:text-lg capitalize">{steps[currentIndex].label.replace("_", " ")}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 sm:p-6 pt-0">{renderStep()}</CardContent>
+          </Card>
+        </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <Button variant="outline" onClick={voltar} disabled={currentIndex === 0} className="border-slate-200 text-slate-700">
-          Voltar
-        </Button>
-        {currentIndex < steps.length - 1 ? (
-          <Button onClick={avancar} disabled={!podeAvancar()} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
-            Avançar
-          </Button>
-        ) : (
-          <Button onClick={finalizar} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm">
-            {saving ? "Salvando..." : "Finalizar Inspeção"}
-          </Button>
-        )}
+        <div className="sticky bottom-0 pb-0 bg-gradient-to-t from-slate-50 via-slate-50/95 to-transparent pt-4 -mx-4 sm:-mx-8 px-4 sm:px-8">
+          <div className="flex items-center justify-between gap-3">
+            <Button variant="outline" onClick={voltar} disabled={currentIndex === 0} className="border-slate-200 text-slate-700">
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Voltar
+            </Button>
+            {currentIndex < steps.length - 1 ? (
+              <Button onClick={avancar} disabled={!podeAvancar()} className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+                Avançar
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            ) : (
+              <Button onClick={finalizar} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm">
+                {saving ? "Salvando..." : "Finalizar Inspeção"}
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -432,7 +456,7 @@ function NovaInspecaoForm() {
 
 export default function NovaInspecao() {
   return (
-    <Suspense fallback={<div className="p-8 text-slate-500">Carregando...</div>}>
+    <Suspense fallback={<div className="p-4 sm:p-8 text-slate-500">Carregando...</div>}>
       <NovaInspecaoForm />
     </Suspense>
   )
