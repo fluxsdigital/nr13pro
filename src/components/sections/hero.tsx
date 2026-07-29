@@ -82,16 +82,6 @@ export function Hero() {
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
           >
-            <motion.div
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F8F0E8] text-xs text-[#C56A2D] font-medium mb-4 sm:mb-5">
-                Plataforma especializada em inspeção NR-13
-              </div>
-            </motion.div>
-
             <motion.h1
               initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
               animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}

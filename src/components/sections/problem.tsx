@@ -251,23 +251,23 @@ export function Problem() {
           transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.15 }}
           className="flex flex-col items-center"
         >
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-2 mb-3 self-start">
-              <div className="w-6 h-6 rounded-lg bg-[#2E7D32]/10 flex items-center justify-center text-[#2E7D32]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <h3 className="text-sm font-medium text-[#2E7D32]">Depois — Tudo na palma da mão</h3>
+          <div className="flex items-center gap-2 mb-4 self-start w-full">
+            <div className="w-6 h-6 rounded-lg bg-[#2E7D32]/10 flex items-center justify-center text-[#2E7D32]">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
+            <h3 className="text-sm font-medium text-[#2E7D32]">Depois — Tudo na palma da mão</h3>
+          </div>
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 w-full">
             <PhoneApp />
-            <ul className="mt-3 space-y-1.5 self-start w-full max-w-[280px] mx-auto">
+            <ul className="space-y-2.5 w-full max-w-[260px]">
               {[
                 "Dados na nuvem, em tempo real",
                 "Laudos PDF automáticos",
                 "Fotos anexadas na inspeção",
                 "Notificações de vencimento",
               ].map((item) => (
-                <li key={item} className="flex items-start gap-2 text-xs text-[#676767]">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
+                <li key={item} className="flex items-start gap-2.5 text-sm text-[#676767]">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   {item}
