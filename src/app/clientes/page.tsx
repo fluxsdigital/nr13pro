@@ -208,13 +208,13 @@ export default function Clientes() {
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3 min-w-0">
                         <div className={cn(
-                          "w-9 h-9 rounded-lg border flex items-center justify-center shrink-0",
+                          "w-8 h-8 rounded-lg border flex items-center justify-center shrink-0",
                           urgency === "urgente" ? "bg-red-50 border-red-100" :
                           urgency === "atencao" ? "bg-amber-50 border-amber-100" :
                           "bg-primary-subtle border-primary/20"
                         )}>
                           <Building2 className={cn(
-                            "h-5 w-5",
+                            "h-4 w-4",
                             urgency === "urgente" ? "text-red-500" :
                             urgency === "atencao" ? "text-amber-500" :
                             "text-primary"
@@ -222,55 +222,55 @@ export default function Clientes() {
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-sm font-semibold text-text-primary truncate">{cli.nome}</p>
+                            <p className="text-[11px] font-semibold text-text-primary truncate">{cli.nome}</p>
                             {urgency === "urgente" && (
-                              <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-100 text-xs">
-                                <AlertTriangle className="h-3 w-3 mr-1" />
+                              <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-100 text-[10px] leading-tight py-0 px-1.5">
+                                <AlertTriangle className="h-2.5 w-2.5 mr-0.5" />
                                 Vencida
                               </Badge>
                             )}
                             {urgency === "atencao" && (
-                              <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-xs">
-                                <AlertCircle className="h-3 w-3 mr-1" />
+                              <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-[10px] leading-tight py-0 px-1.5">
+                                <AlertCircle className="h-2.5 w-2.5 mr-0.5" />
                                 Próxima
                               </Badge>
                             )}
                           </div>
-                          <p className="text-xs text-text-secondary">{cli.cnpj}</p>
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-                            <span className="flex items-center gap-1 text-xs text-text-secondary">
-                              <Mail className="h-3 w-3 shrink-0" />
+                          <p className="text-[10px] text-text-secondary">{cli.cnpj}</p>
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-0.5">
+                            <span className="flex items-center gap-1 text-[10px] text-text-secondary">
+                              <Mail className="h-2.5 w-2.5 shrink-0" />
                               {cli.contato}
                             </span>
-                            <span className="flex items-center gap-1 text-xs text-text-secondary">
-                              <Phone className="h-3 w-3 shrink-0" />
+                            <span className="flex items-center gap-1 text-[10px] text-text-secondary">
+                              <Phone className="h-2.5 w-2.5 shrink-0" />
                               {cli.telefone}
                             </span>
-                            <span className="text-xs text-text-muted truncate">{cli.email}</span>
+                            <span className="text-[10px] text-text-muted truncate">{cli.email}</span>
                           </div>
                           {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0) && (
-                            <div className="flex items-center gap-3 mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                            <div className="flex items-center gap-2 mt-1 overflow-hidden text-ellipsis whitespace-nowrap">
                               {status.overdue > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-red-600 font-medium shrink-0">
-                                  <AlertTriangle className="h-3 w-3" />
+                                <span className="flex items-center gap-1 text-[10px] text-red-600 font-medium shrink-0">
+                                  <AlertTriangle className="h-2.5 w-2.5" />
                                   {status.overdue} vencida{status.overdue > 1 ? "s" : ""}
                                 </span>
                               )}
                               {status.approaching > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-amber-600 font-medium shrink-0">
-                                  <AlertCircle className="h-3 w-3" />
-                                  {status.approaching} em {status.approaching > 1 ? "até" : "até"} 60d
+                                <span className="flex items-center gap-1 text-[10px] text-amber-600 font-medium shrink-0">
+                                  <AlertCircle className="h-2.5 w-2.5" />
+                                  {status.approaching} em até 60d
                                 </span>
                               )}
                               {status.unknown > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-text-muted shrink-0">
-                                  <HelpCircle className="h-3 w-3" />
+                                <span className="flex items-center gap-1 text-[10px] text-text-muted shrink-0">
+                                  <HelpCircle className="h-2.5 w-2.5" />
                                   {status.unknown} sem inspeção
                                 </span>
                               )}
                               {status.safe > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-success shrink-0">
-                                  <CheckCircle2 className="h-3 w-3" />
+                                <span className="flex items-center gap-1 text-[10px] text-success shrink-0">
+                                  <CheckCircle2 className="h-2.5 w-2.5" />
                                   {status.safe} em dia
                                 </span>
                               )}
