@@ -137,14 +137,14 @@ function NovaInspecaoForm() {
   const renderExames = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label className="text-slate-700">Data de Início</Label>
-          <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} className="border-slate-200 bg-white" />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-slate-700">Data de Término</Label>
-          <Input type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} className="border-slate-200 bg-white" />
-        </div>
+            <div className="space-y-2">
+              <Label className="text-slate-700">Data de Início</Label>
+              <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} className="border-slate-200 bg-white w-full" />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-slate-700">Data de Término</Label>
+              <Input type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} className="border-slate-200 bg-white w-full" />
+            </div>
       </div>
 
       <div className="space-y-2">
@@ -167,7 +167,7 @@ function NovaInspecaoForm() {
 
       <div className="space-y-3">
         <Label className="text-base text-slate-900 font-medium">Exames Realizados</Label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
             { key: "examesExternos", label: "Exame Externo", val: examesExternos, set: setExamesExternos },
             { key: "examesInternos", label: "Exame Interno", val: examesInternos, set: setExamesInternos },
@@ -206,7 +206,7 @@ function NovaInspecaoForm() {
               <Trash2 className="h-3 w-3 text-red-500 cursor-pointer" onClick={() => setMedicoes(medicoes.filter((_, j) => j !== i))} />
             )}
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="space-y-1">
               <Label className="text-xs text-slate-600">Ponto de Medição</Label>
               <Input value={med.ponto} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], ponto: e.target.value }; setMedicoes(m) }}
@@ -385,22 +385,22 @@ function NovaInspecaoForm() {
   const voltar = () => { const prev = steps[currentIndex - 1]; if (prev) setStep(prev.key) }
 
   return (
-    <div className="max-w-3xl mx-auto p-8 space-y-6">
+    <div className="max-w-3xl mx-auto p-4 sm:p-8 space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Nova Inspeção</h1>
         <p className="text-slate-500 text-sm mt-1">Preencha os dados da inspeção de segurança</p>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2">
         {steps.map((s, i) => (
-          <div key={s.key} className="flex items-center gap-2">
+          <div key={s.key} className="flex items-center gap-2 shrink-0">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
               i <= currentIndex ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400"
             }`}>
               {i + 1}
             </div>
-            <span className={`text-xs ${i <= currentIndex ? "text-slate-700 font-medium" : "text-slate-400"}`}>{s.label}</span>
-            {i < steps.length - 1 && <div className={`w-6 h-px ${i < currentIndex ? "bg-blue-600" : "bg-slate-200"}`} />}
+            <span className={`text-xs whitespace-nowrap ${i <= currentIndex ? "text-slate-700 font-medium" : "text-slate-400"}`}>{s.label}</span>
+            {i < steps.length - 1 && <div className={`w-4 sm:w-6 h-px ${i < currentIndex ? "bg-blue-600" : "bg-slate-200"}`} />}
           </div>
         ))}
       </div>
@@ -412,7 +412,7 @@ function NovaInspecaoForm() {
         <CardContent>{renderStep()}</CardContent>
       </Card>
 
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between gap-3">
         <Button variant="outline" onClick={voltar} disabled={currentIndex === 0} className="border-slate-200 text-slate-700">
           Voltar
         </Button>

@@ -87,7 +87,7 @@ function NovoLaudoForm() {
 
   if (!inspecaoId) {
     return (
-      <div className="p-8 max-w-2xl mx-auto space-y-6">
+      <div className="p-4 sm:p-8 max-w-2xl mx-auto space-y-6">
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="py-16 text-center">
             <FileText className="h-16 w-16 text-slate-300 mx-auto mb-4" />
@@ -106,10 +106,10 @@ function NovoLaudoForm() {
   if (!inspecao || !equipamento) return <div className="p-8 text-slate-500">Inspeção não encontrada</div>
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 sm:p-8 max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Gerar Laudo Técnico</h1>
-        <p className="text-slate-500 text-sm mt-1">
+        <p className="text-slate-500 text-sm mt-1 truncate">
           {equipamento.tag} — {equipamento.descricao}
           {cliente && ` • ${cliente.nome}`}
         </p>
@@ -163,7 +163,7 @@ function NovoLaudoForm() {
           </CardContent>
         </Card>
 
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
           <Button type="button" variant="outline" onClick={() => router.back()} className="border-slate-200 text-slate-700">
             Cancelar
           </Button>

@@ -33,15 +33,15 @@ export default function Economia() {
     valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 
   return (
-    <div className="p-8 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-8 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Calculadora de Economia</h1>
           <p className="text-slate-500 text-sm mt-1">
             Ferramenta comercial para apresentar a indústrias o ROI da conformidade NR-13
           </p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 text-xs text-blue-700">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-100 text-xs text-blue-700 shrink-0 self-start">
           <FileText className="h-3.5 w-3.5" />
           Use com seus clientes
         </div>
@@ -66,7 +66,7 @@ export default function Economia() {
                 className="border-slate-200 bg-white"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-slate-600 text-xs">Total de Equipamentos</Label>
                 <Input type="number" value={equipamentos} onChange={(e) => setEquipamentos(Number(e.target.value))} className="border-slate-200 bg-white" />
@@ -89,7 +89,7 @@ export default function Economia() {
               </div>
             </div>
             <Separator className="bg-slate-200" />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-slate-600 text-xs">Custo Diário Operacional (R$)</Label>
                 <Input type="number" value={diariaOperacional} onChange={(e) => setDiariaOperacional(Number(e.target.value))} className="border-slate-200 bg-white" />
@@ -119,7 +119,7 @@ export default function Economia() {
               <p className="text-3xl font-bold text-emerald-700 mt-1">{formatarMoeda(totalEconomia)}</p>
               <p className="text-xs text-slate-500 mt-1">por ano</p>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { icon: AlertTriangle, label: "Multas Evitadas (NR-28)", value: multasEvitadas, color: "text-red-600" },
                 { icon: TrendingUp, label: "Paradas Evitadas", value: paradasEvitadas, color: "text-orange-600" },
@@ -138,7 +138,7 @@ export default function Economia() {
 
             <Separator className="bg-slate-200" />
             <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Seu Retorno como Engenheiro</p>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-3 rounded-lg border border-slate-100 bg-slate-50 text-center">
                 <p className="text-xs text-slate-500">Custo do SaaS / ano</p>
                 <p className="text-lg font-bold text-slate-900">{formatarMoeda(investimentoAnual)}</p>

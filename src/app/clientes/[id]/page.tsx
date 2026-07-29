@@ -24,23 +24,23 @@ export default function ClienteDetalhe() {
   if (!cliente) return <div className="p-8 text-slate-500">Carregando...</div>
 
   return (
-    <div className="p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Building2 className="h-6 w-6 text-blue-600" />
-          <div>
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{cliente.nome}</h1>
+    <div className="p-4 sm:p-8 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3 min-w-0">
+          <Building2 className="h-6 w-6 text-blue-600 shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight truncate">{cliente.nome}</h1>
             <p className="text-slate-500 text-sm">{cliente.cnpj}</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 shrink-0">
           <Link href={`/clientes/${cliente.id}/editar`}>
-            <Button variant="outline" className="border-slate-200 text-slate-700">
+            <Button variant="outline" className="border-slate-200 text-slate-700 w-full sm:w-auto">
               <Pencil className="h-4 w-4 mr-2" /> Editar
             </Button>
           </Link>
           <Link href={`/equipamentos/novo?clienteId=${cliente.id}`}>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
               <Plus className="h-4 w-4 mr-2" /> Novo Equipamento
             </Button>
           </Link>
