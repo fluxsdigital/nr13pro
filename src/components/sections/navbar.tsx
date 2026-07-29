@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Container } from "@/components/ui/container"
-import { Button } from "@/components/ui/button"
 import { useReducedMotion } from "./motion-provider"
 
 const links = [
   { label: "Funcionalidades", href: "#funcionalidades" },
   { label: "Como Funciona", href: "#como-funciona" },
-  { label: "Preços", href: "#precos" },
 ]
 
 export function Navbar() {
@@ -62,9 +60,12 @@ export function Navbar() {
           </div>
 
           <div className="hidden md:block">
-            <Button variant="primary" size="sm" onClick={() => scrollTo("#cta")}>
-              Solicitar Demonstração
-            </Button>
+            <a
+              href="/checkout"
+              className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm"
+            >
+              Assinar Agora
+            </a>
           </div>
 
           <button
@@ -109,9 +110,12 @@ export function Navbar() {
                   {link.label}
                 </button>
               ))}
-              <Button variant="primary" size="sm" className="w-full mt-2" onClick={() => scrollTo("#cta")}>
-                Solicitar Demonstração
-              </Button>
+              <a
+                href="/checkout"
+                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer w-full px-4 py-2.5 text-sm bg-primary text-white hover:bg-primary-hover shadow-sm mt-2"
+              >
+                Assinar Agora
+              </a>
             </Container>
           </motion.div>
         )}
