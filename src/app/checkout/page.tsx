@@ -35,18 +35,18 @@ export default function CheckoutPage() {
 
   if (paid) {
     return (
-      <div className="min-h-dvh flex items-center justify-center bg-[#F7F5F2]">
+      <div className="min-h-dvh flex items-center justify-center bg-background">
         <div className="text-center max-w-md mx-auto p-8">
-          <div className="w-16 h-16 rounded-full bg-[#EDF5ED] flex items-center justify-center mx-auto mb-6">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-16 h-16 rounded-full bg-success-subtle flex items-center justify-center mx-auto mb-6">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-success">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           </div>
-          <h1 className="text-2xl font-medium text-[#171717]">Assinatura confirmada!</h1>
-          <p className="mt-3 text-base text-[#676767] leading-relaxed">
-            Seu plano mensal de <strong className="text-[#171717]">R$ 197/mês</strong> está ativo, {name.split(" ")[0]}.
+          <h1 className="text-2xl font-medium text-text-primary">Assinatura confirmada!</h1>
+          <p className="mt-3 text-base text-text-secondary leading-relaxed">
+            Seu plano mensal de <strong className="text-text-primary">R$ 197/mês</strong> está ativo, {name.split(" ")[0]}.
           </p>
-          <div className="mt-4 flex items-center justify-center gap-2 text-xs text-[#2E7D32] bg-[#EDF5ED] px-3 py-1.5 rounded-full mx-auto w-fit">
+          <div className="mt-4 flex items-center justify-center gap-2 text-xs text-success bg-success-subtle px-3 py-1.5 rounded-full mx-auto w-fit">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
@@ -54,7 +54,7 @@ export default function CheckoutPage() {
           </div>
           <a
             href="/"
-            className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-[#171717] text-white hover:bg-[#2B2B2B] shadow-sm"
+            className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover shadow-sm"
           >
             Acessar Plataforma
           </a>
@@ -64,7 +64,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-[#F7F5F2] flex items-center justify-center py-16 px-4">
+    <div className="min-h-dvh bg-background flex items-center justify-center py-16 px-4">
       <Container className="max-w-md">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -73,7 +73,7 @@ export default function CheckoutPage() {
         >
           <a
             href="/vendas"
-            className="inline-flex items-center gap-1.5 text-sm text-[#676767] hover:text-[#171717] transition-colors mb-8"
+            className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-8"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -81,7 +81,7 @@ export default function CheckoutPage() {
             Voltar
           </a>
 
-          <div className="bg-white border border-[#EDE9E3] rounded-2xl p-6 sm:p-8">
+          <div className="bg-white border border-divider rounded-2xl p-6 sm:p-8">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-7 h-7 rounded-lg bg-[#171717] flex items-center justify-center">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -89,44 +89,44 @@ export default function CheckoutPage() {
                   <path d="M12 8v8M8 12h8"/>
                 </svg>
               </div>
-              <span className="font-semibold text-sm text-[#171717]">NR-13 Pro</span>
+              <span className="font-semibold text-sm text-text-primary">NR-13 Pro</span>
             </div>
 
-            <h1 className="text-xl font-medium text-[#171717]">Assinar plano</h1>
+            <h1 className="text-xl font-medium text-text-primary">Assinar plano</h1>
             <div className="flex items-baseline gap-1 mt-2 mb-6">
-              <span className="text-2xl font-semibold text-[#171717]">R$ 197</span>
-              <span className="text-sm text-[#676767]">/mês</span>
+              <span className="text-2xl font-semibold text-text-primary">R$ 197</span>
+              <span className="text-sm text-text-secondary">/mês</span>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-xs text-[#676767] mb-1.5">Nome completo</label>
+                <label className="block text-xs text-text-secondary mb-1.5">Nome completo</label>
                 <input
                   type="text"
                   placeholder="Seu nome"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                  className="w-full h-11 px-4 rounded-xl bg-white border border-input text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#676767] mb-1.5">E-mail</label>
+                <label className="block text-xs text-text-secondary mb-1.5">E-mail</label>
                 <input
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                  className="w-full h-11 px-4 rounded-xl bg-white border border-input text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 />
               </div>
               <div>
-                <label className="block text-xs text-[#676767] mb-1.5">Senha</label>
+                <label className="block text-xs text-text-secondary mb-1.5">Senha</label>
                 <input
                   type="password"
                   placeholder="Mínimo 6 caracteres"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                  className="w-full h-11 px-4 rounded-xl bg-white border border-input text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 />
               </div>
 
@@ -142,18 +142,18 @@ export default function CheckoutPage() {
               </motion.button>
             </form>
 
-            <div className="mt-4 flex items-center gap-2 text-xs text-[#2E7D32] bg-[#EDF5ED] px-3 py-1.5 rounded-lg">
+            <div className="mt-4 flex items-center gap-2 text-xs text-success bg-success-subtle px-3 py-1.5 rounded-lg">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
               Cancele quando quiser, sem multa
             </div>
 
-            <p className="mt-4 text-xs text-[#9E9E9E] leading-relaxed">
+            <p className="mt-4 text-xs text-text-muted leading-relaxed">
               Ao assinar, você aceita nossos{" "}
-              <a href="#" className="underline underline-offset-2 hover:text-[#676767]">Termos de Uso</a>{" "}
+              <a href="#" className="underline underline-offset-2 hover:text-text-secondary">Termos de Uso</a>{" "}
               e{" "}
-              <a href="#" className="underline underline-offset-2 hover:text-[#676767]">Política de Privacidade</a>.
+              <a href="#" className="underline underline-offset-2 hover:text-text-secondary">Política de Privacidade</a>.
             </p>
           </div>
         </motion.div>
