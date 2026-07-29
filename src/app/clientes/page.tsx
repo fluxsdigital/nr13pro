@@ -222,7 +222,7 @@ export default function Clientes() {
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <p className="text-[11px] font-semibold text-text-primary truncate">{cli.nome}</p>
+                            <p className="text-sm font-semibold text-text-primary truncate">{cli.nome}</p>
                             {urgency === "urgente" && (
                               <Badge className="bg-red-100 text-red-700 border-red-200 hover:bg-red-100 text-[10px] leading-tight py-0 px-1.5">
                                 <AlertTriangle className="h-2.5 w-2.5 mr-0.5" />
