@@ -15,7 +15,7 @@ export default function EquipamentoDetalhe() {
   const eq = getEquipamento(params.id as string)
 
   if (!eq) {
-    return <div className="p-8 text-slate-500">Equipamento não encontrado</div>
+    return <div className="p-4 sm:p-8 text-slate-500">Equipamento não encontrado</div>
   }
 
   const cliente = getClientePorEquipamento(eq.id)

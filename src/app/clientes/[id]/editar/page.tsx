@@ -26,11 +26,11 @@ export default function EditarCliente() {
     router.push(`/clientes/${cliente.id}`)
   }
 
-  if (loading) return <div className="p-8 text-slate-500">Carregando...</div>
+  if (loading) return <div className="p-4 sm:p-8 text-slate-500">Carregando...</div>
   if (!cliente) return null
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 sm:p-8 max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Editar Cliente</h1>
         <p className="text-slate-500 text-sm mt-1">{cliente.nome}</p>

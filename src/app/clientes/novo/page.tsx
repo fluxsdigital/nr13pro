@@ -14,7 +14,7 @@ export default function NovoCliente() {
   }
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 sm:p-8 max-w-3xl mx-auto space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Novo Cliente</h1>
         <p className="text-slate-500 text-sm mt-1">Cadastre uma nova indústria contratante</p>

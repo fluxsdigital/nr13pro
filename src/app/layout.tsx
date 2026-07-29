@@ -3,6 +3,8 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
 import { Sidebar } from "@/components/layout/sidebar"
+import { SidebarProvider } from "@/lib/sidebar-context"
+import { MainContent } from "@/components/layout/main-content"
 
 const inter = Inter({
   variable: "--font-sans",
@@ -20,8 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex bg-slate-50 text-slate-900">
-        <Sidebar />
-        <main className="flex-1 md:ml-64 min-h-screen pt-12 md:pt-0">{children}</main>
+        <SidebarProvider>
+          <Sidebar />
+          <MainContent>{children}</MainContent>
+        </SidebarProvider>
         <Toaster richColors closeButton />
       </body>
     </html>

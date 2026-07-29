@@ -102,8 +102,8 @@ function NovoLaudoForm() {
     )
   }
 
-  if (loading) return <div className="p-8 text-slate-500">Carregando...</div>
-  if (!inspecao || !equipamento) return <div className="p-8 text-slate-500">Inspeção não encontrada</div>
+  if (loading) return <div className="p-4 sm:p-8 text-slate-500">Carregando...</div>
+  if (!inspecao || !equipamento) return <div className="p-4 sm:p-8 text-slate-500">Inspeção não encontrada</div>
 
   return (
     <div className="p-4 sm:p-8 max-w-3xl mx-auto space-y-6">

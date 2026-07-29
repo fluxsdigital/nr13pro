@@ -21,7 +21,7 @@ export default function ClienteDetalhe() {
     equipamentoService.list({ clienteId: id }).then(setEquipamentos)
   }, [params.id])
 
-  if (!cliente) return <div className="p-8 text-slate-500">Carregando...</div>
+  if (!cliente) return <div className="p-4 sm:p-8 text-slate-500">Carregando...</div>
 
   return (
     <div className="p-4 sm:p-8 space-y-6">
