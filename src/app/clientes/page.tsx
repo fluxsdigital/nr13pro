@@ -8,8 +8,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Plus, Search, Pencil, Trash2, Building2, Phone, Mail,
-  ArrowRight, AlertTriangle, AlertCircle, CheckCircle2, HelpCircle,
+  ArrowRight, AlertTriangle, AlertCircle, CheckCircle2, HelpCircle, Clock,
 } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
@@ -20,18 +27,21 @@ interface ClienteStatus {
   approaching: number
   safe: number
   unknown: number
+  inProgress: number
 }
 
 function getStatus(clienteId: string): ClienteStatus {
   const eqs = eqStore.filter((eq) => eq.clienteId === clienteId)
   const today = new Date()
-  let overdue = 0, approaching = 0, safe = 0, unknown = 0
+  let overdue = 0, approaching = 0, safe = 0, unknown = 0, inProgress = 0
 
   eqs.forEach((eq) => {
-    const insps = insStore.filter((i) => i.equipamentoId === eq.id && i.concluida && i.laudoId)
+    const insps = insStore.filter((i) => i.equipamentoId === eq.id)
     if (insps.length === 0) { unknown++; return }
 
     const latest = insps.sort((a, b) => b.dataTermino.localeCompare(a.dataTermino))[0]
+    if (!latest.concluida) { inProgress++; return }
+
     const laudo = lauStore.find((l) => l.id === latest.laudoId)
     if (!laudo?.dataProximaInspecao) { unknown++; return }
 
@@ -45,14 +55,15 @@ function getStatus(clienteId: string): ClienteStatus {
     else safe++
   })
 
-  return { overdue, approaching, safe, unknown }
+  return { overdue, approaching, safe, unknown, inProgress }
 }
 
-type FiltroStatus = "todas" | "urgente" | "atencao"
+type FiltroStatus = "todas" | "urgente" | "atencao" | "andamento"
 
 export default function Clientes() {
   const [search, setSearch] = useState("")
   const [filtroStatus, setFiltroStatus] = useState<FiltroStatus>("todas")
+  const [filtroCliente, setFiltroCliente] = useState("")
   const [data, setData] = useState<Cliente[]>([])
 
   useEffect(() => {
@@ -67,6 +78,7 @@ export default function Clientes() {
 
   const filtered = useMemo(() => {
     return data.filter((c) => {
+      if (filtroCliente && c.id !== filtroCliente) return false
       const match = c.nome.toLowerCase().includes(search.toLowerCase()) ||
         c.cnpj.includes(search) ||
         c.contato.toLowerCase().includes(search.toLowerCase())
@@ -74,10 +86,11 @@ export default function Clientes() {
       if (filtroStatus === "todas") return true
       const s = statusPorCliente.get(c.id)
       if (filtroStatus === "urgente") return s ? s.overdue > 0 : false
-      if (filtroStatus === "atencao") return s ? s.overdue === 0 && s.approaching > 0 : false
+      if (filtroStatus === "atencao") return s ? s.approaching > 0 : false
+      if (filtroStatus === "andamento") return s ? s.inProgress > 0 : false
       return true
     })
-  }, [data, search, filtroStatus, statusPorCliente])
+  }, [data, search, filtroStatus, filtroCliente, statusPorCliente])
 
   const handleDelete = async (id: string, nome: string) => {
     if (!window.confirm(`Excluir cliente ${nome}?`)) return
@@ -97,10 +110,16 @@ export default function Clientes() {
     [data, statusPorCliente]
   )
 
+  const countAndamento = useMemo(
+    () => data.filter(c => (statusPorCliente.get(c.id)?.inProgress ?? 0) > 0).length,
+    [data, statusPorCliente]
+  )
+
   const clienteUrgency = (s: ClienteStatus | undefined) => {
     if (!s) return "unknown"
     if (s.overdue > 0) return "urgente"
     if (s.approaching > 0) return "atencao"
+    if (s.inProgress > 0) return "andamento"
     if (s.safe > 0) return "ok"
     return "unknown"
   }
@@ -160,24 +179,47 @@ export default function Clientes() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          {(["todas", "urgente", "atencao"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setFiltroStatus(t)}
-              className={cn(
-                "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
-                filtroStatus === t
-                  ? t === "urgente" ? "bg-red-50 text-red-700 border-red-200"
-                    : t === "atencao" ? "bg-amber-50 text-amber-700 border-amber-200"
-                    : "bg-primary-subtle text-primary border-primary/20"
-                  : "bg-card text-text-secondary border-border hover:bg-card-hover"
-              )}
-            >
-              {t === "todas" ? "Todas" : t === "urgente" ? "Vencidas" : "Próximas"}
-            </button>
-          ))}
+        <div className="w-full sm:w-auto min-w-[220px]">
+          <Select value={filtroCliente} onValueChange={(v) => setFiltroCliente(v ?? "")}>
+            <SelectTrigger className="border-border bg-card h-9 text-sm w-full">
+              <SelectValue placeholder="Todas as empresas" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">Todas as empresas</SelectItem>
+              {data.map((c) => (
+                <SelectItem key={c.id} value={c.id}>{c.nome}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
+        {(filtroCliente !== "" || filtroStatus !== "todas") && (
+          <button
+            onClick={() => { setFiltroCliente(""); setFiltroStatus("todas") }}
+            className="text-xs text-text-muted hover:text-text-primary shrink-0 ml-auto sm:ml-0"
+          >
+            Limpar filtros
+          </button>
+        )}
+      </div>
+
+      <div className="flex items-center gap-2 flex-wrap">
+        {(["todas", "urgente", "atencao", "andamento"] as const).map((t) => (
+          <button
+            key={t}
+            onClick={() => setFiltroStatus(t)}
+            className={cn(
+              "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
+              filtroStatus === t
+                ? t === "urgente" ? "bg-red-50 text-red-700 border-red-200"
+                  : t === "atencao" ? "bg-amber-50 text-amber-700 border-amber-200"
+                  : t === "andamento" ? "bg-blue-50 text-blue-700 border-blue-200"
+                  : "bg-primary-subtle text-primary border-primary/20"
+                : "bg-card text-text-secondary border-border hover:bg-card-hover"
+            )}
+          >
+            {t === "todas" ? "Todas" : t === "urgente" ? "Vencidas" : t === "atencao" ? "Aguardando" : "Em andamento"}
+          </button>
+        ))}
       </div>
 
       {filtered.length === 0 ? (
@@ -202,6 +244,7 @@ export default function Clientes() {
                   "card-hover cursor-pointer",
                   urgency === "urgente" ? "border-red-200 hover:!border-red-300" :
                   urgency === "atencao" ? "border-amber-200 hover:!border-amber-300" :
+                  urgency === "andamento" ? "border-blue-200 hover:!border-blue-300" :
                   ""
                 )}>
                   <Link href={`/clientes/${cli.id}`}>
@@ -248,7 +291,7 @@ export default function Clientes() {
                             </span>
                             <span className="text-[10px] text-text-muted truncate">{cli.email}</span>
                           </div>
-                          {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0) && (
+                          {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0 || status.inProgress > 0) && (
                             <div className="flex items-center gap-2 mt-1 overflow-hidden text-ellipsis whitespace-nowrap">
                               {status.overdue > 0 && (
                                 <span className="flex items-center gap-1 text-[10px] text-red-600 font-medium shrink-0">
@@ -259,13 +302,19 @@ export default function Clientes() {
                               {status.approaching > 0 && (
                                 <span className="flex items-center gap-1 text-[10px] text-amber-600 font-medium shrink-0">
                                   <AlertCircle className="h-2.5 w-2.5" />
-                                  {status.approaching} em até 60d
+                                  {status.approaching} à fazer
                                 </span>
                               )}
                               {status.unknown > 0 && (
                                 <span className="flex items-center gap-1 text-[10px] text-text-muted shrink-0">
                                   <HelpCircle className="h-2.5 w-2.5" />
                                   {status.unknown} sem inspeção
+                                </span>
+                              )}
+                              {status.inProgress > 0 && (
+                                <span className="flex items-center gap-1 text-[10px] text-blue-600 font-medium shrink-0">
+                                  <Clock className="h-2.5 w-2.5" />
+                                  {status.inProgress} em andamento
                                 </span>
                               )}
                               {status.safe > 0 && (
