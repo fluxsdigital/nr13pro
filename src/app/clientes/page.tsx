@@ -249,27 +249,27 @@ export default function Clientes() {
                             <span className="text-xs text-text-muted truncate">{cli.email}</span>
                           </div>
                           {status && (status.overdue > 0 || status.approaching > 0 || status.unknown > 0) && (
-                            <div className="flex items-center gap-3 mt-2">
+                            <div className="flex items-center gap-3 mt-2 overflow-hidden text-ellipsis whitespace-nowrap">
                               {status.overdue > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-red-600 font-medium">
+                                <span className="flex items-center gap-1 text-xs text-red-600 font-medium shrink-0">
                                   <AlertTriangle className="h-3 w-3" />
                                   {status.overdue} vencida{status.overdue > 1 ? "s" : ""}
                                 </span>
                               )}
                               {status.approaching > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-amber-600 font-medium">
+                                <span className="flex items-center gap-1 text-xs text-amber-600 font-medium shrink-0">
                                   <AlertCircle className="h-3 w-3" />
-                                  {status.approaching} em {status.approaching > 1 ? "até" : "até"} 60 dias
+                                  {status.approaching} em {status.approaching > 1 ? "até" : "até"} 60d
                                 </span>
                               )}
                               {status.unknown > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-text-muted">
+                                <span className="flex items-center gap-1 text-xs text-text-muted shrink-0">
                                   <HelpCircle className="h-3 w-3" />
                                   {status.unknown} sem inspeção
                                 </span>
                               )}
                               {status.safe > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-success">
+                                <span className="flex items-center gap-1 text-xs text-success shrink-0">
                                   <CheckCircle2 className="h-3 w-3" />
                                   {status.safe} em dia
                                 </span>
