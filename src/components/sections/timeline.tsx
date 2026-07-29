@@ -115,7 +115,25 @@ export function Timeline() {
       id="como-funciona"
       title="Como funciona"
       subtitle="Cinco passos para transformar a gestão de inspeção da sua empresa."
+      className="relative overflow-hidden"
     >
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(23,23,23,0.4) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(23,23,23,0.4) 1px, transparent 1px),
+              linear-gradient(rgba(23,23,23,0.15) 0.5px, transparent 0.5px),
+              linear-gradient(90deg, rgba(23,23,23,0.15) 0.5px, transparent 0.5px)
+            `,
+            backgroundSize: "40px 40px, 40px 40px, 10px 10px, 10px 10px",
+          }}
+        />
+        <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-[#C56A2D]/[0.03] blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 rounded-full bg-[#C56A2D]/[0.02] blur-3xl" />
+      </div>
+
       <div ref={containerRef} className="relative max-w-2xl mx-auto">
         <div className="absolute left-5 sm:left-[22px] top-0 bottom-0 w-0.5 bg-[#EDE9E3] rounded-full overflow-hidden hidden sm:block">
           {!prefersReducedMotion && (
