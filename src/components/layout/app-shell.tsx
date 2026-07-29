@@ -7,9 +7,9 @@ import { MainContent } from "@/components/layout/main-content"
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isLanding = pathname === "/vendas"
+  const noSidebar = pathname === "/vendas" || pathname === "/checkout"
 
-  if (isLanding) {
+  if (noSidebar) {
     return <>{children}</>
   }
 
