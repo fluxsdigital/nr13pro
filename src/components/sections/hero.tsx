@@ -27,7 +27,7 @@ export function Hero() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name || !email || !password) {
-      toast.error("Preencha todos os campos para criar sua conta.")
+      toast.error("Preencha todos os campos para assinar o plano.")
       return
     }
     if (password.length < 6) {
@@ -35,14 +35,20 @@ export function Hero() {
       return
     }
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 800))
+    await new Promise((r) => setTimeout(r, 1500))
     localStorage.setItem(
       "nr13pro_user",
-      JSON.stringify({ name, email, createdAt: new Date().toISOString() }),
+      JSON.stringify({
+        name,
+        email,
+        plan: "Mensal",
+        price: 197,
+        createdAt: new Date().toISOString(),
+      }),
     )
     setLoading(false)
     setSignedUp(true)
-    toast.success("Conta criada com sucesso! Bem-vindo ao NR-13 Pro.")
+    toast.success("Assinatura confirmada! Bem-vindo ao NR-13 Pro.")
   }
 
   if (signedUp) {
@@ -62,12 +68,18 @@ export function Hero() {
               </svg>
             </div>
             <h1 className="text-2xl sm:text-3xl font-medium text-[#171717] tracking-tight">
-              Conta criada, {name.split(" ")[0]}!
+              Assinatura confirmada, {name.split(" ")[0]}!
             </h1>
             <p className="mt-3 text-base text-[#676767] leading-relaxed">
-              Enviamos um link de confirmação para <strong className="text-[#171717]">{email}</strong>.
-              Acesse sua conta e comece a gerenciar suas inspeções.
+              Seu plano mensal de <strong className="text-[#171717]">R$ 197/mês</strong> está ativo.
+              Acesse a plataforma e comece a gerenciar suas inspeções agora mesmo.
             </p>
+            <div className="mt-4 flex items-center gap-2 text-xs text-[#2E7D32] bg-[#EDF5ED] px-3 py-1.5 rounded-full">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Cancele quando quiser, sem multa
+            </div>
             <a
               href="/"
               className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-[#171717] text-white hover:bg-[#2B2B2B] shadow-sm"
@@ -110,53 +122,66 @@ export function Hero() {
               completo das suas válvulas — tudo em um só lugar.
             </p>
 
-            <form onSubmit={handleSubmit} className="mt-6 sm:mt-8 space-y-3 max-w-sm">
-              <div>
-                <input
-                  type="text"
-                  placeholder="Seu nome completo"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
-                />
+            <div className="mt-6 sm:mt-8">
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className="text-3xl font-semibold text-[#171717]">R$ 197</span>
+                <span className="text-sm text-[#676767]">/mês</span>
               </div>
-              <div>
-                <input
-                  type="email"
-                  placeholder="Seu melhor e-mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  placeholder="Crie uma senha"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
-                />
-              </div>
-              <motion.button
-                type="submit"
-                disabled={loading}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                className="w-full h-11 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
-              >
-                {loading ? "Criando conta..." : "Criar conta gratuita"}
-              </motion.button>
-            </form>
 
-            <p className="mt-3 text-xs text-[#9E9E9E] max-w-sm">
-              Ao criar sua conta, você aceita nossos{" "}
-              <a href="#" className="underline underline-offset-2 hover:text-[#676767]">Termos de Uso</a>{" "}
-              e{" "}
-              <a href="#" className="underline underline-offset-2 hover:text-[#676767]">Política de Privacidade</a>.
-              {" "}Sem cartão de crédito.
-            </p>
+              <form onSubmit={handleSubmit} className="space-y-3 max-w-sm">
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Seu nome completo"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    placeholder="Seu melhor e-mail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                  />
+                </div>
+                <div>
+                  <input
+                    type="password"
+                    placeholder="Crie uma senha"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full h-11 px-4 rounded-xl bg-white border border-[#D4CFC8] text-sm text-[#171717] placeholder:text-[#9E9E9E] focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                  />
+                </div>
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  className="w-full h-11 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm"
+                >
+                  {loading ? "Processando pagamento..." : "Assinar agora — R$ 197/mês"}
+                </motion.button>
+              </form>
+
+              <div className="mt-3 flex items-center gap-2 text-xs text-[#2E7D32]">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Cancele quando quiser, sem multa
+              </div>
+
+              <p className="mt-3 text-xs text-[#9E9E9E] max-w-sm">
+                Ao assinar, você aceita nossos{" "}
+                <a href="#" className="underline underline-offset-2 hover:text-[#676767]">Termos de Uso</a>{" "}
+                e{" "}
+                <a href="#" className="underline underline-offset-2 hover:text-[#676767]">Política de Privacidade</a>.
+              </p>
+            </div>
 
             <div className="flex flex-wrap items-center gap-2 mt-6 sm:mt-8">
               {badges.map((badge) => (
