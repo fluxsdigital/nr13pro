@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion"
 import { Container } from "@/components/ui/container"
-import { Button } from "@/components/ui/button"
 import { useReducedMotion } from "./motion-provider"
 
 export function CTA() {
@@ -21,28 +20,31 @@ export function CTA() {
           <div className="absolute inset-0 bg-gradient-to-br from-[#C56A2D]/5 to-transparent pointer-events-none" />
           <div className="relative">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-white tracking-tight">
-              Pronto para transformar sua gestão de inspeção?
+              Comece agora por R$ 197/mês
             </h2>
             <p className="mt-4 text-base sm:text-lg text-[#9E9E9E] max-w-lg mx-auto leading-relaxed">
-              Solicite uma demonstração personalizada e descubra como o NR-13 Pro pode simplificar sua rotina.
+              Acesso completo à plataforma. Cancele quando quiser, sem multa ou burocracia.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <a
-                href="mailto:contato@nr13pro.com.br"
-                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-white text-[#171717] hover:bg-[#F1ECE6] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                href="/checkout"
+                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-white text-[#171717] hover:bg-[#F1ECE6] shadow-sm"
               >
-                Solicitar Demonstração
+                Assinar agora
               </a>
               <a
-                href="tel:+5511999999999"
+                href="mailto:contato@nr13pro.com.br"
                 className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base text-[#9E9E9E] hover:text-white hover:bg-white/10"
               >
                 Falar com Consultor
               </a>
             </div>
-            <p className="mt-4 text-xs text-[#676767]">
-              Sem compromisso. Demonstração gratuita de 30 minutos.
-            </p>
+            <div className="mt-4 flex items-center justify-center gap-2 text-xs text-[#2E7D32] bg-[#EDF5ED]/10 px-3 py-1.5 rounded-full mx-auto w-fit">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Cancele quando quiser, sem multa
+            </div>
           </div>
         </motion.div>
       </Container>
