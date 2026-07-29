@@ -29,30 +29,30 @@ export default function EquipamentoDetalhe() {
   const laudo = ultimaInspecao ? getLaudoPorInspecao(ultimaInspecao.id) : null
 
   return (
-    <div className="p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-3">
+    <div className="p-4 sm:p-8 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">{eq.tag}</h1>
             <Badge variant="outline" className="border-slate-200 text-slate-600 capitalize">{eq.tipo}</Badge>
             {eq.categoria && <Badge>{eq.categoria}</Badge>}
           </div>
-          <p className="text-slate-500 mt-1">{eq.descricao}</p>
+          <p className="text-slate-500 mt-1 truncate">{eq.descricao}</p>
           {cliente && (
-            <p className="text-xs text-blue-600 mt-1">
+            <p className="text-xs text-blue-600 mt-1 truncate">
               Cliente: {cliente.nome}
             </p>
           )}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 shrink-0">
           <Link href={`/equipamentos/${eq.id}/editar`}>
-            <Button variant="outline" className="border-slate-200 text-slate-700">
+            <Button variant="outline" className="border-slate-200 text-slate-700 w-full sm:w-auto">
               <Pencil className="h-4 w-4 mr-2" />
               Editar
             </Button>
           </Link>
           <Link href={`/inspecoes/nova?equipamento=${eq.id}`}>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
               <ClipboardCheck className="h-4 w-4 mr-2" />
               Nova Inspeção
             </Button>
@@ -66,7 +66,7 @@ export default function EquipamentoDetalhe() {
             <CardTitle className="text-slate-900">Dados Técnicos</CardTitle>
           </CardHeader>
           <CardContent>
-            <dl className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
               <div>
                 <dt className="text-slate-500">Fabricante</dt>
                 <dd className="text-slate-900 font-medium">{eq.fabricante}</dd>
@@ -144,9 +144,9 @@ export default function EquipamentoDetalhe() {
       </div>
 
       <Tabs defaultValue="inspecoes" className="w-full">
-        <TabsList className="bg-slate-100 border border-slate-200">
-          <TabsTrigger value="inspecoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Inspeções</TabsTrigger>
-          <TabsTrigger value="laudos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Laudos</TabsTrigger>
+        <TabsList className="bg-slate-100 border border-slate-200 overflow-x-auto flex-nowrap">
+          <TabsTrigger value="inspecoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Inspeções</TabsTrigger>
+          <TabsTrigger value="laudos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Laudos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="inspecoes" className="mt-4">

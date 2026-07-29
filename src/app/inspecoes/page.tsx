@@ -55,20 +55,20 @@ export default function Inspecoes() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Inspeções</h1>
           <p className="text-slate-500 text-sm mt-1">Histórico de inspeções realizadas</p>
         </div>
-        <Link href="/inspecoes/nova">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+        <Link href="/inspecoes/nova" className="shrink-0">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Nova Inspeção
           </Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
             <ClipboardCheck className="h-8 w-8 text-blue-600" />
@@ -160,23 +160,23 @@ export default function Inspecoes() {
             <Link key={ins.id} href={`/inspecoes/${ins.id}`} className="block mb-6 last:mb-0">
               <Card className="border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 min-w-0">
-                      <div className={`w-2.5 h-2.5 rounded-full shrink-0 ${ins.concluida ? "bg-emerald-500" : "bg-amber-500"}`} />
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-0.5 ${ins.concluida ? "bg-emerald-500" : "bg-amber-500"}`} />
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="text-sm font-semibold text-slate-900 capitalize truncate">{ins.tipo.replace("_", " ")}</p>
-                          <Badge variant="outline" className="text-xs border-slate-200 text-slate-600 font-mono">{ins.eq?.tag}</Badge>
-                          <Badge variant="outline" className="text-xs border-slate-200 text-slate-500">{ins.eq?.descricao}</Badge>
+                          <Badge variant="outline" className="text-xs border-slate-200 text-slate-600 font-mono shrink-0">{ins.eq?.tag}</Badge>
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
+                        <p className="text-xs text-slate-500 truncate mt-0.5">{ins.eq?.descricao}</p>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
                           <p className="text-xs font-medium text-blue-600 truncate">{ins.cliente?.nome}</p>
-                          <span className="text-xs text-slate-400">•</span>
+                          <span className="text-xs text-slate-400 hidden sm:inline">•</span>
                           <p className="text-xs text-slate-500">{ins.dataInicio}{ins.dataTermino ? ` — ${ins.dataTermino}` : ""}</p>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex items-center gap-2 shrink-0 sm:pl-3">
                       {ins.concluida && !ins.laudoId && (
                         <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-xs">
                           <AlertCircle className="h-3 w-3 mr-1" />
@@ -192,7 +192,7 @@ export default function Inspecoes() {
                       <Badge variant={ins.concluida ? "default" : "secondary"} className="text-xs">
                         {ins.concluida ? "Concluída" : "Em andamento"}
                       </Badge>
-                      <ArrowRight className="h-4 w-4 text-slate-400" />
+                      <ArrowRight className="h-4 w-4 text-slate-400 shrink-0" />
                     </div>
                   </div>
                 </CardContent>

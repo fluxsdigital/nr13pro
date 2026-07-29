@@ -59,20 +59,20 @@ export default function Equipamentos() {
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Equipamentos</h1>
           <p className="text-slate-500 text-sm mt-1">Gerencie caldeiras, vasos de pressão, tubulações e tanques</p>
         </div>
-        <Link href="/equipamentos/novo">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+        <Link href="/equipamentos/novo" className="shrink-0">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Novo Equipamento
           </Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3">
             <div>
@@ -111,8 +111,8 @@ export default function Equipamentos() {
         </Card>
       </div>
 
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="min-w-[280px]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+        <div className="w-full sm:w-auto min-w-0 sm:min-w-[280px]">
           <Select value={filtroCliente} onValueChange={(v) => setFiltroCliente(v ?? "")}>
             <SelectTrigger className="border-slate-200 bg-white h-9 text-sm w-full">
               <SelectValue placeholder="Todas as empresas" />
@@ -125,7 +125,7 @@ export default function Equipamentos() {
             </SelectContent>
           </Select>
         </div>
-        <div className="relative flex-1 max-w-sm">
+        <div className="relative w-full sm:flex-1 sm:max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Buscar por tag, descrição ou local..."

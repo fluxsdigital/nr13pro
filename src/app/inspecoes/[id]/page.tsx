@@ -43,48 +43,48 @@ export default function InspecaoDetalhe() {
   if (!inspecao) return <div className="p-8 text-slate-500">Inspeção não encontrada</div>
 
   return (
-    <div className="p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-3">
+    <div className="p-4 sm:p-8 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-3 flex-wrap">
             <h1 className="text-2xl font-semibold text-slate-900 tracking-tight capitalize">{inspecao.tipo.replace("_", " ")}</h1>
             <Badge variant={inspecao.concluida ? "default" : "secondary"}>
               {inspecao.concluida ? "Concluída" : "Em andamento"}
             </Badge>
           </div>
-          <p className="text-slate-500 text-sm mt-1">
+          <p className="text-slate-500 text-sm mt-1 truncate">
             {eq?.tag} — {eq?.descricao} • {inspecao.dataInicio} a {inspecao.dataTermino}
           </p>
           {cliente && <p className="text-xs text-blue-600 mt-0.5">Cliente: {cliente.nome}</p>}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 shrink-0">
           {!laudo && inspecao.concluida && (
             <Link href={`/laudos/novo?inspecao=${inspecao.id}`}>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
                 <FileText className="h-4 w-4 mr-2" />
                 Gerar Laudo
               </Button>
             </Link>
           )}
           <Link href={`/equipamentos/${eq?.id}`}>
-            <Button variant="outline" className="border-slate-200 text-slate-700">Ver Equipamento</Button>
+            <Button variant="outline" className="border-slate-200 text-slate-700 w-full sm:w-auto">Ver Equipamento</Button>
           </Link>
         </div>
       </div>
 
       <Tabs defaultValue="resumo" className="w-full">
-        <TabsList className="bg-slate-100 border border-slate-200">
-          <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Resumo</TabsTrigger>
-          <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Medições</TabsTrigger>
-          <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Anomalias</TabsTrigger>
-          <TabsTrigger value="dispositivos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm">Dispositivos</TabsTrigger>
+        <TabsList className="bg-slate-100 border border-slate-200 overflow-x-auto flex-nowrap">
+          <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Resumo</TabsTrigger>
+          <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Medições</TabsTrigger>
+          <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Anomalias</TabsTrigger>
+          <TabsTrigger value="dispositivos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Dispositivos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="resumo" className="mt-4 space-y-4">
           <Card className="border-slate-200 shadow-sm">
             <CardHeader><CardTitle className="text-slate-900">Exames Realizados</CardTitle></CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {[
                   { label: "Exame Externo", ok: inspecao.examesExternos },
                   { label: "Exame Interno", ok: inspecao.examesInternos },

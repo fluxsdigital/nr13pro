@@ -43,18 +43,18 @@ export default function Dashboard() {
   )
 
   return (
-    <div className="p-8 space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-8 space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Dashboard</h1>
           <p className="text-slate-500 text-sm mt-1">Gestão das atividades de inspeção NR-13</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
           <label className="text-xs text-slate-500">Filtrar por cliente:</label>
           <select
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
-            className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto"
           >
             <option value="todas">Todas as empresas</option>
             {clientes.map((c) => (
@@ -285,28 +285,28 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <button
             onClick={onVoltar}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium shrink-0"
           >
             &larr; Voltar
           </button>
           <div className="h-5 w-px bg-slate-200" />
-          <div>
-            <h2 className="text-xl font-semibold text-slate-900">{cli.nome}</h2>
-            <p className="text-xs text-slate-500">{cli.cnpj} • {cli.contato}</p>
+          <div className="min-w-0">
+            <h2 className="text-xl font-semibold text-slate-900 truncate">{cli.nome}</h2>
+            <p className="text-xs text-slate-500 truncate">{cli.cnpj} • {cli.contato}</p>
           </div>
         </div>
-        <Link href={`/inspecoes/nova?cliente=${clienteId}`}>
-          <button className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm font-medium">
+        <Link href={`/inspecoes/nova?cliente=${clienteId}`} className="shrink-0">
+          <button className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm font-medium w-full sm:w-auto">
             Nova Inspeção
           </button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <Card className="border-slate-200 shadow-sm">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold text-slate-900">{p.total}</p>

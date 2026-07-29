@@ -32,20 +32,20 @@ export default function Clientes() {
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Empresas Clientes</h1>
           <p className="text-slate-500 text-sm mt-1">Gerencie as indústrias contratantes</p>
         </div>
-        <Link href="/clientes/novo">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+        <Link href="/clientes/novo" className="shrink-0">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm w-full sm:w-auto">
             <Plus className="h-4 w-4 mr-2" />
             Novo Cliente
           </Button>
         </Link>
       </div>
 
-      <div className="relative max-w-sm">
+      <div className="relative w-full sm:max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
         <Input
           placeholder="Buscar por nome, CNPJ ou contato..."
