@@ -75,7 +75,7 @@ export default function Equipamentos() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <FlaskConical className="h-8 w-8 text-blue-600 shrink-0" />
             <div>
@@ -84,7 +84,7 @@ export default function Equipamentos() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <Building2 className="h-8 w-8 text-violet-600 shrink-0" />
             <div>
@@ -93,7 +93,7 @@ export default function Equipamentos() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="h-8 w-8 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
               <div className="h-3 w-3 rounded-full bg-emerald-500" />
@@ -106,7 +106,7 @@ export default function Equipamentos() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
               <div className="h-3 w-3 rounded-full bg-amber-500" />
@@ -162,7 +162,7 @@ export default function Equipamentos() {
             const catStr = eq.categoria ?? ""
             return (
               <div key={eq.id} className="mb-6 last:mb-0">
-                <Card className="border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
+                <Card className="card-hover cursor-pointer">
                   <Link href={`/equipamentos/${eq.id}`}>
                     <CardContent className="p-4">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

@@ -199,10 +199,10 @@ export default function Clientes() {
             return (
               <div key={cli.id} className="mb-6 last:mb-0">
                 <Card className={cn(
-                  "border shadow-sm transition-all cursor-pointer",
-                  urgency === "urgente" ? "border-red-200 hover:border-red-300" :
-                  urgency === "atencao" ? "border-amber-200 hover:border-amber-300" :
-                  "border-slate-200 hover:border-blue-300"
+                  "card-hover cursor-pointer",
+                  urgency === "urgente" ? "border-red-200 hover:!border-red-300" :
+                  urgency === "atencao" ? "border-amber-200 hover:!border-amber-300" :
+                  ""
                 )}>
                   <Link href={`/clientes/${cli.id}`}>
                     <CardContent className="p-4">

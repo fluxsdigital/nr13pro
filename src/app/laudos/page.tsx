@@ -52,7 +52,7 @@ export default function Laudos() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <FileText className="h-8 w-8 text-blue-600" />
             <div>
@@ -61,7 +61,7 @@ export default function Laudos() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <Building2 className="h-8 w-8 text-violet-600" />
             <div>
@@ -70,7 +70,7 @@ export default function Laudos() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <User className="h-8 w-8 text-slate-600" />
             <div>
@@ -115,7 +115,7 @@ export default function Laudos() {
         <div>
           {filtradas.map((l) => (
             <Link key={l.id} href={`/laudos/${l.id}`} className="block mb-6 last:mb-0">
-              <Card className="border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
+              <Card className="card-hover cursor-pointer">
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">

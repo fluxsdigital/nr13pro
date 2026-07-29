@@ -8,7 +8,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
-  Building2, ClipboardCheck, FileText, AlertTriangle,
+  Building2, ClipboardCheck, FileText, FlaskConical, AlertTriangle,
   ArrowRight, Calendar, CheckCircle2, Clock, Ban,
 } from "lucide-react"
 import Link from "next/link"
@@ -67,10 +67,12 @@ export default function Dashboard() {
       {filtro === "todas" ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600">Clientes Ativos</CardTitle>
-                <Building2 className="h-4 w-4 text-blue-600" />
+                <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                  <Building2 className="h-4 w-4 text-blue-600" />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-slate-900">{totalClientes}</div>
@@ -78,10 +80,12 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600">Equipamentos</CardTitle>
-                <Building2 className="h-4 w-4 text-slate-500" />
+                <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
+                  <FlaskConical className="h-4 w-4 text-violet-600" />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-slate-900">{totalEquipamentos}</div>
@@ -89,10 +93,12 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600">Inspeções Concluídas</CardTitle>
-                <ClipboardCheck className="h-4 w-4 text-emerald-600" />
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                  <ClipboardCheck className="h-4 w-4 text-emerald-600" />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-slate-900">{inspecoesConcluidas}</div>
@@ -100,10 +106,12 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600">Laudos Emitidos</CardTitle>
-                <FileText className="h-4 w-4 text-blue-600" />
+                <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                  <FileText className="h-4 w-4 text-blue-600" />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-slate-900">{laudosEmitidos}</div>
@@ -111,10 +119,12 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600">Pendentes</CardTitle>
-                <AlertTriangle className="h-4 w-4 text-red-600" />
+                <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center">
+                  <AlertTriangle className="h-4 w-4 text-red-600" />
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-slate-900">{inspecoesPendentes + semInspecaoGeral}</div>
@@ -126,7 +136,7 @@ export default function Dashboard() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-slate-900 text-lg">Progresso por Cliente</CardTitle>
                 <Link href="/equipamentos" className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
@@ -186,7 +196,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-slate-900 text-lg">Atividade Recente</CardTitle>
                 <Link href="/inspecoes" className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
@@ -230,7 +240,7 @@ export default function Dashboard() {
           </div>
 
           {certificadosPendentes.length > 0 && (
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-kpi">
               <CardHeader>
                 <CardTitle className="text-slate-900 flex items-center gap-2">
                   <FileText className="h-5 w-5 text-blue-600" />
@@ -307,25 +317,25 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold text-slate-900">{p.total}</p>
             <p className="text-xs text-slate-500">Total Equip.</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold text-emerald-600">{p.comLaudo}</p>
             <p className="text-xs text-slate-500">Inspecionados</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold text-amber-600">{p.emAndamento}</p>
             <p className="text-xs text-slate-500">Em Andamento</p>
           </CardContent>
         </Card>
-        <Card className="border-slate-200 shadow-sm">
+        <Card className="card-kpi">
           <CardContent className="p-4 text-center">
             <p className="text-2xl font-bold text-slate-400">{p.semInspecao}</p>
             <p className="text-xs text-slate-500">Pendentes</p>
@@ -333,7 +343,7 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
         </Card>
       </div>
 
-      <Card className="border-slate-200 shadow-sm">
+      <Card className="card-kpi">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-medium text-slate-700">Progresso de Inspeções</p>
