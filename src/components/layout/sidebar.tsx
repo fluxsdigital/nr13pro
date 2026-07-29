@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   LayoutDashboard,
   Building2,
@@ -10,12 +11,10 @@ import {
   ClipboardCheck,
   FileText,
   TrendingUp,
-  Menu,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useSidebar } from "@/lib/sidebar-context"
 
 const links = [
@@ -47,7 +46,7 @@ function NavItems({ collapsed = false }: { collapsed?: boolean }) {
             )}
             title={collapsed ? link.label : undefined}
           >
-            {isActive && (
+            {isActive && !collapsed && (
               <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-full bg-sidebar-primary" />
             )}
             <Icon className={cn("h-4 w-4 shrink-0", isActive && "text-sidebar-primary")} />
@@ -114,22 +113,60 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
 }
 
 export function Sidebar() {
-  const [open, setOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const { expanded } = useSidebar()
 
   return (
     <>
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger>
-          <div className="fixed top-3 left-3 z-50 md:hidden flex items-center justify-center h-9 w-9 rounded-lg border border-border bg-card/90 backdrop-blur-sm cursor-pointer">
-            <Menu className="h-4 w-4 text-text-secondary" />
-            <span className="sr-only">Abrir menu</span>
-          </div>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0 bg-sidebar text-sidebar-foreground border-sidebar-border">
-          <SidebarContent collapsed={false} />
-        </SheetContent>
-      </Sheet>
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-[#EDE9E3]">
+        <div className="flex items-center justify-between h-14 px-4">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-[#171717] flex items-center justify-center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v8M8 12h8"/>
+              </svg>
+            </div>
+            <span className="font-semibold text-sm text-[#171717]">NR-13 Pro</span>
+          </Link>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Menu"
+            className="w-8 h-8 flex items-center justify-center text-[#676767]"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              {mobileOpen ? (
+                <>
+                  <path d="M18 6L6 18" />
+                  <path d="M6 6l12 12" />
+                </>
+              ) : (
+                <>
+                  <path d="M4 6h16" />
+                  <path d="M4 12h16" />
+                  <path d="M4 18h16" />
+                </>
+              )}
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed top-14 left-0 right-0 z-40 bg-white border-b border-[#EDE9E3] overflow-hidden shadow-lg"
+          >
+            <nav className="p-3 space-y-0.5">
+              <NavItems />
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <aside
         className={cn(

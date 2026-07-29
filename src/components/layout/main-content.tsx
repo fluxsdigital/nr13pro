@@ -9,7 +9,7 @@ export function MainContent({ children }: { children: React.ReactNode }) {
   return (
     <main
       className={cn(
-        "flex-1 min-h-screen pt-12 md:pt-0 transition-all duration-300",
+        "flex-1 min-h-screen pt-14 md:pt-0 transition-all duration-300",
         expanded ? "md:ml-64" : "md:ml-16"
       )}
     >
