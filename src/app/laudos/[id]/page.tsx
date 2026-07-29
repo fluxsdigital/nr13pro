@@ -53,7 +53,7 @@ export default function LaudoDetalhe() {
   if (!laudo) return <div className="p-4 sm:p-8 text-text-secondary">Laudo não encontrado</div>
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-8 space-y-6">
+    <div className="p-4 sm:p-8 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Link href="/laudos" className="text-text-secondary hover:text-text-primary shrink-0">
