@@ -190,15 +190,7 @@ export function Hero() {
                   </svg>
                   Assinar agora — R$ 197/mês
                 </a>
-                <a
-                  href="#como-funciona"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base bg-secondary text-text-primary hover:bg-secondary-hover border border-border hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                  </svg>
-                  Ver Plataforma
-                </a>
+
               </div>
 
               <div className="mt-3 flex items-center gap-2 text-xs text-[#2E7D32]">

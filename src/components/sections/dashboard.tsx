@@ -19,8 +19,34 @@ export function DashboardPreview() {
         whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="bg-white border border-[#EDE9E3] rounded-xl overflow-hidden shadow-[0_1px_3px_rgba(23,23,23,0.06)]"
+        className="bg-white border border-[#EDE9E3] rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(23,23,23,0.08)]"
       >
+        <div className="flex items-center gap-1 px-4 pt-3 pb-2 bg-[#F7F5F2] border-b border-[#EDE9E3]">
+          <div className="flex gap-1">
+            <div className="w-3 h-3 rounded-full bg-[#FF5F57]" />
+            <div className="w-3 h-3 rounded-full bg-[#FFBD2E]" />
+            <div className="w-3 h-3 rounded-full bg-[#28C840]" />
+          </div>
+          <div className="flex-1 flex items-center justify-center mx-4">
+            <div className="bg-white border border-[#EDE9E3] rounded-md px-3 py-1 text-xs text-[#676767] flex items-center gap-2 max-w-[300px] w-full">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20"/>
+                <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+              </svg>
+              <span className="truncate">app.nr13pro.com.br/dashboard</span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#9E9E9E]">
+              <path d="M12 19V5M5 12l7-7 7 7"/>
+            </svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#9E9E9E]">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </div>
+        </div>
+
         <div className="p-4 sm:p-6 border-b border-[#EDE9E3]">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-medium text-[#171717]">Resumo do Mês</h3>
@@ -54,7 +80,7 @@ export function DashboardPreview() {
                       className="w-full rounded-t-sm transition-all"
                       style={{
                         height: `${v}%`,
-                        backgroundColor: i === 5 ? "#C56A2D" : "#C56A2D/30",
+                        backgroundColor: i === 5 ? "#C56A2D" : "#EDE9E3",
                       }}
                     />
                     <span className="text-[10px] text-[#676767]">
