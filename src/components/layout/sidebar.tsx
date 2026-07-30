@@ -242,6 +242,22 @@ export function Sidebar() {
             <nav className="p-3 space-y-0.5">
               <NavItems />
             </nav>
+            <div className="p-3 border-t border-divider space-y-1">
+              <Link
+                href="/configuracoes"
+                className="flex items-center gap-2.5 p-2 rounded-lg text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <Settings2 className="h-4 w-4" />
+                <span>Configurações</span>
+              </Link>
+              <Link
+                href="/configuracoes"
+                className="flex items-center gap-2.5 p-2 rounded-lg text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                <CreditCard className="h-4 w-4" />
+                <span>Salvar cartão</span>
+              </Link>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

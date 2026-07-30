@@ -1,6 +1,5 @@
 import { settings } from "@/lib/store"
-import type { Settings, UpdateSettingsDTO } from "@/lib/settings"
-import { settingsService as mockService } from "."
+import type { Settings, UpdateSettingsDTO } from "@/lib/settings" from "."
 
 type SettingsListener = () => void
 const listeners: SettingsListener[] = []
