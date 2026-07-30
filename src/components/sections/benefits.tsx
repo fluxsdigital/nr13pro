@@ -146,7 +146,7 @@ function SafariCard({
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
-      className="bg-white border border-[#EDE9E3] rounded-xl overflow-hidden cursor-default"
+      className="bg-white border border-[#EDE9E3] rounded-md overflow-hidden cursor-default"
     >
       <div className="flex items-center gap-1 px-3 pt-2 pb-1.5 bg-[#F7F5F2] border-b border-[#EDE9E3]">
         <div className="flex gap-1">

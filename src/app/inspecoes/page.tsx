@@ -163,7 +163,7 @@ export default function Inspecoes() {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-0.5 ${ins.concluida ? "bg-success" : "bg-amber-500"}`} />
-                      <div className="min-w-0">
+                      <div className="min-w-0 overflow-hidden line-clamp-4">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="text-sm font-semibold text-text-primary capitalize truncate">{ins.tipo.replace("_", " ")}</p>
                           <Badge variant="outline" className="text-xs border-border text-text-secondary font-mono shrink-0">{ins.eq?.tag}</Badge>

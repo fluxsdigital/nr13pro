@@ -23,7 +23,7 @@ export function CTA() {
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-3xl" />
 
           <div className="relative">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-lg bg-white/20">
               <Sparkles className="h-7 w-7 text-white" />
             </div>
 

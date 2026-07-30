@@ -58,9 +58,9 @@ export function Benefits() {
           <motion.div
             key={b.title}
             variants={reduced ? undefined : cardVariant}
-            className="rounded-2xl border border-border bg-white p-8 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
+            className="rounded-lg border border-border bg-white p-8 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white">
+            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary text-white">
               <b.icon className="h-6 w-6" />
             </div>
             <h3 className="mt-6 text-lg font-semibold text-text-primary">{b.title}</h3>

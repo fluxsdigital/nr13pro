@@ -22,7 +22,7 @@ export function Differentials() {
       title="Tradicional vs. NR-13 Pro"
       subtitle="Compare o processo manual que você conhece com o que nossa plataforma entrega."
     >
-      <div className="mt-10 overflow-hidden rounded-2xl border border-border bg-white">
+      <div className="mt-10 overflow-hidden rounded-lg border border-border bg-white">
         <div className="grid grid-cols-3 bg-card-hover border-b border-border">
           <div className="p-4 text-sm font-semibold text-text-primary">Processo</div>
           <div className="p-4 text-sm font-semibold text-danger flex items-center gap-2">

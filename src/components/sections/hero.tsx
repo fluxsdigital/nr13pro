@@ -116,7 +116,7 @@ export function Hero() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
                   href="/checkout"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                  className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12"/>

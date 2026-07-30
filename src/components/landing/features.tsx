@@ -69,7 +69,7 @@ export function Features() {
           <motion.div
             key={f.title}
             variants={reduced ? undefined : cardVariant}
-            className="rounded-xl border border-border bg-white p-5 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
+            className="rounded-lg border border-border bg-white p-5 transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-subtle">
               <f.icon className="h-[18px] w-[18px] text-primary" />

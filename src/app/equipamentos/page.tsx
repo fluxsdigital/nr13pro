@@ -170,7 +170,7 @@ export default function Equipamentos() {
                           <div className="w-9 h-9 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center shrink-0">
                             <FlaskConical className="h-5 w-5 text-primary" />
                           </div>
-                          <div className="min-w-0">
+                          <div className="min-w-0 overflow-hidden line-clamp-4">
                             <div className="flex items-center gap-2 flex-wrap">
                               <p className="text-sm font-semibold text-text-primary">{eq.tag}</p>
                               <Badge variant="outline" className="border-border text-text-secondary capitalize text-xs">{eq.tipo}</Badge>

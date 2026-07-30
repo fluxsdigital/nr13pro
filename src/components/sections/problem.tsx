@@ -106,7 +106,7 @@ function PhoneApp() {
           </div>
 
           <div className="flex-1 px-3 space-y-1.5 overflow-hidden">
-            <div className="bg-[#C56A2D] rounded-xl p-2.5 text-white shadow-sm">
+            <div className="bg-[#C56A2D] rounded-md p-2.5 text-white shadow-sm">
               <div className="text-[7px] opacity-80">Próxima inspeção</div>
               <div className="text-[13px] font-bold tracking-tight">V-101</div>
               <div className="flex items-center justify-between mt-0.5">
@@ -129,7 +129,7 @@ function PhoneApp() {
               ))}
             </div>
 
-            <div className="bg-white rounded-xl p-2 shadow-[0_1px_3px_rgba(23,23,23,0.06)]">
+            <div className="bg-white rounded-md p-2 shadow-[0_1px_3px_rgba(23,23,23,0.06)]">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-[7px] font-semibold text-[#171717]">Últimas Inspeções</span>
                 <span className="text-[6px] text-[#C56A2D] font-medium">Ver tudo →</span>
@@ -155,7 +155,7 @@ function PhoneApp() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-2 shadow-[0_1px_3px_rgba(23,23,23,0.06)]">
+            <div className="bg-white rounded-md p-2 shadow-[0_1px_3px_rgba(23,23,23,0.06)]">
               <div className="flex items-center gap-1.5 mb-1">
                 <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#C56A2D" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                 <span className="text-[7px] font-semibold text-[#171717]]">Inspeções por Mês</span>

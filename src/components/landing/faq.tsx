@@ -61,7 +61,7 @@ export function FAQ() {
       subtitle="Tire suas principais dúvidas sobre o NR-13 Pro."
     >
       <div className="mt-10 mx-auto max-w-3xl">
-        <div className="divide-y divide-border rounded-2xl border border-border bg-white">
+        <div className="divide-y divide-border rounded-lg border border-border bg-white">
           {faqs.map((faq, i) => (
             <motion.div
               key={i}

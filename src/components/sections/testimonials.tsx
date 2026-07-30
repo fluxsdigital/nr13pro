@@ -49,7 +49,7 @@ export function Testimonials() {
         whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="max-w-lg mx-auto bg-white border border-[#EDE9E3] rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(23,23,23,0.08)]"
+        className="max-w-lg mx-auto bg-white border border-[#EDE9E3] rounded-md overflow-hidden shadow-[0_4px_20px_rgba(23,23,23,0.08)]"
       >
         <div className="flex items-center gap-1 px-4 pt-3 pb-2 bg-[#F7F5F2] border-b border-[#EDE9E3]">
           <div className="flex gap-1">

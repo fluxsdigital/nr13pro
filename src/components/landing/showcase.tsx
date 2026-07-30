@@ -45,14 +45,14 @@ export function Showcase() {
           <motion.div
             key={device.label}
             variants={reduced ? undefined : cardVariant}
-            className="rounded-2xl border border-border bg-white p-6 text-center transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
+            className="rounded-lg border border-border bg-white p-6 text-center transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5"
           >
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary-subtle">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-md bg-primary-subtle">
               <device.icon className="h-6 w-6 text-primary" />
             </div>
             <h3 className="mt-4 text-base font-semibold text-text-primary">{device.label}</h3>
             <p className="text-sm text-text-secondary">{device.desc}</p>
-            <div className="mt-6 rounded-xl border border-border bg-card-hover p-4">
+            <div className="mt-6 rounded-md border border-border bg-card-hover p-4">
               <div className="rounded-lg border border-border bg-white">
                 <div className="flex items-center gap-1 border-b border-border px-3 py-2">
                   <div className="h-2 w-2 rounded-full bg-danger/50" />

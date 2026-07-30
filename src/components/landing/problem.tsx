@@ -33,7 +33,7 @@ export function Problem() {
           whileInView={reduced ? undefined : { x: 0, opacity: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
-          className="rounded-2xl border border-border bg-white p-6 sm:p-8"
+          className="rounded-lg border border-border bg-white p-6 sm:p-8"
         >
           <span className="inline-block rounded-full bg-text-muted/10 px-3 py-1 text-xs font-semibold text-text-muted">
             Processo Tradicional
@@ -55,7 +55,7 @@ export function Problem() {
           whileInView={reduced ? undefined : { x: 0, opacity: 1 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] as const }}
-          className="rounded-2xl border border-primary/30 bg-primary-subtle p-6 sm:p-8"
+          className="rounded-lg border border-primary/30 bg-primary-subtle p-6 sm:p-8"
         >
           <div className="flex items-center justify-between mb-4">
             <span className="inline-block rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white">

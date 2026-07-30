@@ -62,7 +62,7 @@ export function Navbar() {
           <div className="hidden md:block">
             <a
               href="/checkout"
-              className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm"
+              className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm"
             >
               Assinar Agora
             </a>
@@ -112,7 +112,7 @@ export function Navbar() {
               ))}
               <a
                 href="/checkout"
-                className="inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-colors duration-200 cursor-pointer w-full px-4 py-2.5 text-sm bg-primary text-white hover:bg-primary-hover shadow-sm mt-2"
+                className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer w-full px-4 py-2.5 text-sm bg-primary text-white hover:bg-primary-hover shadow-sm mt-2"
               >
                 Assinar Agora
               </a>

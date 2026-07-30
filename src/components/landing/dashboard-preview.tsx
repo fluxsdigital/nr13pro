@@ -55,7 +55,7 @@ function KpiCard({
     <div
       ref={ref}
       className={cn(
-        "rounded-xl border border-border bg-white p-5 transition-all duration-500 hover:shadow-card-hover",
+        "rounded-lg border border-border bg-white p-5 transition-all duration-500 hover:shadow-card-hover",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       )}
       style={{ transitionDelay: `${index * 80}ms` }}
@@ -76,7 +76,7 @@ function ChartPreview() {
     <div
       ref={ref}
       className={cn(
-        "rounded-xl border border-border bg-white p-6 transition-all duration-700",
+        "rounded-md border border-border bg-white p-6 transition-all duration-700",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       )}
     >
@@ -116,7 +116,7 @@ function AlertsPreview() {
     <div
       ref={ref}
       className={cn(
-        "rounded-xl border border-border bg-white p-6 transition-all duration-700",
+        "rounded-md border border-border bg-white p-6 transition-all duration-700",
         isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       )}
     >

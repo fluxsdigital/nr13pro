@@ -122,7 +122,7 @@ export default function Laudos() {
                       <div className="w-9 h-9 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center shrink-0">
                         <FileText className="h-4 w-4 text-primary" />
                       </div>
-                      <div className="min-w-0">
+                      <div className="min-w-0 overflow-hidden line-clamp-4">
                         <div className="flex items-center gap-2 flex-wrap">
                           <p className="text-sm font-semibold text-text-primary">{l.numeroLaudo}</p>
                           <Badge variant="outline" className="text-xs border-border text-text-secondary font-mono">{l.eq?.tag}</Badge>

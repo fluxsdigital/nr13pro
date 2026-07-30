@@ -55,7 +55,7 @@ export function HowItWorks() {
               className="flex flex-col md:flex-row gap-6 md:gap-8 pb-8 md:pb-12 last:pb-0"
             >
               <div className="relative flex items-center justify-center md:justify-start">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white shadow-sm relative z-10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary text-white shadow-sm relative z-10">
                   <step.icon className="h-5 w-5" />
                 </div>
                 <span className="md:hidden ml-4 text-sm font-semibold text-text-primary">
