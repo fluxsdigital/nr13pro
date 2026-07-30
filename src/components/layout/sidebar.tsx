@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   LayoutDashboard,
@@ -13,9 +13,20 @@ import {
   TrendingUp,
   ChevronLeft,
   ChevronRight,
+  User,
+  Settings2,
+  Sun,
+  Moon,
+  LogOut,
+  ChevronDown,
+  Bell,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "@/lib/sidebar-context"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+
+type Theme = "light" | "dark"
 
 const links = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -25,6 +36,12 @@ const links = [
   { href: "/laudos", label: "Laudos Técnicos", icon: FileText },
   { href: "/economia", label: "Economia", icon: TrendingUp },
 ]
+
+const USER = {
+  name: "Carlos Eduardo Mendes",
+  crea: "CREA-SP • 123.456",
+  role: "Engenharia",
+}
 
 function NavItems({ collapsed = false }: { collapsed?: boolean }) {
   const pathname = usePathname()
@@ -58,6 +75,109 @@ function NavItems({ collapsed = false }: { collapsed?: boolean }) {
   )
 }
 
+function ThemeToggle() {
+  const [theme, setTheme] = useState<Theme>("light")
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as Theme | null
+    if (saved) {
+      setTheme(saved)
+      document.documentElement.setAttribute("data-theme", saved)
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark")
+      document.documentElement.setAttribute("data-theme", "dark")
+    }
+  }, [])
+
+  const toggle = () => {
+    const next = theme === "dark" ? "light" : "dark"
+    setTheme(next)
+    document.documentElement.setAttribute("data-theme", next)
+    localStorage.setItem("theme", next)
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-150 w-full"
+    >
+      {theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+      {theme === "dark" ? "Modo Claro" : "Modo Escuro"}
+    </button>
+  )
+}
+
+function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
+  const initials = USER.name.split(" ").map((n) => n[0]).join("").slice(0, 2)
+
+  if (collapsed) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <button className="w-full flex justify-center py-2 rounded-lg text-sidebar-foreground/40 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-200">
+            <Avatar className="h-7 w-7">
+              <AvatarFallback className="bg-primary/20 text-primary text-xs">{initials}</AvatarFallback>
+            </Avatar>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="right" align="start" className="w-56">
+          <div className="px-2 py-1.5">
+            <p className="text-sm font-medium text-sidebar-foreground">{USER.name}</p>
+            <p className="text-[11px] text-sidebar-foreground-muted">{USER.crea}</p>
+          </div>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer">
+            <User className="mr-2 h-4 w-4" /> Perfil
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Settings2 className="mr-2 h-4 w-4" /> Configurações
+          </DropdownMenuItem>
+          <ThemeToggle />
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer text-danger focus:text-danger">
+            <LogOut className="mr-2 h-4 w-4" /> Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+
+  return (
+    <DropdownMenu>
+        <DropdownMenuTrigger>
+          <button className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-150 group">
+            <Avatar className="h-7 w-7 shrink-0">
+              <AvatarFallback className="bg-primary/20 text-primary text-xs">{initials}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 text-left min-w-0">
+              <p className="text-xs font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">{USER.name}</p>
+              <p className="text-[10px] text-sidebar-foreground-muted">{USER.crea}</p>
+            </div>
+            <ChevronDown className="h-3 w-3 shrink-0 text-sidebar-foreground-muted transition-transform group-data-[state=open]:rotate-180" />
+          </button>
+        </DropdownMenuTrigger>
+      <DropdownMenuContent side="top" align="start" className="w-56" sideOffset={4}>
+        <div className="px-2 py-1.5">
+          <p className="text-sm font-medium text-sidebar-foreground">{USER.name}</p>
+          <p className="text-[11px] text-sidebar-foreground-muted">{USER.crea}</p>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer">
+          <User className="mr-2 h-4 w-4" /> Perfil
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Settings2 className="mr-2 h-4 w-4" /> Configurações
+        </DropdownMenuItem>
+        <ThemeToggle />
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer" variant="destructive">
+          <LogOut className="mr-2 h-4 w-4" /> Sair
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
   const { toggle } = useSidebar()
   return (
@@ -83,7 +203,8 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
         )}
         <NavItems collapsed={collapsed} />
       </nav>
-      <div className={cn("border-t border-sidebar-border", collapsed ? "p-2" : "p-4")}>
+      <div className={cn("border-t border-sidebar-border", collapsed ? "p-2" : "p-3 space-y-1")}>
+        <UserProfile collapsed={collapsed} />
         {collapsed ? (
           <button
             onClick={toggle}
@@ -93,10 +214,9 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
             <ChevronRight className="h-4 w-4" />
           </button>
         ) : (
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-[11px] text-sidebar-foreground/30 leading-relaxed">
-              NR-13 • Portaria MTb nº 1.846/22<br />
-              Conformidade de Equipamentos
+          <div className="flex items-center justify-between gap-2 px-1">
+            <p className="text-[10px] text-sidebar-foreground/30 leading-relaxed">
+              NR-13 • Portaria MTb nº 1.846/22
             </p>
             <button
               onClick={toggle}
@@ -118,37 +238,42 @@ export function Sidebar() {
 
   return (
     <>
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-divider">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-lg border-b border-divider">
         <div className="flex items-center justify-between h-14 px-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#171717] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/>
                 <path d="M12 8v8M8 12h8"/>
               </svg>
             </div>
-            <span className="font-semibold text-sm text-[#171717]">NR-13 Pro</span>
+            <span className="font-semibold text-sm text-foreground">NR-13 Pro</span>
           </Link>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu"
-            className="w-8 h-8 flex items-center justify-center text-[#676767]"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-              {mobileOpen ? (
-                <>
-                  <path d="M18 6L6 18" />
-                  <path d="M6 6l12 12" />
-                </>
-              ) : (
-                <>
-                  <path d="M4 6h16" />
-                  <path d="M4 12h16" />
-                  <path d="M4 18h16" />
-                </>
-              )}
-            </svg>
-          </button>
+          <div className="flex items-center gap-2">
+            <button className="w-8 h-8 flex items-center justify-center text-foreground/50 hover:text-foreground" aria-label="Notificações">
+              <Bell className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Menu"
+              className="w-8 h-8 flex items-center justify-center text-foreground/50 hover:text-foreground"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                {mobileOpen ? (
+                  <>
+                    <path d="M18 6L6 18" />
+                    <path d="M6 6l12 12" />
+                  </>
+                ) : (
+                  <>
+                    <path d="M4 6h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 18h16" />
+                  </>
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -159,8 +284,19 @@ export function Sidebar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed top-14 left-0 right-0 z-40 bg-sidebar text-sidebar-foreground border-b border-sidebar-border overflow-hidden shadow-lg"
+            className="md:hidden fixed top-14 left-0 right-0 z-40 bg-surface text-foreground border-b border-divider overflow-hidden shadow-lg"
           >
+            <div className="p-3 border-b border-divider">
+              <div className="flex items-center gap-2.5">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-primary/20 text-primary text-xs">{USER.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-xs font-medium text-foreground">{USER.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{USER.crea}</p>
+                </div>
+              </div>
+            </div>
             <nav className="p-3 space-y-0.5">
               <NavItems />
             </nav>
