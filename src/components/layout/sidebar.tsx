@@ -76,14 +76,14 @@ function NavItems({ collapsed = false }: { collapsed?: boolean }) {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light")
+  const [theme, setTheme] = useState<Theme>("dark")
 
   useEffect(() => {
     const saved = localStorage.getItem("theme") as Theme | null
     if (saved) {
       setTheme(saved)
       document.documentElement.setAttribute("data-theme", saved)
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    } else {
       setTheme("dark")
       document.documentElement.setAttribute("data-theme", "dark")
     }
