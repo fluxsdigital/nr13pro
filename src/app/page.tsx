@@ -83,8 +83,8 @@ export default function Dashboard() {
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-text-secondary">Equipamentos</CardTitle>
-                <div className="w-8 h-8 rounded-lg bg-violet-50 border border-violet-100 flex items-center justify-center">
-                  <FlaskConical className="h-4 w-4 text-violet-600" />
+                <div className="w-8 h-8 rounded-lg bg-primary-subtle border border-primary/20 flex items-center justify-center">
+                  <FlaskConical className="h-4 w-4 text-primary" />
                 </div>
               </CardHeader>
               <CardContent>
@@ -122,8 +122,8 @@ export default function Dashboard() {
             <Card className="card-kpi">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-text-secondary">Pendentes</CardTitle>
-                <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center">
-                  <AlertTriangle className="h-4 w-4 text-red-600" />
+                <div className="w-8 h-8 rounded-lg bg-danger-subtle border border-danger/20 flex items-center justify-center">
+                  <AlertTriangle className="h-4 w-4 text-danger" />
                 </div>
               </CardHeader>
               <CardContent>
