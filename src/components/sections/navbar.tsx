@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Container } from "@/components/ui/container"
 import { useReducedMotion } from "./motion-provider"
+import { authService } from "@/lib/services/auth-service"
+import type { User } from "@/lib/types"
 
 const links = [
   { label: "Funcionalidades", href: "#funcionalidades" },
@@ -13,12 +15,24 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
   const { prefersReducedMotion } = useReducedMotion()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  useEffect(() => {
+    const check = () => {
+      const session = authService.getSession()
+      setUser(session?.user ?? null)
+    }
+    check()
+    // Re-check when localStorage changes (e.g., login in another tab)
+    window.addEventListener("storage", check)
+    return () => window.removeEventListener("storage", check)
   }, [])
 
   const scrollTo = (id: string) => {
@@ -59,13 +73,38 @@ export function Navbar() {
             ))}
           </div>
 
-          <div className="hidden md:block">
-            <a
-              href="/checkout"
-              className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm"
-            >
-              Assinar Agora
-            </a>
+          <div className="hidden md:flex items-center gap-3">
+            {user ? (
+              <>
+                <a
+                  href="/"
+                  className="text-sm text-[#676767] hover:text-[#171717] transition-colors font-medium"
+                >
+                  Dashboard
+                </a>
+                <a
+                  href="/"
+                  className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm"
+                >
+                  {user.plan ? "Acessar Plataforma" : "Dashboard"}
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  className="text-sm text-[#676767] hover:text-[#171717] transition-colors font-medium"
+                >
+                  Entrar
+                </a>
+                <a
+                  href="/checkout"
+                  className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer px-4 py-2 text-sm bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm"
+                >
+                  Assinar Agora
+                </a>
+              </>
+            )}
           </div>
 
           <button
@@ -110,12 +149,31 @@ export function Navbar() {
                   {link.label}
                 </button>
               ))}
-              <a
-                href="/checkout"
-                className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer w-full px-4 py-2.5 text-sm bg-primary text-white hover:bg-primary-hover shadow-sm mt-2"
-              >
-                Assinar Agora
-              </a>
+              <div className="border-t border-[#EDE9E3] pt-3 mt-1">
+                {user ? (
+                  <a
+                    href="/"
+                    className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer w-full px-4 py-2.5 text-sm bg-primary text-white hover:bg-primary-hover shadow-sm"
+                  >
+                    Acessar Plataforma
+                  </a>
+                ) : (
+                  <>
+                    <a
+                      href="/login"
+                      className="block text-sm text-[#676767] hover:text-[#171717] py-2 transition-colors"
+                    >
+                      Entrar
+                    </a>
+                    <a
+                      href="/checkout"
+                      className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer w-full px-4 py-2.5 text-sm bg-primary text-white hover:bg-primary-hover shadow-sm mt-2"
+                    >
+                      Assinar Agora
+                    </a>
+                  </>
+                )}
+              </div>
             </Container>
           </motion.div>
         )}

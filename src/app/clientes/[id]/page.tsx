@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 import { clienteService, equipamentoService } from "@/lib/services"
 import type { Cliente, Equipamento } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +12,7 @@ import { Building2, Phone, Mail, MapPin, FileText, Pencil, Plus } from "lucide-r
 import Link from "next/link"
 
 export default function ClienteDetalhe() {
+  const { user } = useAuth()
   const params = useParams()
   const [cliente, setCliente] = useState<Cliente | null>(null)
   const [equipamentos, setEquipamentos] = useState<Equipamento[]>([])
@@ -18,8 +20,8 @@ export default function ClienteDetalhe() {
   useEffect(() => {
     const id = params.id as string
     clienteService.getById(id).then((c) => setCliente(c ?? null))
-    equipamentoService.list({ clienteId: id }).then(setEquipamentos)
-  }, [params.id])
+    equipamentoService.list({ clienteId: id, userId: user?.id }).then(setEquipamentos)
+  }, [params.id, user?.id])
 
   if (!cliente) return <div className="p-4 sm:p-8 text-text-secondary">Carregando...</div>
 

@@ -4,36 +4,37 @@ import type {
 } from "./types"
 
 export const CHECKS_PADRAO: ChecklistItem[] = [
-  { secao: "Identificação", item: "Placa de identificação indelével", ok: true, observacao: "" },
-  { secao: "Identificação", item: "Adesivo auxiliar com categoria NR-13", ok: true, observacao: "" },
-  { secao: "Identificação", item: "Número de série confere com documentação", ok: true, observacao: "" },
-  { secao: "Documentação", item: "Prontuário do vaso disponível", ok: true, observacao: "" },
-  { secao: "Documentação", item: "Relatório de inspeção anterior", ok: true, observacao: "" },
-  { secao: "Documentação", item: "Certificados de calibração válidos", ok: true, observacao: "" },
-  { secao: "Instalação", item: "Ambiente limpo e sem obstruções", ok: true, observacao: "" },
-  { secao: "Instalação", item: "Saídas de emergência desobstruídas", ok: true, observacao: "" },
-  { secao: "Instalação", item: "Ventilação adequada", ok: true, observacao: "" },
-  { secao: "Exame Externo", item: "Fundações e estruturas íntegras", ok: true, observacao: "" },
-  { secao: "Exame Externo", item: "Pintura e revestimento em bom estado", ok: true, observacao: "" },
-  { secao: "Exame Externo", item: "Aterramento elétrico adequado", ok: true, observacao: "" },
-  { secao: "Exame Externo", item: "Sem corrosão externa significativa", ok: true, observacao: "" },
-  { secao: "Exame Externo", item: "Suportes e fixações sem deformações", ok: true, observacao: "" },
-  { secao: "Equipamentos", item: "Manômetros com faixa adequada", ok: true, observacao: "" },
-  { secao: "Equipamentos", item: "Válvula de segurança com lacre intacto", ok: true, observacao: "" },
-  { secao: "Equipamentos", item: "Visor de nível sem vazamentos", ok: true, observacao: "" },
-  { secao: "Segurança", item: "Procedimentos operacionais disponíveis", ok: true, observacao: "" },
-  { secao: "Segurança", item: "EPIs disponíveis", ok: true, observacao: "" },
-  { secao: "Segurança", item: "Válvulas de bloqueio em bom estado", ok: true, observacao: "" },
-  { secao: "Exame Interno", item: "Acesso interno seguro", ok: null, observacao: "Não verificado" },
-  { secao: "Exame Interno", item: "Sem trincas ou deformações internas", ok: null, observacao: "Não verificado" },
-  { secao: "Exame Interno", item: "Sem corrosão interna significativa", ok: null, observacao: "Não verificado" },
-  { secao: "Teste Hidrostático", item: "Pressão de teste conforme calculada", ok: null, observacao: "N/A" },
-  { secao: "Teste Hidrostático", item: "Sem vazamentos durante o teste", ok: null, observacao: "N/A" },
+  { id: "ck_item_1", secao: "Identificação", item: "Placa de identificação indelével", ok: true, observacao: "" },
+  { id: "ck_item_2", secao: "Identificação", item: "Adesivo auxiliar com categoria NR-13", ok: true, observacao: "" },
+  { id: "ck_item_3", secao: "Identificação", item: "Número de série confere com documentação", ok: true, observacao: "" },
+  { id: "ck_item_4", secao: "Documentação", item: "Prontuário do vaso disponível", ok: true, observacao: "" },
+  { id: "ck_item_5", secao: "Documentação", item: "Relatório de inspeção anterior", ok: true, observacao: "" },
+  { id: "ck_item_6", secao: "Documentação", item: "Certificados de calibração válidos", ok: true, observacao: "" },
+  { id: "ck_item_7", secao: "Instalação", item: "Ambiente limpo e sem obstruções", ok: true, observacao: "" },
+  { id: "ck_item_8", secao: "Instalação", item: "Saídas de emergência desobstruídas", ok: true, observacao: "" },
+  { id: "ck_item_9", secao: "Instalação", item: "Ventilação adequada", ok: true, observacao: "" },
+  { id: "ck_item_10", secao: "Exame Externo", item: "Fundações e estruturas íntegras", ok: true, observacao: "" },
+  { id: "ck_item_11", secao: "Exame Externo", item: "Pintura e revestimento em bom estado", ok: true, observacao: "" },
+  { id: "ck_item_12", secao: "Exame Externo", item: "Aterramento elétrico adequado", ok: true, observacao: "" },
+  { id: "ck_item_13", secao: "Exame Externo", item: "Sem corrosão externa significativa", ok: true, observacao: "" },
+  { id: "ck_item_14", secao: "Exame Externo", item: "Suportes e fixações sem deformações", ok: true, observacao: "" },
+  { id: "ck_item_15", secao: "Equipamentos", item: "Manômetros com faixa adequada", ok: true, observacao: "" },
+  { id: "ck_item_16", secao: "Equipamentos", item: "Válvula de segurança com lacre intacto", ok: true, observacao: "" },
+  { id: "ck_item_17", secao: "Equipamentos", item: "Visor de nível sem vazamentos", ok: true, observacao: "" },
+  { id: "ck_item_18", secao: "Segurança", item: "Procedimentos operacionais disponíveis", ok: true, observacao: "" },
+  { id: "ck_item_19", secao: "Segurança", item: "EPIs disponíveis", ok: true, observacao: "" },
+  { id: "ck_item_20", secao: "Segurança", item: "Válvulas de bloqueio em bom estado", ok: true, observacao: "" },
+  { id: "ck_item_21", secao: "Exame Interno", item: "Acesso interno seguro", ok: null, observacao: "Não verificado" },
+  { id: "ck_item_22", secao: "Exame Interno", item: "Sem trincas ou deformações internas", ok: null, observacao: "Não verificado" },
+  { id: "ck_item_23", secao: "Exame Interno", item: "Sem corrosão interna significativa", ok: null, observacao: "Não verificado" },
+  { id: "ck_item_24", secao: "Teste Hidrostático", item: "Pressão de teste conforme calculada", ok: null, observacao: "N/A" },
+  { id: "ck_item_25", secao: "Teste Hidrostático", item: "Sem vazamentos durante o teste", ok: null, observacao: "N/A" },
 ]
 
 export const seedClientes: Cliente[] = [
   {
     id: "c1",
+    userId: "user_demo_001",
     nome: "PetroVale Indústria Ltda.",
     cnpj: "12.345.678/0001-90",
     contato: "João Oliveira",
@@ -44,6 +45,7 @@ export const seedClientes: Cliente[] = [
   },
   {
     id: "c2",
+    userId: "user_demo_001",
     nome: "Química Nacional S.A.",
     cnpj: "98.765.432/0001-10",
     contato: "Maria Souza",
@@ -54,6 +56,7 @@ export const seedClientes: Cliente[] = [
   },
   {
     id: "c3",
+    userId: "user_demo_001",
     nome: "Aços Forte Metalurgia",
     cnpj: "55.123.456/0001-88",
     contato: "Carlos Silva",
@@ -64,6 +67,7 @@ export const seedClientes: Cliente[] = [
   },
   {
     id: "c4",
+    userId: "user_demo_001",
     nome: "Alimentos Santa Clara Ltda.",
     cnpj: "45.678.901/0001-23",
     contato: "Ana Rodrigues",
@@ -74,6 +78,7 @@ export const seedClientes: Cliente[] = [
   },
   {
     id: "c5",
+    userId: "user_demo_001",
     nome: "Cervejaria do Vale S.A.",
     cnpj: "78.901.234/0001-56",
     contato: "Pedro Henrique Martins",
@@ -84,6 +89,7 @@ export const seedClientes: Cliente[] = [
   },
   {
     id: "c6",
+    userId: "user_demo_001",
     nome: "Usina de Açúcar DoceRio",
     cnpj: "34.567.890/0001-78",
     contato: "Fernando Costa",
@@ -98,6 +104,7 @@ export const seedEquipamentos: Equipamento[] = [
   // ── PetroVale Indústria (c1) - 4 equipamentos ──
   {
     id: "eq1",
+    userId: "user_demo_001",
     clienteId: "c1",
     tag: "V-101",
     descricao: "Reservatório de Ar Comprimido",
@@ -125,6 +132,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq2",
+    userId: "user_demo_001",
     clienteId: "c1",
     tag: "V-102",
     descricao: "Separador de Gás Natural",
@@ -152,6 +160,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq6",
+    userId: "user_demo_001",
     clienteId: "c1",
     tag: "V-105",
     descricao: "Filtro de Gás Natural",
@@ -179,6 +188,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq7",
+    userId: "user_demo_001",
     clienteId: "c1",
     tag: "CAL-101",
     descricao: "Caldeira de Recuperação",
@@ -208,6 +218,7 @@ export const seedEquipamentos: Equipamento[] = [
   // ── Química Nacional (c2) - 4 equipamentos ──
   {
     id: "eq3",
+    userId: "user_demo_001",
     clienteId: "c2",
     tag: "V-103",
     descricao: "Tanque de Óleo Térmico",
@@ -235,6 +246,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq4",
+    userId: "user_demo_001",
     clienteId: "c2",
     tag: "CAL-201",
     descricao: "Caldeira Flamotubular",
@@ -262,6 +274,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq8",
+    userId: "user_demo_001",
     clienteId: "c2",
     tag: "R-201",
     descricao: "Reator Químico de Síntese",
@@ -289,6 +302,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq9",
+    userId: "user_demo_001",
     clienteId: "c2",
     tag: "T-201",
     descricao: "Tanque Pulmão de Ácido",
@@ -318,6 +332,7 @@ export const seedEquipamentos: Equipamento[] = [
   // ── Aços Forte (c3) - 3 equipamentos ──
   {
     id: "eq5",
+    userId: "user_demo_001",
     clienteId: "c3",
     tag: "V-104",
     descricao: "Autoclave Industrial",
@@ -345,6 +360,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq10",
+    userId: "user_demo_001",
     clienteId: "c3",
     tag: "CAL-301",
     descricao: "Caldeira Aquatubular",
@@ -372,6 +388,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq11",
+    userId: "user_demo_001",
     clienteId: "c3",
     tag: "V-301",
     descricao: "Acumulador de Condensado",
@@ -401,6 +418,7 @@ export const seedEquipamentos: Equipamento[] = [
   // ── Alimentos Santa Clara (c4) - 3 equipamentos ──
   {
     id: "eq12",
+    userId: "user_demo_001",
     clienteId: "c4",
     tag: "CAL-401",
     descricao: "Caldeira Mista",
@@ -428,6 +446,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq13",
+    userId: "user_demo_001",
     clienteId: "c4",
     tag: "V-401",
     descricao: "Resfriador de Mosto",
@@ -455,6 +474,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq14",
+    userId: "user_demo_001",
     clienteId: "c4",
     tag: "T-401",
     descricao: "Tanque de Armazenamento de Óleo Vegetal",
@@ -484,6 +504,7 @@ export const seedEquipamentos: Equipamento[] = [
   // ── Cervejaria do Vale (c5) - 3 equipamentos ──
   {
     id: "eq15",
+    userId: "user_demo_001",
     clienteId: "c5",
     tag: "CAL-501",
     descricao: "Caldeira Flamotubular",
@@ -511,6 +532,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq16",
+    userId: "user_demo_001",
     clienteId: "c5",
     tag: "V-501",
     descricao: "Tanque de Maturação Pressurizado",
@@ -538,6 +560,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq17",
+    userId: "user_demo_001",
     clienteId: "c5",
     tag: "V-502",
     descricao: "Filtro de Cerveja",
@@ -567,6 +590,7 @@ export const seedEquipamentos: Equipamento[] = [
   // ── Usina DoceRio (c6) - 3 equipamentos ──
   {
     id: "eq18",
+    userId: "user_demo_001",
     clienteId: "c6",
     tag: "CAL-601",
     descricao: "Caldeira de Bagaço de Cana",
@@ -594,6 +618,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq19",
+    userId: "user_demo_001",
     clienteId: "c6",
     tag: "T-601",
     descricao: "Tanque de Mel Final",
@@ -621,6 +646,7 @@ export const seedEquipamentos: Equipamento[] = [
   },
   {
     id: "eq20",
+    userId: "user_demo_001",
     clienteId: "c6",
     tag: "V-601",
     descricao: "Separador de Álcool",
@@ -801,67 +827,67 @@ export const seedDispositivos: Record<string, DispositivoSeguranca[]> = {
 // ── Inspeções ──
 export const seedInspecoes: Inspecao[] = [
   // PetroVale
-  { id: "i1", equipamentoId: "eq1", tipo: "periodica", dataInicio: "2026-06-10", dataTermino: "2026-06-15", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i1", userId: "user_demo_001", equipamentoId: "eq1", tipo: "periodica", dataInicio: "2026-06-10", dataTermino: "2026-06-15", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i1"], anomalias: seedAnomalias["i1"], dispositivosSeguranca: seedDispositivos["i1"], parecer: "Equipamento apto para operação. Realizar inspeção externa em 2027 e interna em 2029.", concluida: true, laudoId: "l1" },
-  { id: "i2", equipamentoId: "eq2", tipo: "periodica", dataInicio: "2026-07-01", dataTermino: "2026-07-05", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
+  { id: "i2", userId: "user_demo_001", equipamentoId: "eq2", tipo: "periodica", dataInicio: "2026-07-01", dataTermino: "2026-07-05", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i2"], anomalias: seedAnomalias["i2"], dispositivosSeguranca: seedDispositivos["i2"], parecer: "Equipamento apto. Próxima inspeção externa em 2029 (SPIE).", concluida: true, laudoId: "l2" },
-  { id: "i9", equipamentoId: "eq2", tipo: "extraordinaria", dataInicio: "2026-07-06", dataTermino: "2026-07-07", examesExternos: true, examesInternos: false, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
+  { id: "i9", userId: "user_demo_001", equipamentoId: "eq2", tipo: "extraordinaria", dataInicio: "2026-07-06", dataTermino: "2026-07-07", examesExternos: true, examesInternos: false, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: [], anomalias: [], dispositivosSeguranca: [], parecer: "Inspeção extraordinária após reparo na válvula de alívio. Equipamento apto.", concluida: true, laudoId: null },
 
   // Química Nacional
-  { id: "i3", equipamentoId: "eq4", tipo: "periodica", dataInicio: "2026-08-20", dataTermino: "2026-08-22", examesExternos: true, examesInternos: false, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i3", userId: "user_demo_001", equipamentoId: "eq4", tipo: "periodica", dataInicio: "2026-08-20", dataTermino: "2026-08-22", examesExternos: true, examesInternos: false, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i3"], anomalias: seedAnomalias["i3"], dispositivosSeguranca: seedDispositivos["i3"], parecer: "Caldeira apta. Próxima inspeção interna em 12 meses.", concluida: true, laudoId: "l3" },
-  { id: "i4", equipamentoId: "eq3", tipo: "periodica", dataInicio: "2026-09-01", dataTermino: "", examesExternos: true, examesInternos: true, testeHidrostatico: true, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i4", userId: "user_demo_001", equipamentoId: "eq3", tipo: "periodica", dataInicio: "2026-09-01", dataTermino: "", examesExternos: true, examesInternos: true, testeHidrostatico: true, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i4"], anomalias: seedAnomalias["i4"], dispositivosSeguranca: seedDispositivos["i4"], parecer: "", concluida: false, laudoId: null },
-  { id: "i5", equipamentoId: "eq8", tipo: "periodica", dataInicio: "2026-09-08", dataTermino: "2026-09-10", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
+  { id: "i5", userId: "user_demo_001", equipamentoId: "eq8", tipo: "periodica", dataInicio: "2026-09-08", dataTermino: "2026-09-10", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i5"], anomalias: seedAnomalias["i5"], dispositivosSeguranca: seedDispositivos["i5"], parecer: "Equipamento apto. Classe A - Sigilo de inspeção conforme NR-13.", concluida: true, laudoId: "l4" },
 
   // Aços Forte
-  { id: "i6", equipamentoId: "eq10", tipo: "vida_remanescente", dataInicio: "2026-09-15", dataTermino: "", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i6", userId: "user_demo_001", equipamentoId: "eq10", tipo: "vida_remanescente", dataInicio: "2026-09-15", dataTermino: "", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i6"], anomalias: seedAnomalias["i6"], dispositivosSeguranca: seedDispositivos["i6"], parecer: "", concluida: false, laudoId: null },
 
   // Alimentos Santa Clara
-  { id: "i7", equipamentoId: "eq12", tipo: "inicial", dataInicio: "2026-09-28", dataTermino: "2026-10-01", examesExternos: true, examesInternos: true, testeHidrostatico: true, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i7", userId: "user_demo_001", equipamentoId: "eq12", tipo: "inicial", dataInicio: "2026-09-28", dataTermino: "2026-10-01", examesExternos: true, examesInternos: true, testeHidrostatico: true, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i7"], anomalias: seedAnomalias["i7"], dispositivosSeguranca: seedDispositivos["i7"], parecer: "Equipamento novo - apto para operação. Próxima inspeção interna em 24 meses.", concluida: true, laudoId: "l5" },
 
   // Cervejaria do Vale
-  { id: "i8", equipamentoId: "eq15", tipo: "periodica", dataInicio: "2026-10-10", dataTermino: "", examesExternos: true, examesInternos: false, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i8", userId: "user_demo_001", equipamentoId: "eq15", tipo: "periodica", dataInicio: "2026-10-10", dataTermino: "", examesExternos: true, examesInternos: false, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i8"], anomalias: seedAnomalias["i8"], dispositivosSeguranca: seedDispositivos["i8"], parecer: "", concluida: false, laudoId: null },
-  { id: "i12", equipamentoId: "eq16", tipo: "periodica", dataInicio: "2026-11-03", dataTermino: "2026-11-05", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i12", userId: "user_demo_001", equipamentoId: "eq16", tipo: "periodica", dataInicio: "2026-11-03", dataTermino: "2026-11-05", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i12"], anomalias: seedAnomalias["i12"], dispositivosSeguranca: seedDispositivos["i12"], parecer: "Tanque de maturação apto. Inspeção externa em 2027, interna em 2029.", concluida: true, laudoId: "l7" },
 
   // Usina DoceRio
-  { id: "i10", equipamentoId: "eq20", tipo: "periodica", dataInicio: "2026-10-13", dataTermino: "2026-10-15", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
+  { id: "i10", userId: "user_demo_001", equipamentoId: "eq20", tipo: "periodica", dataInicio: "2026-10-13", dataTermino: "2026-10-15", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: true,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i10"], anomalias: seedAnomalias["i10"], dispositivosSeguranca: seedDispositivos["i10"], parecer: "Separador de álcool apto. Classe A - rigor normativo. Próxima externa em 2030 (SPIE).", concluida: true, laudoId: "l6" },
-  { id: "i11", equipamentoId: "eq18", tipo: "vida_remanescente", dataInicio: "2026-11-01", dataTermino: "", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i11", userId: "user_demo_001", equipamentoId: "eq18", tipo: "vida_remanescente", dataInicio: "2026-11-01", dataTermino: "", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i11"], anomalias: seedAnomalias["i11"], dispositivosSeguranca: seedDispositivos["i11"], parecer: "", concluida: false, laudoId: null },
 
   // Aços Forte
-  { id: "i13", equipamentoId: "eq11", tipo: "periodica", dataInicio: "2026-11-18", dataTermino: "2026-11-20", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
+  { id: "i13", userId: "user_demo_001", equipamentoId: "eq11", tipo: "periodica", dataInicio: "2026-11-18", dataTermino: "2026-11-20", examesExternos: true, examesInternos: true, testeHidrostatico: false, temSPIE: false,   checklist: CHECKS_PADRAO,
     parametrosUltrassom: { aparelho: "GE KRAUTKRAMER DMS2", transdutor: "TC560 / 5 MHz", velocidadeSonica: 5920, tecnica: "Pontual A-SCAN", blocoCalibracao: "5,00 / 25,00 mm" },
   medicoes: seedMedicoes["i13"], anomalias: seedAnomalias["i13"], dispositivosSeguranca: seedDispositivos["i13"], parecer: "Acumulador de condensado apto. Próxima inspeção externa em 2027, interna em 2029.", concluida: true, laudoId: "l8" },
 ]
 
 // ── Laudos ──
 export const seedLaudos: Laudo[] = [
-  { id: "l1", inspecaoId: "i1", equipamentoId: "eq1", numeroLaudo: "NR13-LD-2026-0001", dataEmissao: "2026-06-20", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2029-06-15", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do V-101 - PetroVale Indústria" },
-  { id: "l2", inspecaoId: "i2", equipamentoId: "eq2", numeroLaudo: "NR13-LD-2026-0002", dataEmissao: "2026-07-10", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2032-07-05", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do V-102 - PetroVale Indústria (SPIE)" },
-  { id: "l3", inspecaoId: "i3", equipamentoId: "eq4", numeroLaudo: "NR13-LD-2026-0003", dataEmissao: "2026-08-25", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2027-08-22", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica da CAL-201 - Química Nacional" },
-  { id: "l4", inspecaoId: "i5", equipamentoId: "eq8", numeroLaudo: "NR13-LD-2026-0004", dataEmissao: "2026-09-15", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2032-09-10", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do R-201 - Química Nacional (SPIE)" },
-  { id: "l5", inspecaoId: "i7", equipamentoId: "eq12", numeroLaudo: "NR13-LD-2026-0005", dataEmissao: "2026-10-05", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2028-10-01", pdfUrl: null, observacoes: "Laudo de inspeção inicial da CAL-401 - Alimentos Santa Clara" },
-  { id: "l6", inspecaoId: "i10", equipamentoId: "eq20", numeroLaudo: "NR13-LD-2026-0006", dataEmissao: "2026-10-20", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2032-10-15", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do V-601 - Usina DoceRio (SPIE)" },
-  { id: "l7", inspecaoId: "i12", equipamentoId: "eq16", numeroLaudo: "NR13-LD-2026-0007", dataEmissao: "2026-11-10", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2029-11-05", pdfUrl: null, observacoes: "Laudo de inspeção periódica do V-501 (Tanque de Maturação) - Cervejaria do Vale" },
-  { id: "l8", inspecaoId: "i13", equipamentoId: "eq11", numeroLaudo: "NR13-LD-2026-0008", dataEmissao: "2026-11-25", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", dataProximaInspecao: "2029-11-20", pdfUrl: null, observacoes: "Laudo de inspeção periódica do V-301 (Acumulador de Condensado) - Aços Forte" },
+  { id: "l1", userId: "user_demo_001", inspecaoId: "i1", equipamentoId: "eq1", numeroLaudo: "NR13-LD-2026-0001", dataEmissao: "2026-06-20", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2029-06-15", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do V-101 - PetroVale Indústria" },
+  { id: "l2", userId: "user_demo_001", inspecaoId: "i2", equipamentoId: "eq2", numeroLaudo: "NR13-LD-2026-0002", dataEmissao: "2026-07-10", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2032-07-05", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do V-102 - PetroVale Indústria (SPIE)" },
+  { id: "l3", userId: "user_demo_001", inspecaoId: "i3", equipamentoId: "eq4", numeroLaudo: "NR13-LD-2026-0003", dataEmissao: "2026-08-25", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2027-08-22", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica da CAL-201 - Química Nacional" },
+  { id: "l4", userId: "user_demo_001", inspecaoId: "i5", equipamentoId: "eq8", numeroLaudo: "NR13-LD-2026-0004", dataEmissao: "2026-09-15", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2032-09-10", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do R-201 - Química Nacional (SPIE)" },
+  { id: "l5", userId: "user_demo_001", inspecaoId: "i7", equipamentoId: "eq12", numeroLaudo: "NR13-LD-2026-0005", dataEmissao: "2026-10-05", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2028-10-01", pdfUrl: null, observacoes: "Laudo de inspeção inicial da CAL-401 - Alimentos Santa Clara" },
+  { id: "l6", userId: "user_demo_001", inspecaoId: "i10", equipamentoId: "eq20", numeroLaudo: "NR13-LD-2026-0006", dataEmissao: "2026-10-20", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2032-10-15", pdfUrl: null, observacoes: "Laudo referente à inspeção periódica do V-601 - Usina DoceRio (SPIE)" },
+  { id: "l7", userId: "user_demo_001", inspecaoId: "i12", equipamentoId: "eq16", numeroLaudo: "NR13-LD-2026-0007", dataEmissao: "2026-11-10", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2029-11-05", pdfUrl: null, observacoes: "Laudo de inspeção periódica do V-501 (Tanque de Maturação) - Cervejaria do Vale" },
+  { id: "l8", userId: "user_demo_001", inspecaoId: "i13", equipamentoId: "eq11", numeroLaudo: "NR13-LD-2026-0008", dataEmissao: "2026-11-25", plhNome: "Eng. Carlos Alberto Santos", plhCrea: "CREA-SP 123.456", plhAssinatura: null, dataProximaInspecao: "2029-11-20", pdfUrl: null, observacoes: "Laudo de inspeção periódica do V-301 (Acumulador de Condensado) - Aços Forte" },
 ]

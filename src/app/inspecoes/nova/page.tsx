@@ -1,6 +1,7 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 import { useState, Suspense, useRef } from "react"
 import { equipamentos, clientes } from "@/lib/store"
 import { inspecaoService, equipamentoService } from "@/lib/services"
@@ -14,7 +15,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Camera, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
+import { Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
+import { ImageUpload } from "@/components/ui/image-upload"
 import { cn } from "@/lib/utils"
 
 import { CHECKLIST_INSPECAO } from "@/lib/checklist-data"
@@ -22,6 +24,7 @@ import { CHECKLIST_INSPECAO } from "@/lib/checklist-data"
 type Step = "equipamento" | "exames" | "checklist" | "medicoes" | "anomalias" | "dispositivos" | "parecer"
 
 function NovaInspecaoForm() {
+  const { user } = useAuth()
   const searchParams = useSearchParams()
   const router = useRouter()
   const equipamentoId = searchParams.get("equipamento")
@@ -54,7 +57,7 @@ function NovaInspecaoForm() {
     setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, observacao } : c)))
 
   const [medicoes, setMedicoes] = useState([{ ponto: "", espessura: "", observacao: "" }])
-  const [anomalias, setAnomalias] = useState<{ descricao: string; gravidade: string; planoAcao: string }[]>([])
+  const [anomalias, setAnomalias] = useState<{ descricao: string; gravidade: string; planoAcao: string; foto: string | null }[]>([])
   const [dispositivos, setDispositivos] = useState<
     { tipo: string; tag: string; fabricante: string; modelo: string; numeroSerie: string; pressaoAbertura: string; pressaoVedacao: string; inspecaoOk: boolean; observacao: string }[]
   >([
@@ -62,7 +65,7 @@ function NovaInspecaoForm() {
   ])
 
   const adicionarMedicao = () => setMedicoes([...medicoes, { ponto: "", espessura: "", observacao: "" }])
-  const adicionarAnomalia = () => setAnomalias([...anomalias, { descricao: "", gravidade: "media", planoAcao: "" }])
+  const adicionarAnomalia = () => setAnomalias([...anomalias, { descricao: "", gravidade: "media", planoAcao: "", foto: null }])
   const adicionarDispositivo = () => setDispositivos([...dispositivos, { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", inspecaoOk: true, observacao: "" }])
 
   const steps: { key: Step; label: string }[] = [
@@ -106,11 +109,12 @@ function NovaInspecaoForm() {
             dataMedicao: dataInicio,
             observacao: m.observacao,
           })),
-        anomalias: anomalias
+        anomalias: anomalias.map(a => ({ descricao: a.descricao, gravidade: a.gravidade, planoAcao: a.planoAcao, foto: a.foto }))
           .filter((a) => a.descricao)
           .map((a) => ({
             descricao: a.descricao,
             gravidade: a.gravidade as "baixa" | "media" | "alta" | "critica",
+            foto: a.foto,
             resolvida: false,
             planoAcao: a.planoAcao,
           })),
@@ -128,7 +132,7 @@ function NovaInspecaoForm() {
             observacao: d.observacao,
           })),
       }
-      const inspecao = await inspecaoService.create(data)
+      const inspecao = await inspecaoService.create(data, user!.id)
       toast.success("Inspeção registrada com sucesso!")
       router.push(`/inspecoes/${inspecao.id}`)
     } catch {
@@ -367,9 +371,7 @@ function NovaInspecaoForm() {
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Foto</Label>
-              <Button variant="outline" className="w-full border-border text-text-primary h-9">
-                <Camera className="h-3 w-3 mr-1" /> Anexar Foto
-              </Button>
+              <ImageUpload value={ano.foto} onChange={(v) => { const a = [...anomalias]; a[i] = { ...a[i], foto: v }; setAnomalias(a) }} label="Anexar Foto" />
             </div>
           </div>
           <div className="space-y-1">

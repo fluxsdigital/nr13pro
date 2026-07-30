@@ -3,9 +3,9 @@ import type { Equipamento, CreateEquipamentoDTO, UpdateEquipamentoDTO } from "@/
 import { classificarVaso, classificarCaldeira, obterGrupoPotencialRisco, calcularPV } from "@/lib/nr13"
 
 export interface EquipamentoService {
-  list(filters?: { clienteId?: string; search?: string }): Promise<Equipamento[]>
+  list(filters?: { clienteId?: string; search?: string; userId?: string }): Promise<Equipamento[]>
   getById(id: string): Promise<Equipamento | undefined>
-  create(data: CreateEquipamentoDTO): Promise<Equipamento>
+  create(data: CreateEquipamentoDTO, userId: string): Promise<Equipamento>
   update(id: string, data: UpdateEquipamentoDTO): Promise<Equipamento>
   delete(id: string): Promise<void>
 }
@@ -29,8 +29,11 @@ function autoClassificar(data: CreateEquipamentoDTO) {
 class MockEquipamentoService implements EquipamentoService {
   private nextId = 100
 
-  async list(filters?: { clienteId?: string; search?: string }) {
+  async list(filters?: { clienteId?: string; search?: string; userId?: string }) {
     let result = equipamentos
+    if (filters?.userId) {
+      result = result.filter((e) => e.userId === filters.userId)
+    }
     if (filters?.clienteId) {
       result = result.filter((e) => e.clienteId === filters.clienteId)
     }
@@ -50,12 +53,13 @@ class MockEquipamentoService implements EquipamentoService {
     return equipamentos.find((e) => e.id === id)
   }
 
-  async create(data: CreateEquipamentoDTO) {
+  async create(data: CreateEquipamentoDTO, userId: string) {
     const now = new Date().toISOString().slice(0, 10)
     const classificacao = autoClassificar(data)
     const equipamento: Equipamento = {
       ...data,
       id: String(this.nextId++),
+      userId,
       ...classificacao,
       createdAt: now,
     }

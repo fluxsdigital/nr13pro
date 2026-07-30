@@ -30,49 +30,63 @@ type SettingsContextType = {
   isLoading: boolean
 }
 
-const defaultSettings: AppSettings = {
+const SettingsContext = createContext<SettingsContextType | null>(null)
+
+const DEFAULT_SETTINGS: AppSettings = {
   profile: { nome: "", crea: "", email: "", foto: "" },
   payment: { cardNumber: "", holderName: "", expiry: "", brand: "", last4: "" },
   preferences: { theme: "dark", notifications: true },
   updatedAt: "",
 }
 
-const SettingsContext = createContext<SettingsContextType | null>(null)
-
 export function AppSettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<AppSettings>(defaultSettings)
+  const [settings, setSettings] = useState<AppSettings>(() => {
+    if (typeof window === "undefined") {
+      return DEFAULT_SETTINGS
+    }
+
+    const stored = localStorage.getItem("app-settings")
+    if (!stored) return DEFAULT_SETTINGS
+
+    try {
+      return JSON.parse(stored) as AppSettings
+    } catch {
+      console.error("Error parsing app-settings")
+      return DEFAULT_SETTINGS
+    }
+  })
+
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const stored = localStorage.getItem("app-settings")
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as AppSettings
-        setSettings({ ...defaultSettings, ...parsed })
-      } catch (e) {
-        console.error("Error parsing app-settings:", e)
-        localStorage.removeItem("app-settings")
+    const loadData = () => {
+      const stored = localStorage.getItem("app-settings")
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored) as AppSettings
+          setSettings({ ...parsed })
+        } catch {
+          console.error("Error parsing app-settings")
+        }
       }
-    } else {
+
       settingsService.get()
         .then((s) => {
           setSettings(s)
           localStorage.setItem("app-settings", JSON.stringify(s))
         })
-        .catch((err) => {
-          console.error("Error loading settings:", err)
-          setSettings(defaultSettings)
-          localStorage.setItem("app-settings", JSON.stringify(defaultSettings))
+        .catch(() => {
+          if (!localStorage.getItem("app-settings")) {
+            setSettings(DEFAULT_SETTINGS)
+            localStorage.setItem("app-settings", JSON.stringify(DEFAULT_SETTINGS))
+          }
         })
         .finally(() => {
           setIsLoading(false)
         })
     }
 
-    const savedTheme = localStorage.getItem("theme")
-    if (savedTheme === "light" || savedTheme === "dark") {
-      document.documentElement.setAttribute("data-theme", savedTheme)
-    }
+    loadData()
   }, [])
 
   const updateSettings = async (newSettings: Partial<AppSettings>) => {
@@ -86,14 +100,6 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
     }
 
     if (newSettings.profile) {
-      const profileForSidebar = {
-        nome: newSettings.profile.nome,
-        crea: newSettings.profile.crea,
-        email: newSettings.profile.email,
-        foto: newSettings.profile.foto,
-      }
-      localStorage.setItem("profile-settings", JSON.stringify({ profile: profileForSidebar }))
-
       await settingsService.update({
         profile: newSettings.profile
       })
@@ -109,6 +115,6 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
 
 export function useAppSettings() {
   const ctx = useContext(SettingsContext)
-  if (!ctx) throw new Error("useAppSettings must be used within AppSettingsProvider")
+  if (!ctx) throw new Error("AppSettingsProvider not found")
   return ctx
 }

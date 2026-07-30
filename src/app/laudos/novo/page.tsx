@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
+import { useAuth } from "@/lib/auth-context"
 import { useSearchParams, useRouter } from "next/navigation"
 import { inspecaoService, laudoService, equipamentoService, clienteService } from "@/lib/services"
 import { periodicidadeInspecao } from "@/lib/nr13"
@@ -11,10 +12,12 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
+import { SignaturePad } from "@/components/ui/signature-pad"
 import { FileText } from "lucide-react"
 import Link from "next/link"
 
 function NovoLaudoForm() {
+  const { user } = useAuth()
   const searchParams = useSearchParams()
   const router = useRouter()
   const inspecaoId = searchParams.get("inspecao")
@@ -29,6 +32,7 @@ function NovoLaudoForm() {
   const [plhCrea, setPlhCrea] = useState("CREA-SP 123.456")
   const [dataEmissao, setDataEmissao] = useState(new Date().toISOString().slice(0, 10))
   const [dataProxima, setDataProxima] = useState("")
+  const [plhAssinatura, setPlhAssinatura] = useState<string | null>(null)
   const [observacoes, setObservacoes] = useState("")
 
   const [numeroLaudo, setNumeroLaudo] = useState("")
@@ -79,9 +83,10 @@ function NovoLaudoForm() {
         dataEmissao,
         plhNome,
         plhCrea,
+        plhAssinatura,
         dataProximaInspecao: dataProxima,
         observacoes,
-      })
+      }, user!.id)
       await inspecaoService.update(inspecao.id, { laudoId: laudo.id })
       router.push(`/laudos/${laudo.id}`)
     } finally {
@@ -152,6 +157,8 @@ function NovoLaudoForm() {
               <Input type="date" value={dataProxima} onChange={(e) => setDataProxima(e.target.value)} required className="border-border bg-card" />
             </div>
             <div className="space-y-2">
+            <Separator className="bg-border" />
+            <SignaturePad value={plhAssinatura} onChange={setPlhAssinatura} label="Assinatura do PLH" height={160} />
               <Label className="text-text-secondary text-xs">Observações</Label>
               <Textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={3} className="border-border bg-card" />
             </div>

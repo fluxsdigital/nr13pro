@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useAuth } from "@/lib/auth-context"
 import { clienteService } from "@/lib/services"
 import type { Cliente } from "@/lib/types"
 import { Card, CardContent } from "@/components/ui/card"
@@ -61,14 +62,15 @@ function getStatus(clienteId: string): ClienteStatus {
 type FiltroStatus = "todas" | "urgente" | "atencao" | "andamento"
 
 export default function Clientes() {
+  const { user } = useAuth()
   const [search, setSearch] = useState("")
   const [filtroStatus, setFiltroStatus] = useState<FiltroStatus>("todas")
   const [filtroCliente, setFiltroCliente] = useState("")
   const [data, setData] = useState<Cliente[]>([])
 
   useEffect(() => {
-    clienteService.list().then(setData)
-  }, [])
+    clienteService.list(user?.id).then(setData)
+  }, [user?.id])
 
   const statusPorCliente = useMemo(() => {
     const map = new Map<string, ClienteStatus>()

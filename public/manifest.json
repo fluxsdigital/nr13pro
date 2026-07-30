@@ -1,0 +1,26 @@
+{
+  "name": "NR-13 Pro",
+  "short_name": "NR-13 Pro",
+  "description": "Plataforma completa para inspeção, classificação e emissão de laudos técnicos conforme a NR-13.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F5F2",
+  "theme_color": "#C56A2D",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

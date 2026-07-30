@@ -1,7 +1,5 @@
 import { clientes, equipamentos, inspecoes, laudos } from "./store"
 
-export { clientes, equipamentos, inspecoes, laudos }
-
 export function getCliente(id: string) {
   return clientes.find((c) => c.id === id)
 }
@@ -9,7 +7,7 @@ export function getCliente(id: string) {
 export function getClientePorEquipamento(equipamentoId: string) {
   const eq = equipamentos.find((e) => e.id === equipamentoId)
   if (!eq) return undefined
-  return getCliente(eq.clienteId)
+  return clientes.find((c) => c.id === eq.clienteId)
 }
 
 export function getEquipamento(id: string) {
@@ -25,7 +23,7 @@ export function getInspecoesPorEquipamento(equipamentoId: string) {
 }
 
 export function getInspecoesDoCliente(clienteId: string) {
-  const eqs = getEquipamentosDoCliente(clienteId)
+  const eqs = equipamentos.filter((e) => e.clienteId === clienteId)
   return inspecoes.filter((i) => eqs.some((e) => e.id === i.equipamentoId))
 }
 

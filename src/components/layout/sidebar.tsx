@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -16,13 +16,15 @@ import {
   User,
   Settings2,
   LogOut,
-  ChevronDown,
   Bell,
+  ChevronDown,
   CreditCard,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "@/lib/sidebar-context"
 import { SettingsProvider, useSettings } from "@/lib/settings-context"
+import { useAuth } from "@/lib/auth-context"
+import { NotificationBell } from "@/components/notifications/notification-dropdown"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
@@ -33,10 +35,27 @@ const links = [
   { href: "/inspecoes", label: "Inspeções", icon: ClipboardCheck },
   { href: "/laudos", label: "Laudos Técnicos", icon: FileText },
   { href: "/economia", label: "Economia", icon: TrendingUp },
+  { href: "/notificacoes", label: "Notificações", icon: Bell },
 ]
 
 function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
+  const { user, logout } = useAuth()
+  const router = useRouter()
   const { profile } = useSettings()
+
+  const displayName = user?.name || profile.name || "Engenheiro"
+  const displayCrea = user?.crea || profile.crea || "Sem CREA"
+  const initials = displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()
+
+  const handleLogout = async () => {
+    await logout()
+    router.push("/vendas")
+  }
 
   if (collapsed) {
     return null
@@ -48,38 +67,35 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
         <button className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-150 group">
           <Avatar className="h-7 w-7 shrink-0">
             <AvatarFallback className="bg-primary/20 text-primary text-xs">
-              {profile.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")
-                .slice(0, 2)
-                .toUpperCase()}
+              {initials}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 text-left min-w-0">
-            <p className="text-xs font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">{profile.name}</p>
-            <p className="text-[10px] text-sidebar-foreground-muted">{profile.crea}</p>
+            <p className="text-xs font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">{displayName}</p>
+            <p className="text-[10px] text-sidebar-foreground-muted">{displayCrea}</p>
           </div>
           <ChevronDown className="h-3 w-3 shrink-0 text-sidebar-foreground-muted transition-transform group-data-[state=open]:rotate-180" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" align="start" className="w-56" sideOffset={4}>
         <div className="px-2 py-1.5">
-          <p className="text-sm font-medium text-sidebar-foreground">{profile.name}</p>
-          <p className="text-[11px] text-sidebar-foreground-muted">{profile.crea}</p>
+          <p className="text-sm font-medium text-sidebar-foreground">{displayName}</p>
+          <p className="text-[11px] text-sidebar-foreground-muted">{displayCrea}</p>
+          {user?.plan && (
+            <span className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
+              {user.plan}
+            </span>
+          )}
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <User className="mr-2 h-4 w-4" /> Perfil
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem className="cursor-pointer" onClick={() => router.push("/configuracoes")}>
           <Settings2 className="mr-2 h-4 w-4" /> Configurações
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">
           <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer" variant="destructive">
+        <DropdownMenuItem className="cursor-pointer" variant="destructive" onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" /> Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -124,7 +140,7 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
   return (
     <>
       <div className={cn("p-4 border-b border-sidebar-border", collapsed ? "flex justify-center" : "")}>
-        <div className={cn("flex items-center gap-2.5", collapsed && "flex-col")}>
+        <Link href="/" className={cn("flex items-center gap-2.5", collapsed && "flex-col")}>
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center text-primary-foreground text-sm font-bold shrink-0 shadow-sm">
             N
           </div>
@@ -134,7 +150,7 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
               <p className="text-[11px] text-sidebar-foreground/50 truncate">Gestão de Inspeções</p>
             </div>
           )}
-        </div>
+        </Link>
       </div>
       <nav className={cn("flex-1 overflow-y-auto", collapsed ? "p-2 space-y-1" : "p-3 space-y-0.5")}>
         {!collapsed && (
@@ -176,10 +192,27 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
 export function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { expanded } = useSidebar()
+  const { user, logout } = useAuth()
+  const router = useRouter()
   const { profile } = useSettings()
+
+  const displayName = user?.name || profile.name || "Engenheiro"
+  const displayCrea = user?.crea || profile.crea || "Sem CREA"
+  const initials = displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()
+
+  const handleLogout = async () => {
+    await logout()
+    router.push("/vendas")
+  }
 
   return (
     <>
+      {/* Mobile header */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-lg border-b border-divider">
         <div className="flex items-center justify-between h-14 px-4">
           <Link href="/" className="flex items-center gap-2">
@@ -192,9 +225,7 @@ export function Sidebar() {
             <span className="font-semibold text-sm text-foreground">NR-13 Pro</span>
           </Link>
           <div className="flex items-center gap-2">
-            <button className="w-8 h-8 flex items-center justify-center text-foreground/50 hover:text-foreground" aria-label="Notificações">
-              <Bell className="h-4 w-4" />
-            </button>
+            <NotificationBell />
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Menu"
@@ -219,6 +250,7 @@ export function Sidebar() {
         </div>
       </div>
 
+      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -231,11 +263,11 @@ export function Sidebar() {
             <div className="p-3 border-b border-divider">
               <div className="flex items-center gap-2.5">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/20 text-primary text-xs">{profile.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}</AvatarFallback>
+                  <AvatarFallback className="bg-primary/20 text-primary text-xs">{initials}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-xs font-medium text-foreground">{profile.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{profile.crea}</p>
+                  <p className="text-xs font-medium text-foreground">{displayName}</p>
+                  <p className="text-[10px] text-muted-foreground">{displayCrea}</p>
                 </div>
               </div>
             </div>
@@ -246,22 +278,24 @@ export function Sidebar() {
               <Link
                 href="/configuracoes"
                 className="flex items-center gap-2.5 p-2 rounded-lg text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+                onClick={() => setMobileOpen(false)}
               >
                 <Settings2 className="h-4 w-4" />
                 <span>Configurações</span>
               </Link>
-              <Link
-                href="/configuracoes"
-                className="flex items-center gap-2.5 p-2 rounded-lg text-sm hover:bg-accent hover:text-accent-foreground transition-colors"
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2.5 p-2 rounded-lg text-sm text-destructive hover:bg-destructive/10 transition-colors w-full text-left"
               >
-                <CreditCard className="h-4 w-4" />
-                <span>Salvar cartão</span>
-              </Link>
+                <LogOut className="h-4 w-4" />
+                <span>Sair</span>
+              </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Desktop sidebar */}
       <aside
         className={cn(
           "hidden md:flex bg-sidebar text-sidebar-foreground flex-col h-screen fixed left-0 top-0 border-r border-sidebar-border transition-all duration-300 ease-out",

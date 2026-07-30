@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useAuth } from "@/lib/auth-context"
 import Link from "next/link"
 import { inspecaoService, equipamentoService, clienteService } from "@/lib/services"
 import type { Inspecao, Equipamento, Cliente } from "@/lib/types"
@@ -13,13 +14,14 @@ import { ClipboardCheck, Plus, ArrowRight, FileText, AlertCircle } from "lucide-
 type StatusFiltro = "andamento" | "concluidas"
 
 export default function Inspecoes() {
+  const { user } = useAuth()
   const [data, setData] = useState<(Inspecao & { eq?: Equipamento; cliente?: Cliente })[]>([])
   const [loading, setLoading] = useState(true)
   const [filtroCliente, setFiltroCliente] = useState("")
   const [filtroStatus, setFiltroStatus] = useState<StatusFiltro | "">("")
 
   useEffect(() => {
-    inspecaoService.list().then(async (inspecoes) => {
+    inspecaoService.list({ userId: user?.id }).then(async (inspecoes) => {
       const enriched = await Promise.all(
         inspecoes.map(async (ins) => {
           const eq = await equipamentoService.getById(ins.equipamentoId)

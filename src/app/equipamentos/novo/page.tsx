@@ -1,15 +1,17 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 import { EquipamentoForm } from "@/components/equipamento-form"
 import { equipamentoService } from "@/lib/services"
 import type { CreateEquipamentoDTO } from "@/lib/types"
 
 export default function NovoEquipamento() {
   const router = useRouter()
+  const { user } = useAuth()
 
   const handleSubmit = async (data: CreateEquipamentoDTO) => {
-    await equipamentoService.create(data)
+    await equipamentoService.create(data, user!.id)
     router.push("/equipamentos")
   }
 

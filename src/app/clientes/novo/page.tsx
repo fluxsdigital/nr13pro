@@ -1,15 +1,17 @@
 "use client"
 
 import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 import { ClienteForm } from "@/components/cliente-form"
 import { clienteService } from "@/lib/services"
 import type { CreateClienteDTO } from "@/lib/types"
 
 export default function NovoCliente() {
   const router = useRouter()
+  const { user } = useAuth()
 
   const handleSubmit = async (data: CreateClienteDTO) => {
-    await clienteService.create(data)
+    await clienteService.create(data, user!.id)
     router.push("/clientes")
   }
 

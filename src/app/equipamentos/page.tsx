@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useAuth } from "@/lib/auth-context"
 import { equipamentoService, clienteService } from "@/lib/services"
 import type { Equipamento, Cliente } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -16,15 +17,16 @@ const statusMap: Record<string, "destructive" | "default" | "secondary" | "outli
 }
 
 export default function Equipamentos() {
+  const { user } = useAuth()
   const [search, setSearch] = useState("")
   const [data, setData] = useState<Equipamento[]>([])
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [filtroCliente, setFiltroCliente] = useState("")
 
   useEffect(() => {
-    equipamentoService.list().then(setData)
-    clienteService.list().then(setClientes)
-  }, [])
+    equipamentoService.list({ userId: user?.id }).then(setData)
+    clienteService.list(user?.id).then(setClientes)
+  }, [user?.id])
 
   const empresas = useMemo(() => {
     return clientes.map((c) => c.nome).sort()

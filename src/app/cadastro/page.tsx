@@ -8,18 +8,16 @@ import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
 import { Container } from "@/components/ui/container"
 
-export default function CheckoutPage() {
+export default function CadastroPage() {
   const router = useRouter()
-  const { signup, setPlan, isAuthenticated } = useAuth()
+  const { signup, isAuthenticated } = useAuth()
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [crea, setCrea] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
-  const [paid, setPaid] = useState(false)
 
-  // Se já estiver logado com plano, redireciona
   if (isAuthenticated && typeof window !== "undefined") {
     router.push("/")
     return null
@@ -36,54 +34,15 @@ export default function CheckoutPage() {
       return
     }
     setLoading(true)
-
     try {
-      // Simula processamento de pagamento
-      await new Promise((r) => setTimeout(r, 2000))
-
-      // Cria a conta
       await signup({ name, email, password, crea })
-
-      // Atribui o plano
-      await setPlan("Mensal")
-
-      setPaid(true)
-      toast.success("Assinatura confirmada! Bem-vindo ao NR-13 Pro.")
+      toast.success("Conta criada com sucesso! Bem-vindo ao NR-13 Pro.")
+      router.push("/")
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro ao processar assinatura.")
+      toast.error(err instanceof Error ? err.message : "Erro ao criar conta.")
     } finally {
       setLoading(false)
     }
-  }
-
-  if (paid) {
-    return (
-      <div className="min-h-dvh flex items-center justify-center bg-background">
-        <div className="text-center max-w-md mx-auto p-8">
-          <div className="w-16 h-16 rounded-full bg-success-subtle flex items-center justify-center mx-auto mb-6">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-success">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-          </div>
-          <h1 className="text-2xl font-medium text-text-primary">Assinatura confirmada!</h1>
-          <p className="mt-3 text-base text-text-secondary leading-relaxed">
-            Seu plano mensal de <strong className="text-text-primary">R$ 97/mês</strong> está ativo, {name.split(" ")[0]}.
-          </p>
-          <div className="mt-4 flex items-center justify-center gap-2 text-xs text-success bg-success-subtle px-3 py-1.5 rounded-full mx-auto w-fit">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-            Cancele quando quiser, sem multa
-          </div>
-          <Link
-            href="/"
-            className="mt-8 inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover shadow-sm"
-          >
-            Acessar Plataforma
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -115,11 +74,10 @@ export default function CheckoutPage() {
               <span className="font-semibold text-sm text-text-primary">NR-13 Pro</span>
             </div>
 
-            <h1 className="text-xl font-medium text-text-primary">Assinar plano</h1>
-            <div className="flex items-baseline gap-1 mt-2 mb-6">
-              <span className="text-2xl font-semibold text-text-primary">R$ 97</span>
-              <span className="text-sm text-text-secondary">/mês</span>
-            </div>
+            <h1 className="text-xl font-medium text-text-primary">Criar conta</h1>
+            <p className="text-sm text-text-secondary mt-1 mb-6">
+              Crie sua conta para começar a gerenciar inspeções NR-13.
+            </p>
 
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
@@ -171,29 +129,22 @@ export default function CheckoutPage() {
                 transition={{ type: "spring", stiffness: 500, damping: 25 }}
                 className="w-full h-11 rounded-md bg-primary text-white text-sm font-medium hover:bg-primary-hover active:bg-primary-active transition-colors disabled:opacity-60 disabled:cursor-not-allowed shadow-sm mt-1"
               >
-                {loading ? "Processando pagamento..." : "Assinar agora — R$ 97/mês"}
+                {loading ? "Criando conta..." : "Criar conta gratuita"}
               </motion.button>
             </form>
 
-            <div className="mt-4 flex items-center gap-2 text-xs text-success bg-success-subtle px-3 py-1.5 rounded-lg">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              Cancele quando quiser, sem multa
-            </div>
+            <p className="mt-6 text-center text-sm text-text-secondary">
+              Já tem conta?{" "}
+              <Link href="/login" className="text-primary hover:text-primary-hover font-medium underline underline-offset-2">
+                Entrar
+              </Link>
+            </p>
 
-            <p className="mt-4 text-xs text-text-muted leading-relaxed">
-              Ao assinar, você aceita nossos{" "}
+            <p className="mt-4 text-xs text-text-muted leading-relaxed text-center">
+              Ao criar conta, você aceita nossos{" "}
               <Link href="/termos-de-uso" className="underline underline-offset-2 hover:text-text-secondary">Termos de Uso</Link>{" "}
               e{" "}
               <Link href="/privacidade" className="underline underline-offset-2 hover:text-text-secondary">Política de Privacidade</Link>.
-            </p>
-
-            <p className="mt-4 text-center text-xs text-text-secondary">
-              Já tem conta?{" "}
-              <Link href="/login" className="text-primary hover:text-primary-hover font-medium underline underline-offset-2">
-                Fazer login
-              </Link>
             </p>
           </div>
         </motion.div>

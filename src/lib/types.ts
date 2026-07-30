@@ -19,6 +19,7 @@ export interface UpdateClienteDTO extends Partial<CreateClienteDTO> {}
 
 export interface Cliente extends CreateClienteDTO {
   id: string
+  userId: string
   createdAt: string
 }
 
@@ -50,6 +51,7 @@ export interface UpdateEquipamentoDTO extends Partial<CreateEquipamentoDTO> {}
 
 export interface Equipamento extends CreateEquipamentoDTO {
   id: string
+  userId: string
   categoria: CategoriaVaso | CategoriaCaldeira | null
   grupoPotencialRisco: GrupoPotencialRisco | null
   createdAt: string
@@ -67,7 +69,7 @@ export interface CreateInspecaoDTO {
   parametrosUltrassom: ParametrosUltrassom | null
   checklist: Omit<ChecklistItem, "id">[]
   medicoes: Omit<Medicao, "id">[]
-  anomalias: Omit<Anomalia, "id" | "foto">[]
+  anomalias: Omit<Anomalia, "id">[]
   dispositivosSeguranca: Omit<DispositivoSeguranca, "id">[]
   parecer: string
   concluida: boolean
@@ -79,6 +81,7 @@ export interface UpdateInspecaoDTO extends Partial<CreateInspecaoDTO> {
 
 export interface Inspecao {
   id: string
+  userId: string
   equipamentoId: string
   tipo: TipoInspecao
   dataInicio: string
@@ -126,6 +129,7 @@ export interface Anomalia {
 }
 
 export interface ChecklistItem {
+  id: string
   secao: string
   item: string
   ok: boolean | null
@@ -157,6 +161,7 @@ export interface CreateLaudoDTO {
   dataEmissao: string
   plhNome: string
   plhCrea: string
+  plhAssinatura: string | null
   dataProximaInspecao: string
   observacoes: string
 }
@@ -165,5 +170,48 @@ export interface UpdateLaudoDTO extends Partial<CreateLaudoDTO> {}
 
 export interface Laudo extends CreateLaudoDTO {
   id: string
+  userId: string
   pdfUrl: string | null
+}
+
+// Auth types
+export interface User {
+  id: string
+  name: string
+  email: string
+  crea: string
+  plan: "Mensal" | "Anual" | null
+  createdAt: string
+}
+
+export interface SignupDTO {
+  name: string
+  email: string
+  password: string
+  crea: string
+}
+
+export interface LoginDTO {
+  email: string
+  password: string
+}
+
+export interface AuthSession {
+  user: User
+  token: string
+  expiresAt: string
+}
+
+// Notification types
+export type NotificationType = "inspecao_vencendo" | "laudo_emitido" | "certificado_vencendo" | "anomalia_critica" | "sistema"
+
+export interface AppNotification {
+  id: string
+  userId: string
+  type: NotificationType
+  title: string
+  message: string
+  link?: string
+  read: boolean
+  createdAt: string
 }

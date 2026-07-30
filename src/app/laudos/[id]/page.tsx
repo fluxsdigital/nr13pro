@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 import { laudoService, equipamentoService, inspecaoService, clienteService } from "@/lib/services"
 import type { Laudo, Equipamento, Inspecao, Cliente } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -23,6 +24,7 @@ function handleDownloadPDF() {
 }
 
 export default function LaudoDetalhe() {
+  const { user } = useAuth()
   const params = useParams()
   const [laudo, setLaudo] = useState<Laudo | null>(null)
   const [eq, setEq] = useState<Equipamento | undefined>(undefined)
@@ -325,7 +327,13 @@ export default function LaudoDetalhe() {
             <div className="border-2 border-border rounded-lg p-6 text-center mt-4">
               <p className="font-semibold text-text-primary">{laudo.plhNome}</p>
               <p className="text-sm text-text-secondary">{laudo.plhCrea}</p>
-              <div className="mt-8 mb-4 border-b border-text-muted max-w-xs mx-auto" />
+              {laudo.plhAssinatura ? (
+                <div className="mt-4 mb-2 flex justify-center">
+                  <img src={laudo.plhAssinatura} alt="Assinatura do PLH" className="h-20 object-contain" />
+                </div>
+              ) : (
+                <div className="mt-8 mb-4 border-b border-text-muted max-w-xs mx-auto" />
+              )}
               <p className="text-sm text-text-secondary">Assinatura do Profissional Legalmente Habilitado (PLH)</p>
             </div>
           </section>

@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import { useAuth } from "@/lib/auth-context"
+import { clientes, equipamentos, inspecoes, laudos } from "@/lib/store"
 import {
-  clientes, equipamentos, inspecoes, laudos,
   getEquipamentosDoCliente, getInspecoesDoCliente, getLaudoPorInspecao,
 } from "@/lib/mock-data"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,11 +16,11 @@ import Link from "next/link"
 
 type FiltroCliente = "todas" | string
 
-function progressoCliente(clienteId: string) {
+function progressoCliente(clienteId: string, laudosRef: typeof laudos) {
   const eqs = getEquipamentosDoCliente(clienteId)
   const insps = getInspecoesDoCliente(clienteId)
   const total = eqs.length
-  const comLaudo = insps.filter((i) => i.concluida && laudos.some((l) => l.inspecaoId === i.id)).length
+  const comLaudo = insps.filter((i) => i.concluida && laudosRef.some((l) => l.inspecaoId === i.id)).length
   const emAndamento = insps.filter((i) => !i.concluida).length
   const semInspecao = total - new Set(insps.map((i) => i.equipamentoId)).size
   const pct = total > 0 ? Math.round((comLaudo / total) * 100) : 0
@@ -27,19 +28,25 @@ function progressoCliente(clienteId: string) {
 }
 
 export default function Dashboard() {
+  const { user } = useAuth()
+  const meusClientes = clientes.filter(c => c.userId === user?.id)
+  const meusEquipamentos = equipamentos.filter(e => e.userId === user?.id)
+  const minhasInspecoes = inspecoes.filter(i => i.userId === user?.id)
+  const meusLaudos = laudos.filter(l => l.userId === user?.id)
+
   const [filtro, setFiltro] = useState<FiltroCliente>("todas")
 
-  const totalEquipamentos = equipamentos.length
-  const totalClientes = clientes.length
-  const inspecoesConcluidas = inspecoes.filter((i) => i.concluida).length
-  const laudosEmitidos = laudos.length
-  const inspecoesPendentes = inspecoes.filter((i) => !i.concluida).length
-  const semInspecaoGeral = equipamentos.filter(
-    (eq) => !inspecoes.some((i) => i.equipamentoId === eq.id)
+  const totalEquipamentos = meusEquipamentos.length
+  const totalClientes = meusClientes.length
+  const inspecoesConcluidas = minhasInspecoes.filter((i) => i.concluida).length
+  const laudosEmitidos = meusLaudos.length
+  const inspecoesPendentes = minhasInspecoes.filter((i) => !i.concluida).length
+  const semInspecaoGeral = meusEquipamentos.filter(
+    (eq) => !minhasInspecoes.some((i) => i.equipamentoId === eq.id)
   ).length
 
-  const certificadosPendentes = inspecoes.filter(
-    (i) => i.concluida && !laudos.some((l) => l.inspecaoId === i.id)
+  const certificadosPendentes = minhasInspecoes.filter(
+    (i) => i.concluida && !meusLaudos.some((l) => l.inspecaoId === i.id)
   )
 
   return (
@@ -57,7 +64,7 @@ export default function Dashboard() {
             className="text-sm border border-border rounded-lg px-3 py-1.5 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary w-full sm:w-auto"
           >
             <option value="todas">Todas as empresas</option>
-            {clientes.map((c) => (
+            {meusClientes.map((c) => (
               <option key={c.id} value={c.id}>{c.nome}</option>
             ))}
           </select>
@@ -145,8 +152,8 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {clientes.map((cli) => {
-                    const p = progressoCliente(cli.id)
+                   {meusClientes.map((cli) => {
+                     const p = progressoCliente(cli.id, meusLaudos)
                     return (
                       <button
                         key={cli.id}
@@ -205,9 +212,9 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {[...inspecoes].reverse().map((ins) => {
-                    const eq = equipamentos.find((e) => e.id === ins.equipamentoId)
-                    const cliNome = eq ? clientes.find((c) => c.id === eq.clienteId)?.nome ?? "" : ""
+                   {[...minhasInspecoes].reverse().map((ins) => {
+                     const eq = meusEquipamentos.find((e) => e.id === ins.equipamentoId)
+                     const cliNome = eq ? meusClientes.find((c) => c.id === eq.clienteId)?.nome ?? "" : ""
                     return (
                       <Link
                         key={ins.id}
@@ -250,8 +257,8 @@ export default function Dashboard() {
               <CardContent>
                 <div className="space-y-2">
                   {certificadosPendentes.map((ins) => {
-                    const eq = equipamentos.find((e) => e.id === ins.equipamentoId)
-                    const cli = eq ? clientes.find((c) => c.id === eq.clienteId) : null
+                    const eq = meusEquipamentos.find((e) => e.id === ins.equipamentoId)
+                    const cli = eq ? meusClientes.find((c) => c.id === eq.clienteId) : null
                     return (
                       <Link
                         key={ins.id}
@@ -275,22 +282,24 @@ export default function Dashboard() {
           )}
         </>
       ) : (
-        <DetalheCliente clienteId={filtro} onVoltar={() => setFiltro("todas")} />
+        <DetalheCliente clienteId={filtro} onVoltar={() => setFiltro("todas")} meusClientes={meusClientes} meusLaudos={meusLaudos} minhasInspecoes={minhasInspecoes} meusEquipamentos={meusEquipamentos} />
       )}
     </div>
   )
 }
 
-function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: () => void }) {
-  const cli = clientes.find((c) => c.id === clienteId)
+function DetalheCliente({ clienteId, onVoltar, meusClientes, meusLaudos, minhasInspecoes, meusEquipamentos }: {
+  clienteId: string; onVoltar: () => void; meusClientes: typeof clientes; meusLaudos: typeof laudos; minhasInspecoes: typeof inspecoes; meusEquipamentos: typeof equipamentos
+}) {
+  const cli = meusClientes.find((c) => c.id === clienteId)
   if (!cli) return null
 
   const eqs = getEquipamentosDoCliente(clienteId)
   const insps = getInspecoesDoCliente(clienteId)
-  const p = progressoCliente(clienteId)
+  const p = progressoCliente(clienteId, meusLaudos)
 
   const certificadosDisponiveis = insps.filter(
-    (i) => i.concluida && !laudos.some((l) => l.inspecaoId === i.id)
+    (i) => i.concluida && !meusLaudos.some((l) => l.inspecaoId === i.id)
   )
 
   return (
@@ -376,7 +385,7 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
               </thead>
               <tbody>
                 {eqs.map((eq) => {
-                  const ins = inspecoes
+                  const ins = minhasInspecoes
                     .filter((i) => i.equipamentoId === eq.id)
                     .sort((a, b) => b.dataInicio.localeCompare(a.dataInicio))
                   const ultima = ins[0]
@@ -448,7 +457,7 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
           <CardContent>
             <div className="space-y-2">
               {certificadosDisponiveis.map((ins) => {
-                const eq = equipamentos.find((e) => e.id === ins.equipamentoId)
+                const eq = meusEquipamentos.find((e) => e.id === ins.equipamentoId)
                 return (
                   <Link
                     key={ins.id}

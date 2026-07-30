@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
 import { inspecaoService, equipamentoService, clienteService, laudoService } from "@/lib/services"
 import type { Inspecao, Equipamento, Cliente, Laudo } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +13,7 @@ import Link from "next/link"
 import { FileText, Ruler, AlertTriangle, ShieldCheck, ClipboardCheck } from "lucide-react"
 
 export default function InspecaoDetalhe() {
+  const { user } = useAuth()
   const params = useParams()
   const [inspecao, setInspecao] = useState<Inspecao | null>(null)
   const [eq, setEq] = useState<Equipamento | undefined>(undefined)
@@ -258,6 +260,13 @@ export default function InspecaoDetalhe() {
                   </div>
                   {ano.planoAcao && (
                     <p className="text-xs text-text-secondary mt-2">Plano de ação: {ano.planoAcao}</p>
+                  )}
+                  {ano.foto && ano.foto.startsWith("data:image") && (
+                    <div className="mt-3">
+                      <img src={ano.foto} alt="Foto da anomalia" className="h-32 w-48 object-cover rounded-lg border border-border cursor-pointer hover:opacity-90 transition-opacity"
+                        onClick={() => { if (ano.foto) window.open(ano.foto, "_blank") }}
+                      />
+                    </div>
                   )}
                 </CardContent>
               </Card>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useAuth } from "@/lib/auth-context"
 import { laudoService, equipamentoService, clienteService } from "@/lib/services"
 import type { Laudo, Equipamento, Cliente } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
@@ -11,12 +12,13 @@ import { FileText, ArrowRight, Calendar, User, Building2 } from "lucide-react"
 import Link from "next/link"
 
 export default function Laudos() {
+  const { user } = useAuth()
   const [data, setData] = useState<(Laudo & { eq?: Equipamento; cliente?: Cliente })[]>([])
   const [loading, setLoading] = useState(true)
   const [filtroCliente, setFiltroCliente] = useState("")
 
   useEffect(() => {
-    laudoService.list().then(async (laudos) => {
+    laudoService.list(user?.id).then(async (laudos) => {
       const enriched = await Promise.all(
         laudos.map(async (l) => {
           const eq = await equipamentoService.getById(l.equipamentoId)

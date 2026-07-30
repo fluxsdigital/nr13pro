@@ -1,7 +1,9 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { getEquipamento, inspecoes, getLaudoPorInspecao, getClientePorEquipamento } from "@/lib/mock-data"
+import { useAuth } from "@/lib/auth-context"
+import { inspecoes } from "@/lib/store"
+import { getEquipamento, getLaudoPorInspecao, getClientePorEquipamento } from "@/lib/mock-data"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -11,6 +13,7 @@ import { FileText, ClipboardCheck, ArrowRight, Pencil } from "lucide-react"
 import Link from "next/link"
 
 export default function EquipamentoDetalhe() {
+  const { user } = useAuth()
   const params = useParams()
   const eq = getEquipamento(params.id as string)
 
