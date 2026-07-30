@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Camera,
   CreditCard,
@@ -54,9 +54,27 @@ export default function ConfiguracoesPage() {
   const [notifications, setNotifications] = useState(true)
   const [saved, setSaved] = useState(false)
 
+  useEffect(() => {
+    const saved = localStorage.getItem("theme") as "light" | "dark" | null
+    if (saved) {
+      setTheme(saved)
+      document.documentElement.setAttribute("data-theme", saved)
+    } else {
+      setTheme("dark")
+      document.documentElement.setAttribute("data-theme", "dark")
+    }
+  }, [])
+
   function save() {
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
+  }
+
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark"
+    setTheme(next)
+    document.documentElement.setAttribute("data-theme", next)
+    localStorage.setItem("theme", next)
   }
 
   return (
@@ -173,9 +191,7 @@ export default function ConfiguracoesPage() {
             </div>
           </div>
           <button
-            onClick={() =>
-              setTheme((prev) => (prev === "dark" ? "light" : "dark"))
-            }
+            onClick={toggleTheme}
             className={cn(
               "relative h-6 w-11 rounded-full transition-colors duration-200",
               theme === "dark" ? "bg-primary" : "bg-secondary"
