@@ -1,9 +1,19 @@
 import { settings } from "@/lib/store"
 import type { Settings, UpdateSettingsDTO } from "@/lib/settings"
+import { settingsService as mockService } from "."
+
+type SettingsListener = () => void
+const listeners: SettingsListener[] = []
+
+function notifyListeners() {
+  listeners.forEach((l) => l())
+  window.dispatchEvent(new Event("settings-updated"))
+}
 
 export interface SettingsService {
   get(): Promise<Settings>
   update(data: UpdateSettingsDTO): Promise<Settings>
+  onChange(listener: SettingsListener): () => void
 }
 
 class MockSettingsService implements SettingsService {
@@ -22,7 +32,16 @@ class MockSettingsService implements SettingsService {
       settings.preferences = { ...settings.preferences, ...data.preferences }
     }
     settings.updatedAt = new Date().toISOString()
+    notifyListeners()
     return settings
+  }
+
+  onChange(listener: SettingsListener) {
+    listeners.push(listener)
+    return () => {
+      const idx = listeners.indexOf(listener)
+      if (idx !== -1) listeners.splice(idx, 1)
+    }
   }
 }
 

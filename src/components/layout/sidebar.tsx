@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   LayoutDashboard,
@@ -20,8 +20,7 @@ import {
   Bell,
   CreditCard,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useSidebar } from "@/lib/sidebar-context"
+import { SettingsProvider, useSettings } from "@/lib/settings-context"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
@@ -34,10 +33,80 @@ const links = [
   { href: "/economia", label: "Economia", icon: TrendingUp },
 ]
 
-const USER = {
-  name: "Carlos Eduardo Mendes",
-  crea: "CREA-SP • 123.456",
-  role: "Engenharia",
+function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
+  const profile = useSettings()
+  const initials = profile.name.split(" ").map((n) => n[0]).join("").slice(0, 2)
+
+  if (collapsed) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <button className="w-full flex justify-center py-2 rounded-lg text-sidebar-foreground/40 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-200">
+            <Avatar className="h-7 w-7">
+              <AvatarFallback className="bg-primary/20 text-primary text-xs">{initials.toUpperCase()}</AvatarFallback>
+            </Avatar>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="right" align="start" className="w-56">
+          <div className="px-2 py-1.5">
+            <p className="text-sm font-medium text-sidebar-foreground">{profile.name}</p>
+            <p className="text-[11px] text-sidebar-foreground-muted">{profile.crea}</p>
+          </div>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer">
+            <User className="mr-2 h-4 w-4" /> Perfil
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <Settings2 className="mr-2 h-4 w-4" /> Configurações
+          </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="cursor-pointer" variant="destructive">
+            <LogOut className="mr-2 h-4 w-4" /> Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <button className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-sidebar-accent transition-colors duration-150 group">
+          <Avatar className="h-7 w-7 shrink-0">
+            <AvatarFallback className="bg-primary/20 text-primary text-xs">{initials.toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 text-left min-w-0">
+            <p className="text-xs font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">{profile.name}</p>
+            <p className="text-[10px] text-sidebar-foreground-muted">{profile.crea}</p>
+          </div>
+          <ChevronDown className="h-3 w-3 shrink-0 text-sidebar-foreground-muted transition-transform group-data-[state=open]:rotate-180" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side="top" align="start" className="w-56" sideOffset={4}>
+        <div className="px-2 py-1.5">
+          <p className="text-sm font-medium text-sidebar-foreground">{profile.name}</p>
+          <p className="text-[11px] text-sidebar-foreground-muted">{profile.crea}</p>
+        </div>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer">
+          <User className="mr-2 h-4 w-4" /> Perfil
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Settings2 className="mr-2 h-4 w-4" /> Configurações
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer" variant="destructive">
+          <LogOut className="mr-2 h-4 w-4" /> Sair
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
 
 function NavItems({ collapsed = false }: { collapsed?: boolean }) {
@@ -73,7 +142,7 @@ function NavItems({ collapsed = false }: { collapsed?: boolean }) {
 }
 
 function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
-  const initials = USER.name.split(" ").map((n) => n[0]).join("").slice(0, 2)
+  const initials = profile.name.split(" ").map((n) => n[0]).join("").slice(0, 2)
 
   if (collapsed) {
     return (
@@ -87,8 +156,8 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start" className="w-56">
           <div className="px-2 py-1.5">
-            <p className="text-sm font-medium text-sidebar-foreground">{USER.name}</p>
-            <p className="text-[11px] text-sidebar-foreground-muted">{USER.crea}</p>
+            <p className="text-sm font-medium text-sidebar-foreground">{profile.name}</p>
+            <p className="text-[11px] text-sidebar-foreground-muted">{profile.crea}</p>
           </div>
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer">
@@ -121,16 +190,16 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
               <AvatarFallback className="bg-primary/20 text-primary text-xs">{initials}</AvatarFallback>
             </Avatar>
             <div className="flex-1 text-left min-w-0">
-              <p className="text-xs font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">{USER.name}</p>
-              <p className="text-[10px] text-sidebar-foreground-muted">{USER.crea}</p>
+              <p className="text-xs font-medium text-sidebar-foreground truncate group-hover:text-sidebar-primary transition-colors">{profile.name}</p>
+              <p className="text-[10px] text-sidebar-foreground-muted">{profile.crea}</p>
             </div>
             <ChevronDown className="h-3 w-3 shrink-0 text-sidebar-foreground-muted transition-transform group-data-[state=open]:rotate-180" />
           </button>
         </DropdownMenuTrigger>
       <DropdownMenuContent side="top" align="start" className="w-56" sideOffset={4}>
         <div className="px-2 py-1.5">
-          <p className="text-sm font-medium text-sidebar-foreground">{USER.name}</p>
-          <p className="text-[11px] text-sidebar-foreground-muted">{USER.crea}</p>
+          <p className="text-sm font-medium text-sidebar-foreground">{profile.name}</p>
+          <p className="text-[11px] text-sidebar-foreground-muted">{profile.crea}</p>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer">
@@ -212,6 +281,7 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
 export function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { expanded } = useSidebar()
+  const { profile } = useSettings()
 
   return (
     <>
@@ -266,11 +336,11 @@ export function Sidebar() {
             <div className="p-3 border-b border-divider">
               <div className="flex items-center gap-2.5">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/20 text-primary text-xs">{USER.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}</AvatarFallback>
+                  <AvatarFallback className="bg-primary/20 text-primary text-xs">{profile.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="text-xs font-medium text-foreground">{USER.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{USER.crea}</p>
+                  <p className="text-xs font-medium text-foreground">{profile.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{profile.crea}</p>
                 </div>
               </div>
             </div>
