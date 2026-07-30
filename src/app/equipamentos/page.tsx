@@ -157,11 +157,11 @@ export default function Equipamentos() {
           </CardContent>
         </Card>
       ) : (
-        <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map((eq) => {
             const catStr = eq.categoria ?? ""
             return (
-              <div key={eq.id} className="mb-6 last:mb-0">
+              <div key={eq.id}>
                 <Card className="card-hover cursor-pointer">
                   <Link href={`/equipamentos/${eq.id}`}>
                     <CardContent className="p-4">

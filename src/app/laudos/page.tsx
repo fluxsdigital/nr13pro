@@ -111,10 +111,10 @@ export default function Laudos() {
             </p>
           </CardContent>
         </Card>
-      ) : (
-        <div>
-          {filtradas.map((l) => (
-            <Link key={l.id} href={`/laudos/${l.id}`} className="block mb-6 last:mb-0">
+       ) : (
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+           {filtradas.map((l) => (
+             <Link key={l.id} href={`/laudos/${l.id}`} className="block">
               <Card className="card-hover cursor-pointer">
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
