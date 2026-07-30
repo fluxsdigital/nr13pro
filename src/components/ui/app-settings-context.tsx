@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { settingsService } from "@/lib/services"
 
 type AppSettings = {
   profile: {
@@ -86,11 +87,9 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
       }
       localStorage.setItem("profile-settings", JSON.stringify({ profile: profileForSidebar }))
 
-      if (settingsService) {
-        await settingsService.update({
-          profile: newSettings.profile
-        })
-      }
+      await settingsService.update({
+        profile: newSettings.profile
+      })
     }
   }
 
