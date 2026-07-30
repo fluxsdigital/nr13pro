@@ -97,7 +97,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.clienteId}
                 onChange={(e) => set("clienteId", e.target.value)}
                 required
-                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="">Selecione...</option>
                 {clientes.map((c) => (
@@ -110,7 +110,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
               <select
                 value={form.tipo}
                 onChange={(e) => set("tipo", e.target.value)}
-                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {tipoOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -127,7 +127,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 onChange={(e) => set("tag", e.target.value)}
                 placeholder="Ex: V-101"
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -137,7 +137,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 onChange={(e) => set("descricao", e.target.value)}
                 placeholder="Ex: Reservatório de Ar Comprimido"
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
           </div>
@@ -150,7 +150,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 onChange={(e) => set("fabricante", e.target.value)}
                 placeholder="Ex: VasosTech"
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -160,7 +160,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.anoFabricacao}
                 onChange={(e) => set("anoFabricacao", Number(e.target.value))}
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
           </div>
@@ -178,7 +178,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.pressaoProjeto}
                 onChange={(e) => set("pressaoProjeto", Number(e.target.value))}
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -188,7 +188,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.pressaoOperacao}
                 onChange={(e) => set("pressaoOperacao", Number(e.target.value))}
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -198,7 +198,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.pressaoTesteHidrostatico ?? ""}
                 onChange={(e) => set("pressaoTesteHidrostatico", e.target.value ? Number(e.target.value) : null)}
                 placeholder="Opcional"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -208,7 +208,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.volume}
                 onChange={(e) => set("volume", Number(e.target.value))}
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
           </div>
@@ -220,7 +220,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.pmta}
                 onChange={(e) => set("pmta", Number(e.target.value))}
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -230,7 +230,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.temperaturaProjeto ?? ""}
                 onChange={(e) => set("temperaturaProjeto", e.target.value ? Number(e.target.value) : null)}
                 placeholder="Opcional"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -240,7 +240,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.temperaturaOperacao ?? ""}
                 onChange={(e) => set("temperaturaOperacao", e.target.value ? Number(e.target.value) : null)}
                 placeholder="Opcional"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -250,7 +250,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 onChange={(e) => set("fluido", e.target.value)}
                 placeholder="Ex: Ar Comprimido"
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
           </div>
@@ -261,7 +261,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
               <select
                 value={form.classeFluido}
                 onChange={(e) => set("classeFluido", e.target.value)}
-                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 {classeOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -275,7 +275,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 onChange={(e) => set("localizacao", e.target.value)}
                 placeholder="Ex: Compressores - Prédio 1"
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -284,7 +284,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.codigoProjeto}
                 onChange={(e) => set("codigoProjeto", e.target.value)}
                 placeholder="Ex: ASME VIII Div.1"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
           </div>
@@ -302,7 +302,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.diametroInterno ?? ""}
                 onChange={(e) => set("diametroInterno", e.target.value ? Number(e.target.value) : null)}
                 placeholder="Opcional"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -312,7 +312,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.alturaComprimento ?? ""}
                 onChange={(e) => set("alturaComprimento", e.target.value ? Number(e.target.value) : null)}
                 placeholder="Opcional"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -321,7 +321,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 value={form.materialConstrucao}
                 onChange={(e) => set("materialConstrucao", e.target.value)}
                 placeholder="Ex: Aço Carbono"
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
@@ -331,7 +331,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
                 onChange={(e) => set("numeroSerie", e.target.value)}
                 placeholder="Ex: VT-2024-001"
                 required
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
           </div>
@@ -341,7 +341,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
       <Card className="border-border shadow-sm">
         <CardContent className="p-6">
           <p className="text-sm font-medium text-text-secondary mb-3">Prévia da Classificação NR-13</p>
-          <div className="p-3 rounded-lg bg-slate-50 border border-border">
+          <div className="p-3 rounded-lg bg-muted border border-border">
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div>
                 <span className="text-text-secondary">P.V:</span>{" "}

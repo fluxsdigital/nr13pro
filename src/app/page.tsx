@@ -54,7 +54,7 @@ export default function Dashboard() {
           <select
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
-            className="text-sm border border-border rounded-lg px-3 py-1.5 bg-white text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary w-full sm:w-auto"
+            className="text-sm border border-border rounded-lg px-3 py-1.5 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary w-full sm:w-auto"
           >
             <option value="todas">Todas as empresas</option>
             {clientes.map((c) => (
@@ -151,7 +151,7 @@ export default function Dashboard() {
                       <button
                         key={cli.id}
                         onClick={() => setFiltro(cli.id)}
-                        className="block p-4 rounded-lg border border-border bg-white hover:bg-background transition-colors text-left"
+                        className="block p-4 rounded-lg border border-border bg-card hover:bg-background transition-colors text-left"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div>
@@ -162,7 +162,7 @@ export default function Dashboard() {
                             {p.total} equip.
                           </Badge>
                         </div>
-                        <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-2">
+                        <div className="w-full h-2 bg-muted rounded-full overflow-hidden mb-2">
                           <div
                             className="h-full bg-success rounded-full transition-all"
                             style={{ width: `${p.pct}%` }}
@@ -212,7 +212,7 @@ export default function Dashboard() {
                       <Link
                         key={ins.id}
                         href={`/inspecoes/${ins.id}`}
-                        className="flex items-center justify-between p-3 rounded-lg border border-border bg-white hover:bg-background transition-colors"
+                        className="flex items-center justify-between p-3 rounded-lg border border-border bg-card hover:bg-background transition-colors"
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <Calendar className="h-4 w-4 text-primary shrink-0" />
@@ -303,7 +303,7 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
           >
             &larr; Voltar
           </button>
-          <div className="h-5 w-px bg-slate-200" />
+          <div className="h-5 w-px bg-border" />
           <div className="min-w-0">
             <h2 className="text-xl font-semibold text-text-primary truncate">{cli.nome}</h2>
             <p className="text-xs text-text-secondary truncate">{cli.cnpj} • {cli.contato}</p>
@@ -349,7 +349,7 @@ function DetalheCliente({ clienteId, onVoltar }: { clienteId: string; onVoltar: 
             <p className="text-sm font-medium text-text-secondary">Progresso de Inspeções</p>
             <span className="text-sm font-bold text-success">{p.pct}%</span>
           </div>
-          <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+          <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
             <div className="h-full bg-success rounded-full transition-all" style={{ width: `${p.pct}%` }} />
           </div>
           <p className="text-xs text-text-muted mt-2">

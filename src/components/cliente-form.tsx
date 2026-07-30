@@ -44,30 +44,30 @@ export function ClienteForm({ initial, onSubmit, onCancel }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Nome da Empresa</Label>
-              <Input value={form.nome} onChange={(e) => set("nome", e.target.value)} placeholder="Ex: Indústria ABC Ltda." required className="border-border bg-white" />
+              <Input value={form.nome} onChange={(e) => set("nome", e.target.value)} placeholder="Ex: Indústria ABC Ltda." required className="border-border bg-card" />
             </div>
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">CNPJ</Label>
-              <Input value={form.cnpj} onChange={(e) => set("cnpj", e.target.value)} placeholder="00.000.000/0001-00" required className="border-border bg-white" />
+              <Input value={form.cnpj} onChange={(e) => set("cnpj", e.target.value)} placeholder="00.000.000/0001-00" required className="border-border bg-card" />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Contato</Label>
-              <Input value={form.contato} onChange={(e) => set("contato", e.target.value)} placeholder="Nome do contato" required className="border-border bg-white" />
+              <Input value={form.contato} onChange={(e) => set("contato", e.target.value)} placeholder="Nome do contato" required className="border-border bg-card" />
             </div>
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">E-mail</Label>
-              <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="contato@empresa.com" required className="border-border bg-white" />
+              <Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} placeholder="contato@empresa.com" required className="border-border bg-card" />
             </div>
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Telefone</Label>
-              <Input value={form.telefone} onChange={(e) => set("telefone", e.target.value)} placeholder="(11) 99999-8888" required className="border-border bg-white" />
+              <Input value={form.telefone} onChange={(e) => set("telefone", e.target.value)} placeholder="(11) 99999-8888" required className="border-border bg-card" />
             </div>
           </div>
           <div className="space-y-2">
             <Label className="text-text-secondary text-xs">Endereço</Label>
-            <Input value={form.endereco} onChange={(e) => set("endereco", e.target.value)} placeholder="Rua, número, bairro - cidade, UF" required className="border-border bg-white" />
+            <Input value={form.endereco} onChange={(e) => set("endereco", e.target.value)} placeholder="Rua, número, bairro - cidade, UF" required className="border-border bg-card" />
           </div>
         </CardContent>
       </Card>

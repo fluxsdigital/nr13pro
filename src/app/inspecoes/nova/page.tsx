@@ -161,7 +161,7 @@ function NovaInspecaoForm() {
             key={eq.id}
             className={cn(
               "p-3 rounded-lg border cursor-pointer transition-all text-center",
-              selectedEq?.id === eq.id ? "border-primary bg-primary-subtle ring-1 ring-primary" : "border-border bg-white hover:border-primary/30 hover:shadow-sm"
+              selectedEq?.id === eq.id ? "border-primary bg-primary-subtle ring-1 ring-primary" : "border-border bg-card hover:border-primary/30 hover:shadow-sm"
             )}
             onClick={() => setSelectedEq(eq)}
           >
@@ -180,18 +180,18 @@ function NovaInspecaoForm() {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label className="text-text-primary">Data de Início</Label>
-          <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} className="border-border bg-white w-full" />
+          <Input type="date" value={dataInicio} onChange={(e) => setDataInicio(e.target.value)} className="border-border bg-card w-full" />
         </div>
         <div className="space-y-2">
           <Label className="text-text-primary">Data de Término</Label>
-          <Input type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} className="border-border bg-white w-full" />
+          <Input type="date" value={dataTermino} onChange={(e) => setDataTermino(e.target.value)} className="border-border bg-card w-full" />
         </div>
       </div>
 
       <div className="space-y-2">
         <Label className="text-text-primary">Tipo de Inspeção</Label>
         <Select value={tipo} onValueChange={(v) => v && setTipo(v)}>
-          <SelectTrigger className="border-border bg-white">
+          <SelectTrigger className="border-border bg-card">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -219,7 +219,7 @@ function NovaInspecaoForm() {
               key={key}
               className={cn(
                 "p-3 rounded-lg border cursor-pointer transition-colors",
-                val ? "border-primary bg-primary-subtle" : "border-border bg-white hover:border-primary/30"
+                val ? "border-primary bg-primary-subtle" : "border-border bg-card hover:border-primary/30"
               )}
               onClick={() => set(!val)}
             >
@@ -278,7 +278,7 @@ function NovaInspecaoForm() {
                             value={item.observacao}
                             onChange={(e) => setCheckObs(idx, e.target.value)}
                             placeholder="Observação..."
-                            className="mt-1 w-full text-xs border border-border rounded px-2 py-1 bg-white"
+                            className="mt-1 w-full text-xs border border-border rounded px-2 py-1 bg-card"
                           />
                         )}
                       </div>
@@ -302,7 +302,7 @@ function NovaInspecaoForm() {
         </Button>
       </div>
       {medicoes.map((med, i) => (
-        <div key={i} className="p-4 rounded-lg border border-border bg-white space-y-3">
+        <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs text-text-secondary font-medium">Ponto {i + 1}</span>
             {medicoes.length > 1 && (
@@ -313,17 +313,17 @@ function NovaInspecaoForm() {
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Ponto de Medição</Label>
               <Input value={med.ponto} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], ponto: e.target.value }; setMedicoes(m) }}
-                placeholder="Ex: Costado Seção A" className="border-border bg-white h-9" />
+                placeholder="Ex: Costado Seção A" className="border-border bg-card h-9" />
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Espessura (mm)</Label>
               <Input type="number" step="0.1" value={med.espessura} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], espessura: e.target.value }; setMedicoes(m) }}
-                placeholder="12.5" className="border-border bg-white h-9" />
+                placeholder="12.5" className="border-border bg-card h-9" />
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Observação</Label>
               <Input value={med.observacao} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], observacao: e.target.value }; setMedicoes(m) }}
-                placeholder="Normal" className="border-border bg-white h-9" />
+                placeholder="Normal" className="border-border bg-card h-9" />
             </div>
           </div>
         </div>
@@ -340,7 +340,7 @@ function NovaInspecaoForm() {
         </Button>
       </div>
       {anomalias.map((ano, i) => (
-        <div key={i} className="p-4 rounded-lg border border-border bg-white space-y-3">
+        <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs text-text-secondary font-medium">Anomalia {i + 1}</span>
             {anomalias.length > 1 && (
@@ -350,13 +350,13 @@ function NovaInspecaoForm() {
           <div className="space-y-1">
             <Label className="text-xs text-text-secondary">Descrição</Label>
             <Textarea value={ano.descricao} onChange={(e) => { const a = [...anomalias]; a[i] = { ...a[i], descricao: e.target.value }; setAnomalias(a) }}
-              placeholder="Descreva a anomalia encontrada..." className="border-border bg-white min-h-[60px]" />
+              placeholder="Descreva a anomalia encontrada..." className="border-border bg-card min-h-[60px]" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Gravidade</Label>
               <Select value={ano.gravidade} onValueChange={(v) => { const a = [...anomalias]; a[i] = { ...a[i], gravidade: v ?? "media" }; setAnomalias(a) }}>
-                <SelectTrigger className="border-border bg-white h-9"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="border-border bg-card h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="baixa">Baixa</SelectItem>
                   <SelectItem value="media">Média</SelectItem>
@@ -375,7 +375,7 @@ function NovaInspecaoForm() {
           <div className="space-y-1">
             <Label className="text-xs text-text-secondary">Plano de Ação</Label>
             <Input value={ano.planoAcao} onChange={(e) => { const a = [...anomalias]; a[i] = { ...a[i], planoAcao: e.target.value }; setAnomalias(a) }}
-              placeholder="Ação corretiva proposta..." className="border-border bg-white h-9" />
+              placeholder="Ação corretiva proposta..." className="border-border bg-card h-9" />
           </div>
         </div>
       ))}
@@ -392,7 +392,7 @@ function NovaInspecaoForm() {
         </Button>
       </div>
       {dispositivos.map((disp, i) => (
-        <div key={i} className="p-4 rounded-lg border border-border bg-white space-y-3">
+        <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs text-text-secondary font-medium">Dispositivo {i + 1}</span>
             {dispositivos.length > 1 && (
@@ -403,7 +403,7 @@ function NovaInspecaoForm() {
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Tipo</Label>
               <Select value={disp.tipo} onValueChange={(v) => { const d = [...dispositivos]; d[i] = { ...d[i], tipo: v ?? "valvula_seguranca" }; setDispositivos(d) }}>
-                <SelectTrigger className="border-border bg-white h-9"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="border-border bg-card h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="valvula_seguranca">Válvula de Segurança</SelectItem>
                   <SelectItem value="disco_ruptura">Disco de Ruptura</SelectItem>
@@ -416,43 +416,43 @@ function NovaInspecaoForm() {
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Tag</Label>
               <Input value={disp.tag} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], tag: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: PSV-101" className="border-border bg-white h-9" />
+                placeholder="Ex: PSV-101" className="border-border bg-card h-9" />
             </div>
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Fabricante</Label>
               <Input value={disp.fabricante} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], fabricante: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: Spirax Sarco" className="border-border bg-white h-8 text-xs" />
+                placeholder="Ex: Spirax Sarco" className="border-border bg-card h-8 text-xs" />
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Modelo</Label>
               <Input value={disp.modelo} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], modelo: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: SCV-25" className="border-border bg-white h-8 text-xs" />
+                placeholder="Ex: SCV-25" className="border-border bg-card h-8 text-xs" />
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Nº Série</Label>
               <Input value={disp.numeroSerie} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], numeroSerie: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: SS-2025-001" className="border-border bg-white h-8 text-xs" />
+                placeholder="Ex: SS-2025-001" className="border-border bg-card h-8 text-xs" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Pressão de Abertura (kPa)</Label>
               <Input type="number" value={disp.pressaoAbertura} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoAbertura: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: 1650" className="border-border bg-white h-8 text-xs" />
+                placeholder="Ex: 1650" className="border-border bg-card h-8 text-xs" />
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Pressão de Vedação (kPa)</Label>
               <Input type="number" value={disp.pressaoVedacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoVedacao: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: 1480" className="border-border bg-white h-8 text-xs" />
+                placeholder="Ex: 1480" className="border-border bg-card h-8 text-xs" />
             </div>
           </div>
           <div className="flex items-center gap-3">
             <div
               className={cn(
                 "flex-1 p-2 rounded-lg border cursor-pointer text-center transition-colors",
-                disp.inspecaoOk ? "border-primary bg-primary-subtle text-primary" : "border-border bg-white text-text-secondary"
+                disp.inspecaoOk ? "border-primary bg-primary-subtle text-primary" : "border-border bg-card text-text-secondary"
               )}
               onClick={() => { const d = [...dispositivos]; d[i] = { ...d[i], inspecaoOk: !d[i].inspecaoOk }; setDispositivos(d) }}
             >
@@ -460,7 +460,7 @@ function NovaInspecaoForm() {
             </div>
             <div className="flex-[2]">
               <Input value={disp.observacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], observacao: e.target.value }; setDispositivos(d) }}
-                placeholder="Observação..." className="border-border bg-white h-9" />
+                placeholder="Observação..." className="border-border bg-card h-9" />
             </div>
           </div>
         </div>
@@ -485,7 +485,7 @@ function NovaInspecaoForm() {
           value={parecer}
           onChange={(e) => setParecer(e.target.value)}
           placeholder="Descreva o parecer conclusivo sobre a integridade do equipamento..."
-          className="border-border bg-white min-h-[120px]"
+          className="border-border bg-card min-h-[120px]"
         />
       </div>
 

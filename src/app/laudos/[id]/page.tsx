@@ -82,7 +82,7 @@ export default function LaudoDetalhe() {
           <div className="text-center mb-10">
             <h2 className="text-xl font-bold uppercase tracking-wide text-text-primary">RELATÓRIO DE INSPEÇÃO DE SEGURANÇA</h2>
             <p className="text-sm text-text-secondary mt-1">NR-13 — Caldeiras, Vasos de Pressão, Tubulações e Tanques Metálicos de Armazenamento</p>
-            <Separator className="my-4 bg-slate-300" />
+            <Separator className="my-4 bg-border" />
             <p className="text-lg font-semibold text-text-primary">{laudo.numeroLaudo}</p>
           </div>
 

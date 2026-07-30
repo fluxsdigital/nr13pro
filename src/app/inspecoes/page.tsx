@@ -105,7 +105,7 @@ export default function Inspecoes() {
       <div className="flex items-center gap-3 flex-wrap">
         <div className="min-w-[280px]">
           <Select value={filtroCliente} onValueChange={(v) => setFiltroCliente(v ?? "")}>
-            <SelectTrigger className="border-border bg-white h-9 text-sm w-full">
+            <SelectTrigger className="border-border bg-card h-9 text-sm w-full">
               <SelectValue placeholder="Todas as empresas" />
             </SelectTrigger>
             <SelectContent>
@@ -118,7 +118,7 @@ export default function Inspecoes() {
         </div>
         <div className="min-w-[200px]">
           <Select value={filtroStatus} onValueChange={(v) => setFiltroStatus(v as StatusFiltro)}>
-            <SelectTrigger className="border-border bg-white h-9 text-sm w-full">
+            <SelectTrigger className="border-border bg-card h-9 text-sm w-full">
               <SelectValue placeholder="Todos os status" />
             </SelectTrigger>
             <SelectContent>

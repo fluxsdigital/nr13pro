@@ -86,7 +86,7 @@ export default function Laudos() {
       <div className="flex items-center gap-3 flex-wrap">
         <div className="min-w-[280px]">
           <Select value={filtroCliente} onValueChange={(v) => setFiltroCliente(v ?? "")}>
-          <SelectTrigger className="border-border bg-white h-9 text-sm w-full">
+          <SelectTrigger className="border-border bg-card h-9 text-sm w-full">
             <SelectValue placeholder="Todas as empresas" />
           </SelectTrigger>
           <SelectContent>

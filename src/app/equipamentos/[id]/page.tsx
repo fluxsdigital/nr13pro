@@ -177,8 +177,8 @@ export default function EquipamentoDetalhe() {
 
       <Tabs defaultValue="inspecoes" className="w-full">
         <TabsList className="bg-card-hover border border-border overflow-x-auto flex-nowrap">
-          <TabsTrigger value="inspecoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Inspeções</TabsTrigger>
-          <TabsTrigger value="laudos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Laudos</TabsTrigger>
+          <TabsTrigger value="inspecoes" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Inspeções</TabsTrigger>
+          <TabsTrigger value="laudos" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Laudos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="inspecoes" className="mt-4">

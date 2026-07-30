@@ -128,32 +128,32 @@ function NovoLaudoForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">Nº do Laudo</Label>
-                <Input value={numeroLaudo} onChange={(e) => setNumeroLaudo(e.target.value)} required className="border-border bg-white font-mono" />
+                <Input value={numeroLaudo} onChange={(e) => setNumeroLaudo(e.target.value)} required className="border-border bg-card font-mono" />
               </div>
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">Data de Emissão</Label>
-                <Input type="date" value={dataEmissao} onChange={(e) => setDataEmissao(e.target.value)} required className="border-border bg-white" />
+                <Input type="date" value={dataEmissao} onChange={(e) => setDataEmissao(e.target.value)} required className="border-border bg-card" />
               </div>
             </div>
             <Separator className="bg-border" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">PLH - Nome</Label>
-                <Input value={plhNome} onChange={(e) => setPlhNome(e.target.value)} required className="border-border bg-white" />
+                <Input value={plhNome} onChange={(e) => setPlhNome(e.target.value)} required className="border-border bg-card" />
               </div>
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">PLH - CREA</Label>
-                <Input value={plhCrea} onChange={(e) => setPlhCrea(e.target.value)} required className="border-border bg-white" />
+                <Input value={plhCrea} onChange={(e) => setPlhCrea(e.target.value)} required className="border-border bg-card" />
               </div>
             </div>
             <Separator className="bg-border" />
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Data da Próxima Inspeção</Label>
-              <Input type="date" value={dataProxima} onChange={(e) => setDataProxima(e.target.value)} required className="border-border bg-white" />
+              <Input type="date" value={dataProxima} onChange={(e) => setDataProxima(e.target.value)} required className="border-border bg-card" />
             </div>
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Observações</Label>
-              <Textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={3} className="border-border bg-white" />
+              <Textarea value={observacoes} onChange={(e) => setObservacoes(e.target.value)} rows={3} className="border-border bg-card" />
             </div>
           </CardContent>
         </Card>

@@ -63,17 +63,17 @@ export default function Economia() {
                 value={nomeCliente}
                 onChange={(e) => setNomeCliente(e.target.value)}
                 placeholder="Ex: Indústria ABC Ltda."
-                className="border-border bg-white"
+                className="border-border bg-card"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">Total de Equipamentos</Label>
-                <Input type="number" value={equipamentos} onChange={(e) => setEquipamentos(Number(e.target.value))} className="border-border bg-white" />
+                <Input type="number" value={equipamentos} onChange={(e) => setEquipamentos(Number(e.target.value))} className="border-border bg-card" />
               </div>
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">Inspeções Vencidas</Label>
-                <Input type="number" value={inspecoesVencidas} onChange={(e) => setInspecoesVencidas(Number(e.target.value))} className="border-border bg-white" />
+                <Input type="number" value={inspecoesVencidas} onChange={(e) => setInspecoesVencidas(Number(e.target.value))} className="border-border bg-card" />
               </div>
             </div>
             <div className="space-y-2">
@@ -81,27 +81,27 @@ export default function Economia() {
               <div className="grid grid-cols-3 gap-2">
                 {(["pequeno", "medio", "grande"] as const).map((key) => (
                   <div key={key} className={`p-2 rounded-lg text-center text-xs cursor-pointer border transition-colors ${
-                    porte === key ? "border-primary bg-primary-subtle text-primary font-medium" : "border-border bg-white text-text-secondary hover:border-slate-300"
+                    porte === key ? "border-primary bg-primary-subtle text-primary font-medium" : "border-border bg-card text-text-secondary hover:border-slate-300"
                   }`} onClick={() => setPorte(key)}>
                     {key.charAt(0).toUpperCase() + key.slice(1)}
                   </div>
                 ))}
               </div>
             </div>
-            <Separator className="bg-slate-200" />
+            <Separator className="bg-border" />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">Custo Diário Operacional (R$)</Label>
-                <Input type="number" value={diariaOperacional} onChange={(e) => setDiariaOperacional(Number(e.target.value))} className="border-border bg-white" />
+                <Input type="number" value={diariaOperacional} onChange={(e) => setDiariaOperacional(Number(e.target.value))} className="border-border bg-card" />
               </div>
               <div className="space-y-2">
                 <Label className="text-text-secondary text-xs">Custo Médio/Inspeção (R$)</Label>
-                <Input type="number" value={custoInspecao} onChange={(e) => setCustoInspecao(Number(e.target.value))} className="border-border bg-white" />
+                <Input type="number" value={custoInspecao} onChange={(e) => setCustoInspecao(Number(e.target.value))} className="border-border bg-card" />
               </div>
             </div>
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Inspeções por Ano</Label>
-              <Input type="number" value={qtdInspecoesAno} onChange={(e) => setQtdInspecoesAno(Number(e.target.value))} className="border-border bg-white" />
+              <Input type="number" value={qtdInspecoesAno} onChange={(e) => setQtdInspecoesAno(Number(e.target.value))} className="border-border bg-card" />
             </div>
           </CardContent>
         </Card>
@@ -136,7 +136,7 @@ export default function Economia() {
               ))}
             </div>
 
-            <Separator className="bg-slate-200" />
+            <Separator className="bg-border" />
             <p className="text-xs font-medium text-text-secondary uppercase tracking-wider">Seu Retorno como Engenheiro</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-3 rounded-lg border border-border bg-background text-center">
@@ -156,7 +156,7 @@ export default function Economia() {
         </Card>
       </div>
 
-      <Card className="border-border shadow-sm bg-white">
+      <Card className="border-border shadow-sm bg-card">
         <CardHeader>
           <CardTitle className="text-text-primary flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
@@ -190,7 +190,7 @@ export default function Economia() {
               </tr>
             </tbody>
           </table>
-          <Separator className="bg-slate-200 my-4" />
+          <Separator className="bg-border my-4" />
           <table className="w-full text-sm mb-6">
             <thead>
               <tr className="bg-background border-b border-border">
@@ -221,7 +221,7 @@ export default function Economia() {
               </tr>
             </tbody>
           </table>
-          <Separator className="bg-slate-200 my-6" />
+          <Separator className="bg-border my-6" />
 
           <div className="rounded-lg bg-primary-subtle border border-primary/20 p-4 text-sm text-text-secondary space-y-2">
             <p className="font-medium text-primary">Como usar esta ferramenta:</p>

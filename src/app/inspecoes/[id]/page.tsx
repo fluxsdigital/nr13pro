@@ -74,11 +74,11 @@ export default function InspecaoDetalhe() {
 
       <Tabs defaultValue="resumo" className="w-full">
         <TabsList className="bg-card-hover border border-border overflow-x-auto flex-nowrap">
-        <TabsTrigger value="resumo" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Resumo</TabsTrigger>
-           <TabsTrigger value="checklist" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Checklist</TabsTrigger>
-           <TabsTrigger value="medicoes" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Medições</TabsTrigger>
-           <TabsTrigger value="anomalias" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Anomalias</TabsTrigger>
-           <TabsTrigger value="dispositivos" className="data-[state=active]:bg-white data-[state=active]:shadow-sm shrink-0">Dispositivos</TabsTrigger>
+        <TabsTrigger value="resumo" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Resumo</TabsTrigger>
+           <TabsTrigger value="checklist" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Checklist</TabsTrigger>
+           <TabsTrigger value="medicoes" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Medições</TabsTrigger>
+           <TabsTrigger value="anomalias" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Anomalias</TabsTrigger>
+           <TabsTrigger value="dispositivos" className="data-[state=active]:bg-card data-[state=active]:shadow-sm shrink-0">Dispositivos</TabsTrigger>
         </TabsList>
 
         <TabsContent value="resumo" className="mt-4 space-y-4">
