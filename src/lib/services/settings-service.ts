@@ -1,5 +1,5 @@
 import { settings } from "@/lib/store"
-import type { Settings, UpdateSettingsDTO } from "@/lib/settings" from "."
+import type { Settings, UpdateSettingsDTO } from "@/lib/settings"
 
 type SettingsListener = () => void
 const listeners: SettingsListener[] = []
@@ -12,7 +12,7 @@ function notifyListeners() {
 export interface SettingsService {
   get(): Promise<Settings>
   update(data: UpdateSettingsDTO): Promise<Settings>
-  onChange(listener: SettingsListener): () => void
+  onChange(listener: () => void): () => void
 }
 
 class MockSettingsService implements SettingsService {
@@ -35,7 +35,7 @@ class MockSettingsService implements SettingsService {
     return settings
   }
 
-  onChange(listener: SettingsListener) {
+  onChange(listener: () => void) {
     listeners.push(listener)
     return () => {
       const idx = listeners.indexOf(listener)
