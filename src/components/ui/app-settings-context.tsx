@@ -53,19 +53,26 @@ export function AppSettingsProvider({ children }: { children: ReactNode }) {
         console.error("Error parsing app-settings:", e)
         localStorage.removeItem("app-settings")
       }
+    } else {
+      settingsService.get()
+        .then((s) => {
+          setSettings(s)
+          localStorage.setItem("app-settings", JSON.stringify(s))
+        })
+        .catch((err) => {
+          console.error("Error loading settings:", err)
+          setSettings(defaultSettings)
+          localStorage.setItem("app-settings", JSON.stringify(defaultSettings))
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     }
 
     const savedTheme = localStorage.getItem("theme")
     if (savedTheme === "light" || savedTheme === "dark") {
-      if (settings.preferences.theme !== savedTheme) {
-        setSettings(prev => ({
-          ...prev,
-          preferences: { ...prev.preferences, theme: savedTheme }
-        }))
-      }
+      document.documentElement.setAttribute("data-theme", savedTheme)
     }
-
-    setIsLoading(false)
   }, [])
 
   const updateSettings = async (newSettings: Partial<AppSettings>) => {
