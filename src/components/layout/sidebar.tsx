@@ -130,11 +130,15 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
           <DropdownMenuItem className="cursor-pointer">
             <User className="mr-2 h-4 w-4" /> Perfil
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <Settings2 className="mr-2 h-4 w-4" /> Configurações
+          <DropdownMenuItem className="cursor-pointer p-0">
+            <Link href="/configuracoes" className="flex items-center gap-1.5 px-1.5 py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7">
+              <Settings2 className="mr-2 h-4 w-4" /> Configurações
+            </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+          <DropdownMenuItem className="cursor-pointer p-0">
+            <Link href="/configuracoes" className="flex items-center gap-1.5 px-1.5 py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7">
+              <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+            </Link>
           </DropdownMenuItem>
           <ThemeToggle />
           <DropdownMenuSeparator />
@@ -169,11 +173,15 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
         <DropdownMenuItem className="cursor-pointer">
           <User className="mr-2 h-4 w-4" /> Perfil
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
-          <Settings2 className="mr-2 h-4 w-4" /> Configurações
+        <DropdownMenuItem className="cursor-pointer p-0">
+          <Link href="/configuracoes" className="flex items-center gap-1.5 px-1.5 py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7">
+            <Settings2 className="mr-2 h-4 w-4" /> Configurações
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
-          <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+        <DropdownMenuItem className="cursor-pointer p-0">
+          <Link href="/configuracoes" className="flex items-center gap-1.5 px-1.5 py-1 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-inset:pl-7">
+            <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+          </Link>
         </DropdownMenuItem>
         <ThemeToggle />
         <DropdownMenuSeparator />
