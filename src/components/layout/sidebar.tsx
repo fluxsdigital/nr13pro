@@ -15,8 +15,6 @@ import {
   ChevronRight,
   User,
   Settings2,
-  Sun,
-  Moon,
   LogOut,
   ChevronDown,
   Bell,
@@ -26,8 +24,6 @@ import { cn } from "@/lib/utils"
 import { useSidebar } from "@/lib/sidebar-context"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-
-type Theme = "light" | "dark"
 
 const links = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -76,38 +72,6 @@ function NavItems({ collapsed = false }: { collapsed?: boolean }) {
   )
 }
 
-function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark")
-
-  useEffect(() => {
-    const saved = localStorage.getItem("theme") as Theme | null
-    if (saved) {
-      setTheme(saved)
-      document.documentElement.setAttribute("data-theme", saved)
-    } else {
-      setTheme("dark")
-      document.documentElement.setAttribute("data-theme", "dark")
-    }
-  }, [])
-
-  const toggle = () => {
-    const next = theme === "dark" ? "light" : "dark"
-    setTheme(next)
-    document.documentElement.setAttribute("data-theme", next)
-    localStorage.setItem("theme", next)
-  }
-
-  return (
-    <button
-      onClick={toggle}
-      className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-sidebar-foreground hover:bg-sidebar-accent transition-colors duration-150 w-full"
-    >
-      {theme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-      {theme === "dark" ? "Modo Claro" : "Modo Escuro"}
-    </button>
-  )
-}
-
 function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
   const initials = USER.name.split(" ").map((n) => n[0]).join("").slice(0, 2)
 
@@ -140,7 +104,6 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
               <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
             </Link>
           </DropdownMenuItem>
-          <ThemeToggle />
           <DropdownMenuSeparator />
           <DropdownMenuItem className="cursor-pointer" variant="destructive">
             <LogOut className="mr-2 h-4 w-4" /> Sair
@@ -183,7 +146,6 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
             <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
           </Link>
         </DropdownMenuItem>
-        <ThemeToggle />
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" variant="destructive">
           <LogOut className="mr-2 h-4 w-4" /> Sair
