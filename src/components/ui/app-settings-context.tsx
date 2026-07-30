@@ -4,92 +4,98 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 
 type AppSettings = {
   profile: {
-    name: string
+    nome: string
+    crea: string
     email: string
-    phone: string
-    company: string
-    position: string
+    foto: string
   }
-  notifications: {
-    email: boolean
-    browser: boolean
-    sms: boolean
+  payment: {
+    cardNumber: string
+    holderName: string
+    expiry: string
+    brand: string
+    last4: string
   }
-  theme: "light" | "dark"
-  language: "pt-BR" | "en-US"
+  preferences: {
+    theme: "light" | "dark"
+    notifications: boolean
+  }
+  updatedAt: string
 }
 
 type SettingsContextType = {
   settings: AppSettings
-  updateSettings: (newSettings: Partial<AppSettings>) => void
+  updateSettings: (newSettings: Partial<AppSettings>) => Promise<void>
   isLoading: boolean
 }
 
 const defaultSettings: AppSettings = {
-  profile: {
-    name: "Carlos Eduardo Mendes",
-    email: "carlos.mendes@engenharia.com.br",
-    phone: "(11) 9999-9999",
-    company: "Engenharia e Consultoria Ltda",
-    position: "Responsável Técnico",
-  },
-  notifications: {
-    email: true,
-    browser: true,
-    sms: false,
-  },
-  theme: "dark",
-  language: "pt-BR",
+  profile: { nome: "", crea: "", email: "", foto: "" },
+  payment: { cardNumber: "", holderName: "", expiry: "", brand: "", last4: "" },
+  preferences: { theme: "dark", notifications: true },
+  updatedAt: "",
 }
 
 const SettingsContext = createContext<SettingsContextType | null>(null)
 
 export function AppSettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<AppSettings>(() => {
-    if (typeof window === "undefined") return defaultSettings
-    
-    const stored = localStorage.getItem("app-settings")
-    if (!stored) return defaultSettings
-    
-    try {
-      return JSON.parse(stored)
-    } catch (e) {
-      console.error("Error parsing app-settings:", e)
-      return defaultSettings
-    }
-  })
+  const [settings, setSettings] = useState<AppSettings>(defaultSettings)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const stored = localStorage.getItem("app-settings")
     if (stored) {
       try {
-        const parsed = JSON.parse(stored)
-        setSettings(parsed)
+        const parsed = JSON.parse(stored) as AppSettings
+        setSettings({ ...defaultSettings, ...parsed })
       } catch (e) {
         console.error("Error parsing app-settings:", e)
+        localStorage.removeItem("app-settings")
       }
     }
-    
+
     const savedTheme = localStorage.getItem("theme")
     if (savedTheme === "light" || savedTheme === "dark") {
-      document.documentElement.setAttribute("data-theme", savedTheme)
-      setSettings(prev => ({ ...prev, theme: savedTheme }))
+      if (settings.preferences.theme !== savedTheme) {
+        setSettings(prev => ({
+          ...prev,
+          preferences: { ...prev.preferences, theme: savedTheme }
+        }))
+      }
     }
+
+    setIsLoading(false)
   }, [])
 
-  const updateSettings = (newSettings: Partial<AppSettings>) => {
+  const updateSettings = async (newSettings: Partial<AppSettings>) => {
     const updated = { ...settings, ...newSettings }
     setSettings(updated)
     localStorage.setItem("app-settings", JSON.stringify(updated))
-    
-    if (newSettings.theme) {
-      localStorage.setItem("theme", newSettings.theme)
-      document.documentElement.setAttribute("data-theme", newSettings.theme)
+
+    if (newSettings.preferences?.theme) {
+      localStorage.setItem("theme", newSettings.preferences.theme)
+      document.documentElement.setAttribute("data-theme", newSettings.preferences.theme)
+    }
+
+    if (newSettings.profile) {
+      const profileForSidebar = {
+        nome: newSettings.profile.nome,
+        crea: newSettings.profile.crea,
+        email: newSettings.profile.email,
+        foto: newSettings.profile.foto,
+      }
+      localStorage.setItem("profile-settings", JSON.stringify({ profile: profileForSidebar }))
+
+      if (settingsService) {
+        await settingsService.update({
+          profile: newSettings.profile
+        })
+      }
     }
   }
 
   return (
-    <SettingsContext.Provider value={{ settings, updateSettings, isLoading: false }}>
+    <SettingsContext.Provider value={{ settings, updateSettings, isLoading }}>
       {children}
     </SettingsContext.Provider>
   )
