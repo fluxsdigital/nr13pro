@@ -20,6 +20,7 @@ import {
   LogOut,
   ChevronDown,
   Bell,
+  CreditCard,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "@/lib/sidebar-context"
@@ -132,9 +133,12 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
           <DropdownMenuItem className="cursor-pointer">
             <Settings2 className="mr-2 h-4 w-4" /> Configurações
           </DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
+          </DropdownMenuItem>
           <ThemeToggle />
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer text-danger focus:text-danger">
+          <DropdownMenuItem className="cursor-pointer" variant="destructive">
             <LogOut className="mr-2 h-4 w-4" /> Sair
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -167,6 +171,9 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
         </DropdownMenuItem>
         <DropdownMenuItem className="cursor-pointer">
           <Settings2 className="mr-2 h-4 w-4" /> Configurações
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <CreditCard className="mr-2 h-4 w-4" /> Salvar cartão
         </DropdownMenuItem>
         <ThemeToggle />
         <DropdownMenuSeparator />
