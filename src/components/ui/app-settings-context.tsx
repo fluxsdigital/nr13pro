@@ -35,7 +35,7 @@ const SettingsContext = createContext<SettingsContextType | null>(null)
 const DEFAULT_SETTINGS: AppSettings = {
   profile: { nome: "", crea: "", email: "", foto: "" },
   payment: { cardNumber: "", holderName: "", expiry: "", brand: "", last4: "" },
-  preferences: { theme: "dark", notifications: true },
+  preferences: { theme: "light", notifications: true },
   updatedAt: "",
 }
 

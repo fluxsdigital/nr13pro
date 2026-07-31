@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `
               (function() {
                 var theme = localStorage.getItem('theme');
-                if (theme === 'dark' || !theme) {
+                if (theme === 'dark') {
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }
               })();
