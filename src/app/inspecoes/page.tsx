@@ -38,52 +38,40 @@ export default function Inspecoes() {
   }, [])
 
   const empresas = useMemo(() => {
-    const nomes = new Set(data.map((d) => d.cliente?.nome).filter(Boolean))
-    return Array.from(nomes).sort()
+    const nomes = data.map((i) => i.cliente?.nome).filter(Boolean) as string[]
+    return [...new Set(nomes)]
   }, [data])
 
   const filtradas = useMemo(() => {
-    return data.filter((d) => {
-      if (filtroCliente && d.cliente?.nome !== filtroCliente) return false
-      if (filtroStatus === "andamento" && d.concluida) return false
-      if (filtroStatus === "concluidas" && !d.concluida) return false
-      return true
-    })
+    let r = data
+    if (filtroCliente) r = r.filter((i) => i.cliente?.nome === filtroCliente)
+    if (filtroStatus === "andamento") r = r.filter((i) => !i.concluida)
+    if (filtroStatus === "concluidas") r = r.filter((i) => i.concluida)
+    return r
   }, [data, filtroCliente, filtroStatus])
 
-  const totalCount = data.length
-  const concluidasCount = data.filter((d) => d.concluida).length
-  const andamentoCount = data.filter((d) => !d.concluida).length
+  const andamentoCount = data.filter((i) => !i.concluida).length
+  const concluidasCount = data.filter((i) => i.concluida).length
 
   return (
     <div className="p-4 sm:p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-text-primary tracking-tight">Inspeções</h1>
-          <p className="text-text-secondary text-sm mt-1">Histórico de inspeções realizadas</p>
+          <p className="text-text-secondary text-sm mt-1">Gerencie as inspeções realizadas nos equipamentos</p>
         </div>
-        <Link href="/inspecoes/nova" className="shrink-0">
+        <Link href="/inspecoes/nova">
           <Button variant="primary" className="w-full sm:w-auto">
-            <Plus className="h-4 w-4 mr-2" />
-            Nova Inspeção
+            <Plus className="h-4 w-4 mr-2" /> Nova Inspeção
           </Button>
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="card-kpi">
-          <CardContent className="p-4 flex items-center gap-3">
-            <ClipboardCheck className="h-8 w-8 text-primary" />
-            <div>
-              <p className="text-2xl font-bold text-text-primary">{totalCount}</p>
-              <p className="text-xs text-text-secondary">Total</p>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card className="card-kpi">
           <CardContent className="p-4 flex items-center gap-3">
             <div className="h-8 w-8 rounded-full bg-success-subtle flex items-center justify-center">
-              <div className="h-3 w-3 rounded-full bg-success" />
+              <FileText className="h-4 w-4 text-success" />
             </div>
             <div>
               <p className="text-2xl font-bold text-text-primary">{concluidasCount}</p>
@@ -159,50 +147,60 @@ export default function Inspecoes() {
        ) : (
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
            {filtradas.map((ins) => (
-             <Link key={ins.id} href={`/inspecoes/${ins.id}`} className="block">
-              <Card className="card-hover cursor-pointer">
-                <CardContent className="p-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-0.5 ${ins.concluida ? "bg-success" : "bg-amber-500"}`} />
-                      <div className="min-w-0 overflow-hidden line-clamp-4">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <p className="text-sm font-semibold text-text-primary capitalize truncate">{ins.tipo.replace("_", " ")}</p>
-                          <Badge variant="outline" className="text-xs border-border text-text-secondary font-mono shrink-0">{ins.eq?.tag}</Badge>
-                        </div>
-                        <p className="text-xs text-text-secondary truncate mt-0.5">{ins.eq?.descricao}</p>
-                        <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
-                          <p className="text-xs font-medium text-primary truncate">{ins.cliente?.nome}</p>
-                          <span className="text-xs text-text-muted hidden sm:inline">•</span>
-                          <p className="text-xs text-text-secondary">{ins.dataInicio}{ins.dataTermino ? ` — ${ins.dataTermino}` : ""}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0 sm:pl-3">
-                      {ins.concluida && !ins.laudoId && (
-                        <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-xs">
-                          <AlertCircle className="h-3 w-3 mr-1" />
-                          Laudo pendente
-                        </Badge>
-                      )}
-                      {ins.laudoId && (
-                        <Badge className="bg-primary-subtle text-primary border-primary/20 hover:bg-primary-subtle text-xs">
-                          <FileText className="h-3 w-3 mr-1" />
-                          Com laudo
-                        </Badge>
-                      )}
-                      <Badge variant={ins.concluida ? "default" : "secondary"} className="text-xs">
-                        {ins.concluida ? "Concluída" : "Em andamento"}
-                      </Badge>
-                      <ArrowRight className="h-4 w-4 text-text-muted shrink-0" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      )}
+             <Card key={ins.id} className="card-hover cursor-pointer">
+               <Link href={`/inspecoes/${ins.id}`} className="block">
+                 <CardContent className="p-4 pb-2">
+                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                     <div className="flex items-center gap-3 min-w-0">
+                       <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-0.5 ${ins.concluida ? "bg-success" : "bg-amber-500"}`} />
+                       <div className="min-w-0 overflow-hidden line-clamp-4">
+                         <div className="flex items-center gap-2 flex-wrap">
+                           <p className="text-sm font-semibold text-text-primary capitalize truncate">{ins.tipo.replace("_", " ")}</p>
+                           <Badge variant="outline" className="text-xs border-border text-text-secondary font-mono shrink-0">{ins.eq?.tag}</Badge>
+                         </div>
+                         <p className="text-xs text-text-secondary truncate mt-0.5">{ins.eq?.descricao}</p>
+                         <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
+                           <p className="text-xs font-medium text-primary truncate">{ins.cliente?.nome}</p>
+                           <span className="text-xs text-text-muted hidden sm:inline">•</span>
+                           <p className="text-xs text-text-secondary">{ins.dataInicio}{ins.dataTermino ? ` — ${ins.dataTermino}` : ""}</p>
+                         </div>
+                       </div>
+                     </div>
+                     <div className="flex items-center gap-2 shrink-0 sm:pl-3">
+                       {ins.concluida && !ins.laudoId && (
+                         <Badge className="bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-100 text-xs">
+                           <AlertCircle className="h-3 w-3 mr-1" />
+                           Laudo pendente
+                         </Badge>
+                       )}
+                       {ins.laudoId && (
+                         <Badge className="bg-primary-subtle text-primary border-primary/20 hover:bg-primary-subtle text-xs">
+                           <FileText className="h-3 w-3 mr-1" />
+                           Com laudo
+                         </Badge>
+                       )}
+                       <Badge variant={ins.concluida ? "default" : "secondary"} className="text-xs">
+                         {ins.concluida ? "Concluída" : "Em andamento"}
+                       </Badge>
+                       <ArrowRight className="h-4 w-4 text-text-muted shrink-0" />
+                     </div>
+                   </div>
+                 </CardContent>
+               </Link>
+               {ins.concluida && !ins.laudoId && (
+                 <div className="px-4 pb-4">
+                   <Link href={`/laudos/novo?inspecao=${ins.id}`} onClick={(e) => e.stopPropagation()}>
+                     <Button variant="primary" size="sm" className="w-full text-xs">
+                       <FileText className="h-3.5 w-3.5 mr-1.5" />
+                       Gerar Laudo
+                     </Button>
+                   </Link>
+                 </div>
+               )}
+             </Card>
+           ))}
+         </div>
+       )}
     </div>
   )
 }

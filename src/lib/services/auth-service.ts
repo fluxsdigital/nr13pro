@@ -1,4 +1,5 @@
 import { type User, type SignupDTO, type LoginDTO, type AuthSession } from "@/lib/types"
+import { seedService } from "./seed-service"
 
 const STORAGE_KEYS = {
   users: "nr13pro_users",
@@ -49,6 +50,9 @@ export const authService = {
 
     users[user.id] = { user, password: data.password }
     saveUsers(users)
+
+    // Seed demo data for the new user
+    await seedService.seedForUser(user.id)
 
     const session: AuthSession = {
       user,
