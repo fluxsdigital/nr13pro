@@ -21,27 +21,27 @@ export function Section({ children, id, className = "", title, subtitle, contain
       <Container className={containerClassName}>
         {(title || subtitle) && (
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 24, filter: "blur(8px)" }}
-            whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+            whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
             className="mb-12 sm:mb-16 text-center"
           >
             {title && (
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight text-text-primary">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-[#171717]">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="mt-4 text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
+              <p className="mt-4 text-lg text-[#676767] max-w-2xl mx-auto leading-relaxed">
                 {subtitle}
               </p>
             )}
           </motion.div>
         )}
         <motion.div
-          initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, scale: 0.98, filter: "blur(6px)" }}
-          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, scale: 0.98 }}
+          whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.1 }}
         >
