@@ -29,12 +29,10 @@ function saveUsers(users: Record<string, { user: User; password: string }>) {
 
 export const authService = {
   async signup(data: SignupDTO): Promise<AuthSession> {
-    // Simula delay de rede
     await new Promise((r) => setTimeout(r, 800))
 
     const users = getUsers()
 
-    // Verifica se email já existe
     if (Object.values(users).some((u) => u.user.email === data.email)) {
       throw new Error("Este e-mail já está cadastrado.")
     }
@@ -51,13 +49,17 @@ export const authService = {
     users[user.id] = { user, password: data.password }
     saveUsers(users)
 
-    // Seed demo data for the new user
-    await seedService.seedForUser(user.id)
+    // Seed dados demo para o novo usuário (não crítico - catch silencioso)
+    try {
+      await seedService.seedForUser(user.id)
+    } catch (err) {
+      console.error("[auth] Erro ao seed dados para novo usuário:", err)
+    }
 
     const session: AuthSession = {
       user,
       token: generateToken(),
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 dias
+      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     }
 
     localStorage.setItem(STORAGE_KEYS.session, JSON.stringify(session))

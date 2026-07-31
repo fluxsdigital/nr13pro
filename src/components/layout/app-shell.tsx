@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/lib/sidebar-context"
 import { SettingsProvider } from "@/lib/settings-context"
 import { AuthProvider, useAuth } from "@/lib/auth-context"
 import { NotificationProvider } from "@/lib/notification-context"
+import { AppSettingsProvider } from "@/components/ui/app-settings-context"
 import { MainContent } from "@/components/layout/main-content"
 
 const publicRoutes = ["/vendas", "/checkout", "/login", "/cadastro", "/privacidade", "/termos-de-uso"]
@@ -64,7 +65,9 @@ function AppContent({ children }: { children: React.ReactNode }) {
           <SettingsProvider>
             <Sidebar />
           </SettingsProvider>
-          <MainContent>{children}</MainContent>
+          <AppSettingsProvider>
+            <MainContent>{children}</MainContent>
+          </AppSettingsProvider>
         </NotificationProvider>
       </SidebarProvider>
     </div>
