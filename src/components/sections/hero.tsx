@@ -78,25 +78,25 @@ export function Hero() {
       <Container className="relative flex-1 flex flex-col justify-center pt-20 sm:pt-24 pb-8 sm:pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
-            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+            animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
           >
             <motion.h1
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 30, filter: "blur(10px)" }}
-              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-medium text-[#171717] tracking-tight leading-[1.1]"
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-text-primary tracking-tight leading-[1.08]"
             >
               Gerencie inspeções de válvulas com a{" "}
-              <span className="text-[#C56A2D]">velocidade de um software moderno</span>
+              <span className="text-primary">velocidade de um software moderno</span>
             </motion.h1>
 
             <motion.p
-              initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+              initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
               animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 0.45 }}
-              className="mt-4 sm:mt-5 text-base sm:text-lg text-[#676767] leading-relaxed max-w-lg"
+              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.45 }}
+              className="mt-5 sm:mt-6 text-base sm:text-lg text-text-secondary leading-relaxed max-w-lg"
             >
               Cadastro, inspeção, fotos, QR Code, laudo PDF e histórico completo —
               tudo que sua empresa precisa para estar em conformidade com a NR-13.
@@ -105,28 +105,28 @@ export function Hero() {
             <motion.div
               initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.96 }}
               animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
-              className="mt-6 sm:mt-8"
+              transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1], delay: 0.6 }}
+              className="mt-8 sm:mt-10"
             >
-              <div className="flex items-baseline gap-1 mb-5">
-                <span className="text-3xl font-semibold text-[#171717]">R$ 197</span>
-                <span className="text-sm text-[#676767]">/mês</span>
+              <div className="flex items-baseline gap-1 mb-6">
+                <span className="text-3xl font-bold text-text-primary">R$ 197</span>
+                <span className="text-sm text-text-secondary">/mês</span>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <a
                   href="/checkout"
-                  className="inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 cursor-pointer px-7 py-3 text-base bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                  className="inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-all duration-200 cursor-pointer px-8 py-3.5 text-base bg-primary text-white hover:bg-primary-hover active:bg-primary-active shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                   Assinar agora — R$ 197/mês
                 </a>
               </div>
 
-              <div className="mt-3 flex items-center gap-2 text-xs text-[#2E7D32]">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <div className="mt-3 flex items-center gap-2 text-xs font-medium text-success">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
                 Cancele quando quiser, sem multa
@@ -149,20 +149,20 @@ export function Hero() {
         <motion.div
           initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: 1 }}
-          className="mt-8 sm:mt-10"
+          transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1], delay: 1 }}
+          className="mt-10 sm:mt-12"
         >
-          <div className="flex items-center justify-center gap-8 sm:gap-14">
+          <div className="flex items-center justify-center gap-10 sm:gap-16">
             {[
               { label: "Empresas", end: 350, suffix: "+" },
               { label: "Inspeções", end: 12000, suffix: "+" },
               { label: "Satisfação", end: 98, suffix: "%" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-xl sm:text-2xl font-semibold text-[#171717]">
+                <div className="text-2xl sm:text-3xl font-bold text-text-primary">
                   <AnimatedCounter end={stat.end} suffix={stat.suffix} />
                 </div>
-                <div className="text-xs text-[#676767] mt-0.5">{stat.label}</div>
+                <div className="text-xs sm:text-sm text-text-secondary mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -174,7 +174,7 @@ export function Hero() {
               hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { staggerChildren: 0.04 } },
             }}
-            className="flex flex-wrap items-center justify-center gap-2 mt-4 sm:mt-5"
+            className="flex flex-wrap items-center justify-center gap-2 mt-5 sm:mt-6"
           >
             {badges.map((badge) => (
               <motion.span
@@ -183,9 +183,9 @@ export function Hero() {
                   hidden: { opacity: 0, y: 6, scale: 0.95 },
                   visible: { opacity: 1, y: 0, scale: 1 },
                 }}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white border border-[#EDE9E3] text-[11px] text-[#676767]"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-border text-xs font-medium text-text-secondary"
               >
-                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--success)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
                 {badge}
