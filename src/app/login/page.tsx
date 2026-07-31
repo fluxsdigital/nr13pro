@@ -108,7 +108,16 @@ export default function LoginPage() {
               </motion.button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-text-secondary">
+            {/* Acesso Demo */}
+            <div className="mt-6 p-3 rounded-lg bg-primary-subtle border border-primary/20">
+              <p className="text-xs font-semibold text-primary mb-1.5">🔑 Acesso de demonstração</p>
+              <p className="text-xs text-text-secondary leading-relaxed">
+                Use o e-mail <strong className="text-text-primary">demo@nr13pro.com.br</strong> e senha{" "}
+                <strong className="text-text-primary">123456</strong> para explorar o sistema com dados pré-carregados.
+              </p>
+            </div>
+
+            <p className="mt-4 text-center text-sm text-text-secondary">
               Não tem conta?{" "}
               <Link href="/cadastro" className="text-primary hover:text-primary-hover font-medium underline underline-offset-2">
                 Criar conta

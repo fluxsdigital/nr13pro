@@ -8,6 +8,7 @@ import { SettingsProvider } from "@/lib/settings-context"
 import { AuthProvider, useAuth } from "@/lib/auth-context"
 import { NotificationProvider } from "@/lib/notification-context"
 import { AppSettingsProvider } from "@/components/ui/app-settings-context"
+import { authService } from "@/lib/services/auth-service"
 import { MainContent } from "@/components/layout/main-content"
 
 const publicRoutes = ["/vendas", "/checkout", "/login", "/cadastro", "/privacidade", "/termos-de-uso"]
@@ -75,6 +76,11 @@ function AppContent({ children }: { children: React.ReactNode }) {
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  // Inicializa o usuário demo no localStorage na primeira carga
+  useEffect(() => {
+    authService.seedDemoUser()
+  }, [])
+
   return (
     <AuthProvider>
       <AuthGuard>

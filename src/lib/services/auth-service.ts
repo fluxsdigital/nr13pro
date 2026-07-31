@@ -1,5 +1,4 @@
 import { type User, type SignupDTO, type LoginDTO, type AuthSession } from "@/lib/types"
-import { seedService } from "./seed-service"
 
 const STORAGE_KEYS = {
   users: "nr13pro_users",
@@ -28,6 +27,26 @@ function saveUsers(users: Record<string, { user: User; password: string }>) {
 }
 
 export const authService = {
+  /** Cria o usuário demo no localStorage se ainda não existir */
+  seedDemoUser(): void {
+    if (typeof window === "undefined") return
+    const users = getUsers()
+    // Verifica se já existe um usuário com o email demo
+    if (Object.values(users).some((u) => u.user.email === "demo@nr13pro.com.br")) return
+
+    const demoUser: User = {
+      id: "user_demo_001",
+      name: "Eng. Carlos Alberto Santos",
+      email: "demo@nr13pro.com.br",
+      crea: "CREA-SP 123.456",
+      plan: "Mensal",
+      createdAt: "2025-01-01T00:00:00.000Z",
+    }
+    users[demoUser.id] = { user: demoUser, password: "123456" }
+    saveUsers(users)
+    console.log("[auth] Usuário demo criado: demo@nr13pro.com.br / 123456")
+  },
+
   async signup(data: SignupDTO): Promise<AuthSession> {
     await new Promise((r) => setTimeout(r, 800))
 
@@ -48,13 +67,6 @@ export const authService = {
 
     users[user.id] = { user, password: data.password }
     saveUsers(users)
-
-    // Seed dados demo para o novo usuário (não crítico - catch silencioso)
-    try {
-      await seedService.seedForUser(user.id)
-    } catch (err) {
-      console.error("[auth] Erro ao seed dados para novo usuário:", err)
-    }
 
     const session: AuthSession = {
       user,
