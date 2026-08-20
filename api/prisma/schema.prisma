@@ -1,0 +1,220 @@
+// NR-13 Pro — Schema Prisma
+// Espelha os tipos do frontend (src/lib/types.ts)
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id                 String    @id @default(cuid())
+  name               String
+  email              String    @unique
+  password           String // hash bcrypt
+  crea               String
+  role               String    @default("engenheiro") // "closer" | "engenheiro"
+  plan               String? // "Mensal" | "Anual" | "Degustação"
+  degustacaoExpiraEm DateTime? // expiração do acesso de degustação (7 dias)
+  createdAt          DateTime  @default(now())
+
+  clientes      Cliente[]
+  equipamentos  Equipamento[]
+  inspecoes     Inspecao[]
+  laudos        Laudo[]
+  notifications Notification[]
+}
+
+model Cliente {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nome      String
+  cnpj      String
+  contato   String
+  email     String
+  telefone  String
+  endereco  String
+  createdAt DateTime @default(now())
+
+  equipamentos Equipamento[]
+}
+
+model Equipamento {
+  id                      String   @id @default(cuid())
+  userId                  String
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clienteId               String
+  cliente                 Cliente  @relation(fields: [clienteId], references: [id], onDelete: Cascade)
+  tag                     String
+  descricao               String
+  fabricante              String
+  numeroSerie             String
+  anoFabricacao           Int
+  pressaoProjeto          Float
+  pressaoOperacao         Float
+  pressaoTesteHidrostatico Float?
+  volume                  Float
+  pmta                    Float
+  temperaturaProjeto      Float?
+  temperaturaOperacao     Float?
+  diametroInterno         Float?
+  alturaComprimento       Float?
+  materialConstrucao      String
+  codigoProjeto           String
+  fluido                  String
+  classeFluido            String // A | B | C | D
+  localizacao             String
+  tipo                    String // vaso | caldeira | tubulacao | tanque
+  categoria               String? // I-V (vaso) | A-B (caldeira)
+  grupoPotencialRisco     Int?
+  createdAt               DateTime @default(now())
+
+  inspecoes Inspecao[]
+  laudos    Laudo[]
+}
+
+model Inspecao {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  equipamentoId     String
+  equipamento       Equipamento @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
+  tipo              String // inicial | periodica | extraordinaria | extraordinaria_especial | vida_remanescente
+  dataInicio        DateTime
+  dataTermino       DateTime
+  examesExternos    Boolean
+  examesInternos    Boolean
+  testeHidrostatico Boolean
+  temSPIE           Boolean
+  parecer           String
+  concluida         Boolean  @default(false)
+  createdAt         DateTime @default(now())
+
+  parametrosUltrassom   ParametrosUltrassom?
+  checklist             ChecklistItem[]
+  medicoes              Medicao[]
+  anomalias             Anomalia[]
+  dispositivosSeguranca DispositivoSeguranca[]
+  laudo                 Laudo?
+}
+
+model ParametrosUltrassom {
+  id               String  @id @default(cuid())
+  inspecaoId       String  @unique
+  inspecao         Inspecao @relation(fields: [inspecaoId], references: [id], onDelete: Cascade)
+  aparelho         String
+  transdutor       String
+  velocidadeSonica Float
+  tecnica          String
+  blocoCalibracao  String
+}
+
+model ChecklistItem {
+  id         String   @id @default(cuid())
+  inspecaoId String
+  inspecao   Inspecao @relation(fields: [inspecaoId], references: [id], onDelete: Cascade)
+  secao      String
+  item       String
+  ok         Boolean?
+  observacao String
+}
+
+model Medicao {
+  id                   String   @id @default(cuid())
+  inspecaoId           String
+  inspecao             Inspecao @relation(fields: [inspecaoId], references: [id], onDelete: Cascade)
+  ponto                String
+  espessura            Float
+  espessuraAnterior    Float?
+  espessuraConstrucao  Float?
+  tempoOperacao        Float?
+  dataMedicao          DateTime
+  observacao           String
+}
+
+model Anomalia {
+  id         String   @id @default(cuid())
+  inspecaoId String
+  inspecao   Inspecao @relation(fields: [inspecaoId], references: [id], onDelete: Cascade)
+  descricao  String
+  gravidade  String // baixa | media | alta | critica
+  foto       String?
+  planoAcao  String
+  resolvida  Boolean  @default(false)
+}
+
+model DispositivoSeguranca {
+  id                String   @id @default(cuid())
+  inspecaoId        String
+  inspecao          Inspecao @relation(fields: [inspecaoId], references: [id], onDelete: Cascade)
+  tipo              String // valvula_seguranca | disco_ruptura | manometro | termometro | visor_nivel
+  tag               String
+  fabricante        String?
+  modelo            String?
+  numeroSerie       String?
+  inspecaoOk        Boolean
+  pressaoAbertura   Float?
+  pressaoVedacao    Float?
+  conexaoEntrada    String?
+  conexaoSaida      String?
+  ultimaCalibracao  DateTime?
+  proximaCalibracao DateTime?
+  numeroCertificado String?
+  observacao        String
+}
+
+model Laudo {
+  id                  String   @id @default(cuid())
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  inspecaoId          String   @unique
+  inspecao            Inspecao @relation(fields: [inspecaoId], references: [id], onDelete: Cascade)
+  equipamentoId       String
+  equipamento         Equipamento @relation(fields: [equipamentoId], references: [id], onDelete: Cascade)
+  numeroLaudo         String
+  dataEmissao         DateTime
+  plhNome             String
+  plhCrea             String
+  plhAssinatura       String?
+  dataProximaInspecao DateTime
+  observacoes         String
+  pdfUrl              String?
+  createdAt           DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // inspecao_vencendo | laudo_emitido | certificado_vencendo | anomalia_critica | sistema
+  title     String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ── Lead (carteira de possíveis compradores via WhatsApp) ──
+// Espelha o frontend (src/lib/types.ts — Lead / CredenciaisDegustacao)
+model Lead {
+  id                       String    @id @default(cuid())
+  userId                   String // dono do lead ("nr13pro_empresa" = carteira da empresa)
+  nome                     String
+  whatsapp                 String
+  email                    String
+  origem                   String // landing | checkout | plataforma
+  status                   String // novo | abandonou_checkout | contatado | em_negociacao | consultor | convertido | perdido
+  mensagemAutomatizada     String?
+  transferidoConsultor     Boolean   @default(false)
+  acessoDegustacaoLiberado Boolean   @default(false)
+  dataLiberacaoAcesso      DateTime?
+  credencialEmail          String? // credenciais de degustação geradas pelo closer
+  credencialSenha          String?
+  credencialExpiraEm       DateTime? // validade de 7 dias
+  ultimoContato            DateTime?
+  criadoEm                 DateTime  @default(now())
+}
