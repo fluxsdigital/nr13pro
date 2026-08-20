@@ -5,10 +5,20 @@
 ## Stack & Commands
 - **Stack**: Next.js 16, TypeScript, Tailwind CSS v4, shadcn/ui (base-nova), lucide-react, recharts, sonner, @base-ui/react
 - **Animation**: Framer Motion, Embla Carousel, Lenis (smooth scroll)
+- **Package manager**: root usa **pnpm** (`pnpm-lock.yaml`); a pasta `api/` usa **npm** (`package-lock.json`)
 - **Build**: `npm run build` (no `typecheck` script — TS check is part of build)
 - **Dev**: `npm run dev` → `localhost:3000`
 - **Lint**: `npm run lint`
 - **Deploy**: Vercel auto-deploys from `fluxsdigital/nr13pro` main branch
+
+## Backend API (`api/`) — NestJS + Prisma
+- Projeto **separado** do Next.js: NestJS 11 (ESM, `"type": "module"`), Prisma 7 + driver `@prisma/adapter-better-sqlite3`, SQLite
+- **Comandos**: `cd api && npx prisma generate && npm run build` (build) · `npm run start:dev` → `http://localhost:3333/api`
+- **CRÍTICO**: o client Prisma gerado (`api/src/generated/prisma/`) está no `.gitignore`. Qualquer build/typecheck do `api/` **falha** se `npx prisma generate` não rodar antes (`nest build` NÃO gera o client)
+- Imports ESM com sufixo `.js` (ex: `import { PrismaService } from '../prisma/prisma.service.js'`)
+- `api/prisma/schema.prisma` espelha `src/lib/types.ts` do frontend (mesmos nomes/campos); migração inicial em `api/prisma/migrations/`
+- Autenticação JWT global (30 dias); todas as rotas exigem `Authorization: Bearer` exceto `POST /api/auth/signup|login`
+- `api/.env`: `DATABASE_URL`, `JWT_SECRET`, `CORS_ORIGIN`, `PORT` (não há `.env.example` em `api/`; o `.env.example` da raiz é do `GITHUB_TOKEN` do opencode)
 
 ## Architecture
 
@@ -29,6 +39,10 @@ src/components/ui/      ← primitives: Button/Container/Section/FadeIn/Floating
 - App pages: `"use client"`, data via `useEffect` → services, filtering via `useMemo`
 - Every `useEffect` async chain **must** have `.catch()` so `setLoading(false)` always runs
 - Services mutate shared arrays directly (mock layer)
+
+### Deploy gotcha (Vercel)
+- `.vercelignore` contém `/api` — o backend NestJS **não** é deployado na Vercel (projeto Next.js puro). Se remover essa linha, o build quebra com TS2339 em `api/` porque `api/src/generated/prisma/` não existe no CI (gitignored, precisa de `prisma generate`)
+- Root `tsconfig.json` já exclui `api`, mas a Vercel typechecka a pasta mesmo assim; `.vercelignore` é a proteção real
 
 ## Landing Page (`/vendas`)
 - **Separate layout** at `vendas/layout.tsx` (server component) with SEO metadata + JSON‑LD. Root layout conditionally renders sidebar via `AppShell` — no sidebar on `/vendas`.
