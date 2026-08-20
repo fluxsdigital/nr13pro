@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter, Lora } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "sonner"
@@ -30,11 +30,16 @@ export const metadata: Metadata = {
   icons: {
     apple: "/icons/icon-192.svg",
   },
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
   other: {
     "mobile-web-app-capable": "yes",
     "apple-mobile-web-app-capable": "yes",
   },
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

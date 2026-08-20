@@ -16,12 +16,16 @@ const publicPrefixes = ["/certificados/"]
 
 const authExceptions = ["/vendas", "/checkout", "/login", "/cadastro", "/privacidade", "/termos-de-uso"]
 
+// Rotas exclusivas do closer (vendedor NR-13 Pro)
+const closerOnlyRoutes = ["/leads"]
+
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
-  const { isAuthenticated, isLoading, checkSession } = useAuth()
+  const { user, isAuthenticated, isLoading, checkSession } = useAuth()
 
   const isPublic = authExceptions.includes(pathname) || authExceptions.some((p) => pathname.startsWith(p))
+  const isCloserOnly = closerOnlyRoutes.some((p) => pathname.startsWith(p))
 
   useEffect(() => {
     checkSession()
@@ -31,8 +35,13 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     if (isLoading) return
     if (!isPublic && !isAuthenticated) {
       router.push("/login")
+      return
     }
-  }, [isLoading, isAuthenticated, isPublic, router])
+    // Área de Leads é exclusiva do closer — engenheiros são redirecionados
+    if (isCloserOnly && user?.role !== "closer") {
+      router.push("/")
+    }
+  }, [isLoading, isAuthenticated, isPublic, isCloserOnly, user?.role, router])
 
   if (isLoading && !isPublic) {
     return (

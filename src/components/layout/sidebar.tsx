@@ -19,6 +19,7 @@ import {
   Bell,
   ChevronDown,
   CreditCard,
+  MessageCircle,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "@/lib/sidebar-context"
@@ -37,6 +38,9 @@ const links = [
   { href: "/economia", label: "Economia", icon: TrendingUp },
   { href: "/notificacoes", label: "Notificações", icon: Bell },
 ]
+
+// Link exclusivo do closer (vendedor NR-13 Pro)
+const closerLink = { href: "/leads", label: "Leads", icon: MessageCircle }
 
 function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
   const { user, logout } = useAuth()
@@ -81,11 +85,23 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
         <div className="px-2 py-1.5">
           <p className="text-sm font-medium text-sidebar-foreground">{displayName}</p>
           <p className="text-[11px] text-sidebar-foreground-muted">{displayCrea}</p>
-          {user?.plan && (
-            <span className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
-              {user.plan}
-            </span>
-          )}
+          <div className="mt-1 flex flex-wrap gap-1">
+            {user?.role === "closer" && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-subtle text-success text-[10px] font-medium">
+                Closer • Vendas
+              </span>
+            )}
+            {user?.role === "engenheiro" && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
+                Engenheiro
+              </span>
+            )}
+            {user?.plan && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-medium">
+                {user.plan}
+              </span>
+            )}
+          </div>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" onClick={() => router.push("/configuracoes")}>
@@ -103,11 +119,12 @@ function UserProfile({ collapsed = false }: { collapsed?: boolean }) {
   )
 }
 
-function NavItems({ collapsed = false }: { collapsed?: boolean }) {
+function NavItems({ collapsed = false, isCloser = false }: { collapsed?: boolean; isCloser?: boolean }) {
   const pathname = usePathname()
+  const visibleLinks = isCloser ? [...links, closerLink] : links
   return (
     <>
-      {links.map((link) => {
+      {visibleLinks.map((link) => {
         const Icon = link.icon
         const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
         return (
@@ -137,6 +154,7 @@ function NavItems({ collapsed = false }: { collapsed?: boolean }) {
 
 function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
   const { toggle } = useSidebar()
+  const { user } = useAuth()
   return (
     <>
       <div className={cn("p-4 border-b border-sidebar-border", collapsed ? "flex justify-center" : "")}>
@@ -158,7 +176,7 @@ function SidebarContent({ collapsed = false }: { collapsed?: boolean }) {
             Menu
           </p>
         )}
-        <NavItems collapsed={collapsed} />
+        <NavItems collapsed={collapsed} isCloser={user?.role === "closer"} />
       </nav>
       <div className={cn("border-t border-sidebar-border", collapsed ? "p-2" : "p-3 space-y-1")}>
         <UserProfile collapsed={collapsed} />
@@ -272,7 +290,7 @@ export function Sidebar() {
               </div>
             </div>
             <nav className="p-3 space-y-0.5">
-              <NavItems />
+              <NavItems isCloser={user?.role === "closer"} />
             </nav>
             <div className="p-3 border-t border-divider space-y-1">
               <Link

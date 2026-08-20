@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import type { Equipamento, CreateEquipamentoDTO, Cliente, TipoEquipamento, ClasseFluido } from "@/lib/types"
+import type { Equipamento, CreateEquipamentoDTO, Cliente, TipoEquipamento, ClasseFluido, UnidadePressao } from "@/lib/types"
 import { clienteService } from "@/lib/services"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
-import { calcularPV, obterGrupoPotencialRisco, classificarVaso, classificarCaldeira } from "@/lib/nr13"
+import { calcularPV, obterGrupoPotencialRisco, classificarVaso, classificarCaldeira, converterParaKpa, converterDeKpa } from "@/lib/nr13"
 
 interface Props {
   initial?: Equipamento
@@ -29,6 +29,24 @@ const classeOptions: { value: ClasseFluido; label: string }[] = [
   { value: "D", label: "D - Demais fluidos" },
 ]
 
+const unidadeOptions: { value: UnidadePressao; label: string }[] = [
+  { value: "kPa", label: "kPa" },
+  { value: "kgf/cm²", label: "kgf/cm²" },
+  { value: "bar", label: "bar" },
+  { value: "PSI", label: "PSI" },
+]
+
+const codigoProjetoOptions = [
+  "ASME VIII Div.1",
+  "ASME VIII Div.2",
+  "API 510",
+  "API 620",
+  "API 650",
+  "EN 13445",
+  "NR-13",
+  "Outro",
+]
+
 export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [loading, setLoading] = useState(false)
@@ -41,6 +59,7 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
     anoFabricacao: initial?.anoFabricacao ?? new Date().getFullYear(),
     pressaoProjeto: initial?.pressaoProjeto ?? 0,
     pressaoOperacao: initial?.pressaoOperacao ?? 0,
+    unidadePressao: initial?.unidadePressao ?? "kPa",
     pressaoTesteHidrostatico: initial?.pressaoTesteHidrostatico ?? null,
     volume: initial?.volume ?? 0,
     pmta: initial?.pmta ?? 0,
@@ -59,6 +78,18 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
   useEffect(() => {
     clienteService.list().then(setClientes)
   }, [])
+
+  const unidade = form.unidadePressao
+
+  // Exibe o valor em kPa convertido para a unidade selecionada
+  const exibir = (valorKpa: number | null) =>
+    valorKpa === null || valorKpa === undefined ? "" : converterDeKpa(valorKpa, unidade)
+
+  // Converte o valor digitado (na unidade selecionada) para kPa
+  const setPressao = (field: "pressaoProjeto" | "pressaoOperacao" | "pressaoTesteHidrostatico" | "pmta", valor: string) => {
+    const num = Number(valor)
+    set(field, valor === "" ? (field === "pressaoTesteHidrostatico" ? null : 0) : converterParaKpa(num, unidade))
+  }
 
   const pv = calcularPV(form.pressaoOperacao, form.volume)
   const grupo = obterGrupoPotencialRisco(pv)
@@ -85,6 +116,11 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
 
   const set = (field: keyof CreateEquipamentoDTO, value: any) =>
     setForm((prev) => ({ ...prev, [field]: value }))
+
+  const mudarUnidade = (nova: UnidadePressao) => {
+    // Mantém os valores em kPa; apenas a exibição muda
+    set("unidadePressao", nova)
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -169,34 +205,48 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
 
       <Card className="border-border shadow-sm">
         <CardContent className="p-6 space-y-4">
-          <p className="text-sm font-medium text-text-secondary">Parâmetros Operacionais</p>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-text-secondary">Parâmetros Operacionais</p>
+            <div className="flex items-center gap-2">
+              <Label className="text-text-secondary text-xs">Unidade de pressão:</Label>
+              <select
+                value={unidade}
+                onChange={(e) => mudarUnidade(e.target.value as UnidadePressao)}
+                className="text-xs border border-border rounded-lg px-2 py-1.5 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {unidadeOptions.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label className="text-text-secondary text-xs">Pressão de Projeto (kPa)</Label>
+              <Label className="text-text-secondary text-xs">Pressão de Projeto ({unidade})</Label>
               <Input
                 type="number"
-                value={form.pressaoProjeto}
-                onChange={(e) => set("pressaoProjeto", Number(e.target.value))}
+                value={exibir(form.pressaoProjeto)}
+                onChange={(e) => setPressao("pressaoProjeto", e.target.value)}
                 required
                 className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-text-secondary text-xs">Pressão de Operação (kPa)</Label>
+              <Label className="text-text-secondary text-xs">Pressão de Operação ({unidade})</Label>
               <Input
                 type="number"
-                value={form.pressaoOperacao}
-                onChange={(e) => set("pressaoOperacao", Number(e.target.value))}
+                value={exibir(form.pressaoOperacao)}
+                onChange={(e) => setPressao("pressaoOperacao", e.target.value)}
                 required
                 className="border-border bg-card"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-text-secondary text-xs">Pressão Teste Hidrostático (kPa)</Label>
+              <Label className="text-text-secondary text-xs">Pressão Teste Hidrostático ({unidade})</Label>
               <Input
                 type="number"
-                value={form.pressaoTesteHidrostatico ?? ""}
-                onChange={(e) => set("pressaoTesteHidrostatico", e.target.value ? Number(e.target.value) : null)}
+                value={exibir(form.pressaoTesteHidrostatico)}
+                onChange={(e) => setPressao("pressaoTesteHidrostatico", e.target.value)}
                 placeholder="Opcional"
                 className="border-border bg-card"
               />
@@ -214,11 +264,11 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
-              <Label className="text-text-secondary text-xs">PMTA (kPa)</Label>
+              <Label className="text-text-secondary text-xs">PMTA ({unidade})</Label>
               <Input
                 type="number"
-                value={form.pmta}
-                onChange={(e) => set("pmta", Number(e.target.value))}
+                value={exibir(form.pmta)}
+                onChange={(e) => setPressao("pmta", e.target.value)}
                 required
                 className="border-border bg-card"
               />
@@ -280,12 +330,23 @@ export function EquipamentoForm({ initial, onSubmit, onCancel }: Props) {
             </div>
             <div className="space-y-2">
               <Label className="text-text-secondary text-xs">Código de Projeto</Label>
-              <Input
-                value={form.codigoProjeto}
+              <select
+                value={codigoProjetoOptions.includes(form.codigoProjeto) ? form.codigoProjeto : "Outro"}
                 onChange={(e) => set("codigoProjeto", e.target.value)}
-                placeholder="Ex: ASME VIII Div.1"
-                className="border-border bg-card"
-              />
+                className="w-full text-sm border border-border rounded-lg px-3 py-2 bg-card text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                {codigoProjetoOptions.map((o) => (
+                  <option key={o} value={o}>{o}</option>
+                ))}
+              </select>
+              {!codigoProjetoOptions.includes(form.codigoProjeto) && form.codigoProjeto !== "" && (
+                <Input
+                  value={form.codigoProjeto}
+                  onChange={(e) => set("codigoProjeto", e.target.value)}
+                  placeholder="Informe o código de projeto"
+                  className="border-border bg-card mt-2"
+                />
+              )}
             </div>
           </div>
         </CardContent>

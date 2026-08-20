@@ -58,6 +58,9 @@ export default function InspecaoDetalhe() {
             {eq?.tag} — {eq?.descricao} • {inspecao.dataInicio} a {inspecao.dataTermino}
           </p>
           {cliente && <p className="text-xs text-primary mt-0.5">Cliente: {cliente.nome}</p>}
+          {inspecao.plhResponsavel && (
+            <p className="text-xs text-text-muted mt-0.5">PLH Responsável: {inspecao.plhResponsavel}{inspecao.plhCrea ? ` • ${inspecao.plhCrea}` : ""}</p>
+          )}
         </div>
         <div className="flex flex-col sm:flex-row gap-2 shrink-0">
           {!laudo && inspecao.concluida && (
@@ -103,6 +106,34 @@ export default function InspecaoDetalhe() {
               </div>
             </CardContent>
           </Card>
+
+          {inspecao.testeHidrostatico && (
+            <Card className="border-border shadow-sm">
+              <CardHeader><CardTitle className="text-text-primary">Resultado do Teste Hidrostático</CardTitle></CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {[
+                    { label: "Vazamentos Visíveis", ok: inspecao.thVazamentosVisiveis },
+                    { label: "Deformação", ok: inspecao.thDeformacao },
+                    { label: "Aprovado", ok: inspecao.thAprovado },
+                  ].map(({ label, ok }) => (
+                    <div key={label} className={`p-3 rounded-lg text-center border ${
+                      ok === true ? "bg-success-subtle border-success/30" :
+                      ok === false ? "bg-red-50 border-red-300" : "bg-background border-border"
+                    }`}>
+                      <p className="text-sm text-text-primary">{label}</p>
+                      <p className={`text-xs mt-1 ${ok === true ? "text-success" : ok === false ? "text-red-600" : "text-text-muted"}`}>
+                        {ok === true ? "Sim" : ok === false ? "Não" : "Não informado"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                {inspecao.thMotivo && (
+                  <p className="text-xs text-text-secondary mt-3">Justificativa: {inspecao.thMotivo}</p>
+                )}
+              </CardContent>
+            </Card>
+          )}
 
           <Card className="border-border shadow-sm">
             <CardHeader><CardTitle className="text-text-primary">Parecer Técnico</CardTitle></CardHeader>
@@ -170,7 +201,10 @@ export default function InspecaoDetalhe() {
                               {item.ok === true ? "✓" : item.ok === false ? "✗" : ""}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className={item.ok === false ? "text-red-600" : "text-text-primary"}>{item.item}</p>
+                              <p className={item.ok === false ? "text-red-600" : item.naoAplicavel ? "text-text-muted line-through" : "text-text-primary"}>{item.item}</p>
+                              {item.naoAplicavel && (
+                                <p className="text-[10px] text-text-muted mt-0.5">Não aplicável</p>
+                              )}
                               {item.observacao && (
                                 <p className="text-xs text-text-secondary mt-0.5">{item.observacao}</p>
                               )}
@@ -203,16 +237,19 @@ export default function InspecaoDetalhe() {
                     <thead>
                       <tr className="border-b border-border bg-background">
                         <th className="text-left py-2 px-3 text-text-secondary font-medium">Ponto</th>
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Tampo</th>
                         <th className="text-left py-2 px-3 text-text-secondary font-medium">Atual (mm)</th>
                         <th className="text-left py-2 px-3 text-text-secondary font-medium">Anterior (mm)</th>
                         <th className="text-left py-2 px-3 text-text-secondary font-medium">Variação</th>
                         <th className="text-left py-2 px-3 text-text-secondary font-medium">Obs</th>
+                        <th className="text-left py-2 px-3 text-text-secondary font-medium">Foto</th>
                       </tr>
                     </thead>
                     <tbody>
                       {inspecao.medicoes.map((med) => (
                         <tr key={med.id} className="border-b border-border">
                           <td className="py-2 px-3 font-medium text-text-primary">{med.ponto}</td>
+                          <td className="py-2 px-3 text-text-secondary">{med.tipoTampo ? med.tipoTampo.replace("_", " ") : "—"}</td>
                           <td className="py-2 px-3 text-text-secondary">{med.espessura}</td>
                           <td className="py-2 px-3 text-text-secondary">{med.espessuraAnterior ?? "—"}</td>
                           <td className="py-2 px-3">
@@ -223,6 +260,12 @@ export default function InspecaoDetalhe() {
                             ) : "—"}
                           </td>
                           <td className="py-2 px-3 text-text-muted text-xs">{med.observacao}</td>
+                          <td className="py-2 px-3">
+                            {med.foto && med.foto.startsWith("data:image") ? (
+                              <img src={med.foto} alt="Foto do ponto" className="h-10 w-14 object-cover rounded border border-border cursor-pointer hover:opacity-90"
+                                onClick={() => { if (med.foto) window.open(med.foto, "_blank") }} />
+                            ) : "—"}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

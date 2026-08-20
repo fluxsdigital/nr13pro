@@ -1,5 +1,9 @@
 export type TipoEquipamento = "vaso" | "caldeira" | "tubulacao" | "tanque"
 
+export type UnidadePressao = "kPa" | "kgf/cm²" | "bar" | "PSI"
+
+export type TipoTampo = "eliptico" | "torisferico" | "plano" | "conico" | "sem_tampo"
+
 export type ClasseFluido = "A" | "B" | "C" | "D"
 export type CategoriaVaso = "I" | "II" | "III" | "IV" | "V"
 export type CategoriaCaldeira = "A" | "B"
@@ -32,6 +36,7 @@ export interface CreateEquipamentoDTO {
   anoFabricacao: number
   pressaoProjeto: number
   pressaoOperacao: number
+  unidadePressao: UnidadePressao
   pressaoTesteHidrostatico: number | null
   volume: number
   pmta: number
@@ -65,6 +70,12 @@ export interface CreateInspecaoDTO {
   examesExternos: boolean
   examesInternos: boolean
   testeHidrostatico: boolean
+  thVazamentosVisiveis: boolean | null
+  thDeformacao: boolean | null
+  thAprovado: boolean | null
+  thMotivo: string
+  plhResponsavel: string
+  plhCrea: string
   temSPIE: boolean
   parametrosUltrassom: ParametrosUltrassom | null
   checklist: Omit<ChecklistItem, "id">[]
@@ -89,6 +100,12 @@ export interface Inspecao {
   examesExternos: boolean
   examesInternos: boolean
   testeHidrostatico: boolean
+  thVazamentosVisiveis: boolean | null
+  thDeformacao: boolean | null
+  thAprovado: boolean | null
+  thMotivo: string
+  plhResponsavel: string
+  plhCrea: string
   temSPIE: boolean
   parametrosUltrassom: ParametrosUltrassom | null
   checklist: ChecklistItem[]
@@ -103,6 +120,8 @@ export interface Inspecao {
 export interface Medicao {
   id: string
   ponto: string
+  tipoTampo: TipoTampo | null
+  foto: string | null
   espessura: number
   espessuraAnterior: number | null
   espessuraConstrucao: number | null
@@ -133,6 +152,7 @@ export interface ChecklistItem {
   secao: string
   item: string
   ok: boolean | null
+  naoAplicavel: boolean
   observacao: string
 }
 
@@ -175,12 +195,16 @@ export interface Laudo extends CreateLaudoDTO {
 }
 
 // Auth types
+export type UserRole = "closer" | "engenheiro"
+
 export interface User {
   id: string
   name: string
   email: string
   crea: string
-  plan: "Mensal" | "Anual" | null
+  role: UserRole
+  plan: "Mensal" | "Anual" | "Degustação" | null
+  degustacaoExpiraEm: string | null
   createdAt: string
 }
 
@@ -214,4 +238,38 @@ export interface AppNotification {
   link?: string
   read: boolean
   createdAt: string
+}
+
+// ── Lead (WhatsApp / carteira de possíveis compradores) ──
+export type LeadStatus = "novo" | "abandonou_checkout" | "contatado" | "em_negociacao" | "consultor" | "convertido" | "perdido"
+
+export interface CreateLeadDTO {
+  nome: string
+  whatsapp: string
+  email: string
+  origem: "landing" | "checkout" | "plataforma"
+  status: LeadStatus
+  mensagemAutomatizada: string | null
+}
+
+export interface UpdateLeadDTO extends Partial<CreateLeadDTO> {
+  transferidoConsultor?: boolean
+  ultimoContato?: string
+}
+
+export interface CredenciaisDegustacao {
+  email: string
+  senha: string
+  expiraEm: string
+}
+
+export interface Lead extends CreateLeadDTO {
+  id: string
+  userId: string
+  criadoEm: string
+  ultimoContato: string | null
+  transferidoConsultor: boolean
+  acessoDegustacaoLiberado: boolean
+  dataLiberacaoAcesso: string | null
+  credenciaisDegustacao: CredenciaisDegustacao | null
 }

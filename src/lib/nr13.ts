@@ -1,4 +1,26 @@
-import { ClasseFluido, GrupoPotencialRisco, CategoriaVaso, CategoriaCaldeira } from "./types"
+import { ClasseFluido, GrupoPotencialRisco, CategoriaVaso, CategoriaCaldeira, UnidadePressao } from "./types"
+
+// ── Conversão de unidades de pressão ──
+// Fatores de conversão para kPa (unidade interna padrão)
+export const PRESSAO_FATORES: Record<UnidadePressao, number> = {
+  kPa: 1,
+  "kgf/cm²": 98.0665,
+  bar: 100,
+  PSI: 6.89476,
+}
+
+export function converterParaKpa(valor: number, unidade: UnidadePressao): number {
+  return valor * PRESSAO_FATORES[unidade]
+}
+
+export function converterDeKpa(valorKpa: number, unidade: UnidadePressao): number {
+  return valorKpa / PRESSAO_FATORES[unidade]
+}
+
+export function formatarPressao(valorKpa: number, unidade: UnidadePressao): string {
+  const v = converterDeKpa(valorKpa, unidade)
+  return `${v.toLocaleString("pt-BR", { maximumFractionDigits: 2 })} ${unidade}`
+}
 
 const CATEGORIA_MATRIX: Record<ClasseFluido, Record<GrupoPotencialRisco, CategoriaVaso>> = {
   A: { 1: "I", 2: "I", 3: "II", 4: "III", 5: "III" },

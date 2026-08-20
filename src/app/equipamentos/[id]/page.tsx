@@ -83,15 +83,15 @@ export default function EquipamentoDetalhe() {
                 <dd className="text-text-primary font-medium">{eq.anoFabricacao}</dd>
               </div>
               <div>
-                <dt className="text-text-secondary">Pressão de Projeto (kPa)</dt>
+                <dt className="text-text-secondary">Pressão de Projeto ({eq.unidadePressao ?? "kPa"})</dt>
                 <dd className="text-text-primary font-medium">{eq.pressaoProjeto}</dd>
               </div>
               <div>
-                <dt className="text-text-secondary">Pressão de Operação (kPa)</dt>
+                <dt className="text-text-secondary">Pressão de Operação ({eq.unidadePressao ?? "kPa"})</dt>
                 <dd className="text-text-primary font-medium">{eq.pressaoOperacao}</dd>
               </div>
               <div>
-                <dt className="text-text-secondary">Pressão Teste Hidrostático (kPa)</dt>
+                <dt className="text-text-secondary">Pressão Teste Hidrostático ({eq.unidadePressao ?? "kPa"})</dt>
                 <dd className="text-text-primary font-medium">{eq.pressaoTesteHidrostatico ?? "N/A"}</dd>
               </div>
               <div>
@@ -99,7 +99,7 @@ export default function EquipamentoDetalhe() {
                 <dd className="text-text-primary font-medium">{eq.volume}</dd>
               </div>
               <div>
-                <dt className="text-text-secondary">PMTA (kPa)</dt>
+                <dt className="text-text-secondary">PMTA ({eq.unidadePressao ?? "kPa"})</dt>
                 <dd className="text-text-primary font-medium">{eq.pmta}</dd>
               </div>
               <div>

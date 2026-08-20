@@ -103,11 +103,11 @@ export default function LaudoDetalhe() {
                   ["Ano de Fabricação:", String(eq?.anoFabricacao ?? "")],
                   ["Localização:", eq?.localizacao ?? ""],
                   ["Fluido de Serviço:", eq ? `${eq.fluido} (Classe ${eq.classeFluido})` : ""],
-                  ["Pressão de Projeto:", eq ? `${eq.pressaoProjeto} kPa` : ""],
-                  ["Pressão de Operação:", eq ? `${eq.pressaoOperacao} kPa` : ""],
-                  ["Pressão Teste Hidrostático:", eq?.pressaoTesteHidrostatico ? `${eq.pressaoTesteHidrostatico} kPa` : "N/A"],
+                  ["Pressão de Projeto:", eq ? `${eq.pressaoProjeto} ${eq.unidadePressao ?? "kPa"}` : ""],
+                  ["Pressão de Operação:", eq ? `${eq.pressaoOperacao} ${eq.unidadePressao ?? "kPa"}` : ""],
+                  ["Pressão Teste Hidrostático:", eq?.pressaoTesteHidrostatico ? `${eq.pressaoTesteHidrostatico} ${eq.unidadePressao ?? "kPa"}` : "N/A"],
                   ["Volume:", eq ? `${eq.volume} m³` : ""],
-                  ["PMTA:", eq ? `${eq.pmta} kPa` : ""],
+                  ["PMTA:", eq ? `${eq.pmta} ${eq.unidadePressao ?? "kPa"}` : ""],
                   ["Temperatura de Projeto:", eq?.temperaturaProjeto ? `${eq.temperaturaProjeto}°C` : "—"],
                   ["Temperatura de Operação:", eq?.temperaturaOperacao ? `${eq.temperaturaOperacao}°C` : "—"],
                   ["Diâmetro Interno:", eq?.diametroInterno ? `${eq.diametroInterno} mm` : "—"],
@@ -138,6 +138,7 @@ export default function LaudoDetalhe() {
                   ["Exame Interno:", inspecao?.examesInternos ? "Realizado" : "Não Realizado"],
                   ["Teste Hidrostático:", inspecao?.testeHidrostatico ? "Realizado" : "Não Realizado"],
                   ["SPIE:", inspecao?.temSPIE ? "Sim" : "Não"],
+                  ["PLH Responsável:", inspecao?.plhResponsavel ? `${inspecao.plhResponsavel}${inspecao.plhCrea ? ` (${inspecao.plhCrea})` : ""}` : ""],
                 ].map(([label, value]) => (
                   <tr key={label} className="border-b border-border">
                     <td className="py-2 pr-4 font-semibold text-text-secondary w-1/3">{label}</td>
@@ -147,6 +148,28 @@ export default function LaudoDetalhe() {
               </tbody>
             </table>
           </section>
+
+          {/* Resultado do Teste Hidrostático */}
+          {inspecao && inspecao.testeHidrostatico && (
+            <section className="mb-8">
+              <h3 className="text-base font-bold uppercase bg-card-hover px-3 py-2 rounded mb-4 text-text-primary">2.1. Resultado do Teste Hidrostático</h3>
+              <table className="w-full text-sm">
+                <tbody>
+                  {[
+                    ["Vazamentos visíveis:", inspecao.thVazamentosVisiveis === true ? "Sim" : inspecao.thVazamentosVisiveis === false ? "Não" : "Não informado"],
+                    ["Deformação:", inspecao.thDeformacao === true ? "Sim" : inspecao.thDeformacao === false ? "Não" : "Não informado"],
+                    ["Resultado:", inspecao.thAprovado === true ? "APROVADO" : inspecao.thAprovado === false ? "REPROVADO" : "Não informado"],
+                    ["Justificativa:", inspecao.thMotivo || "—"],
+                  ].map(([label, value]) => (
+                    <tr key={label} className="border-b border-border">
+                      <td className="py-2 pr-4 font-semibold text-text-secondary w-1/3">{label}</td>
+                      <td className={`py-2 ${label === "Resultado:" ? (inspecao.thAprovado ? "text-success font-semibold" : "text-red-600 font-semibold") : "text-text-primary"}`}>{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
 
           {/* Medições */}
           {inspecao && inspecao.medicoes.length > 0 && (
@@ -168,6 +191,7 @@ export default function LaudoDetalhe() {
                 <thead>
                   <tr className="bg-card-hover">
                     <th className="border border-border px-3 py-2 text-left text-text-secondary">Ponto</th>
+                    <th className="border border-border px-3 py-2 text-left text-text-secondary">Tampo</th>
                     <th className="border border-border px-3 py-2 text-right text-text-secondary">Atual (mm)</th>
                     <th className="border border-border px-3 py-2 text-right text-text-secondary">Anterior (mm)</th>
                     <th className="border border-border px-3 py-2 text-right text-text-secondary">Construção (mm)</th>
@@ -181,6 +205,7 @@ export default function LaudoDetalhe() {
                     return (
                       <tr key={med.id}>
                         <td className="border border-border px-3 py-2 text-text-primary">{med.ponto}</td>
+                        <td className="border border-border px-3 py-2 text-text-secondary">{med.tipoTampo ? med.tipoTampo.replace("_", " ") : "—"}</td>
                         <td className="border border-border px-3 py-2 text-right text-text-primary">{med.espessura}</td>
                         <td className="border border-border px-3 py-2 text-right text-text-secondary">{med.espessuraAnterior ?? "—"}</td>
                         <td className="border border-border px-3 py-2 text-right text-text-secondary">{med.espessuraConstrucao ?? "—"}</td>
@@ -195,6 +220,21 @@ export default function LaudoDetalhe() {
                   })}
                 </tbody>
               </table>
+
+              {inspecao.medicoes.some((m) => m.foto && m.foto.startsWith("data:image")) && (
+                <div className="mt-3">
+                  <p className="text-xs font-semibold text-text-secondary mb-2">Fotos dos pontos de coleta</p>
+                  <div className="flex flex-wrap gap-2">
+                    {inspecao.medicoes.filter((m) => m.foto && m.foto.startsWith("data:image")).map((m) => (
+                      <div key={m.id} className="text-center">
+                        <img src={m.foto!} alt={`Foto ${m.ponto}`} className="h-20 w-28 object-cover rounded border border-border cursor-pointer hover:opacity-90"
+                          onClick={() => { if (m.foto) window.open(m.foto, "_blank") }} />
+                        <p className="text-[10px] text-text-muted mt-0.5">{m.ponto}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* PMTA calculado */}
               {eq && inspecao.medicoes.length > 0 && eq.diametroInterno && (
@@ -304,7 +344,8 @@ export default function LaudoDetalhe() {
                             }`}>
                               {item.ok === true ? "✓" : item.ok === false ? "✗" : ""}
                             </span>
-                            <span className={item.ok === false ? "text-red-600" : "text-text-secondary"}>{item.item}</span>
+                            <span className={item.ok === false ? "text-red-600" : item.naoAplicavel ? "text-text-muted line-through" : "text-text-secondary"}>{item.item}</span>
+                            {item.naoAplicavel && <span className="text-[10px] text-text-muted ml-1">(N/A)</span>}
                           </div>
                         ))}
                       </div>

@@ -10,16 +10,17 @@ import { Container } from "@/components/ui/container"
 
 export default function LoginPage() {
   const router = useRouter()
-  const { login, isAuthenticated } = useAuth()
+  const { login, logout, user, isAuthenticated } = useAuth()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
 
-  // Se já estiver logado, redireciona
-  if (isAuthenticated && typeof window !== "undefined") {
-    router.push("/")
-    return null
+  const handleLogout = async () => {
+    await logout()
+    setEmail("")
+    setPassword("")
+    toast.success("Sessão encerrada. Faça login com outra conta.")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,6 +75,22 @@ export default function LoginPage() {
               Acesse sua conta para gerenciar inspeções e laudos.
             </p>
 
+            {isAuthenticated && user && (
+              <div className="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200">
+                <p className="text-xs text-text-secondary leading-relaxed">
+                  Você está logado como{" "}
+                  <strong className="text-text-primary">{user.name}</strong> ({user.email}).
+                </p>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="mt-2 w-full h-9 rounded-md bg-amber-500 text-white text-xs font-medium hover:bg-amber-600 transition-colors"
+                >
+                  Sair e trocar de conta
+                </button>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-xs text-text-secondary mb-1.5">E-mail</label>
@@ -109,12 +126,22 @@ export default function LoginPage() {
             </form>
 
             {/* Acesso Demo */}
-            <div className="mt-6 p-3 rounded-lg bg-primary-subtle border border-primary/20">
-              <p className="text-xs font-semibold text-primary mb-1.5">🔑 Acesso de demonstração</p>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                Use o e-mail <strong className="text-text-primary">demo@nr13pro.com.br</strong> e senha{" "}
-                <strong className="text-text-primary">123456</strong> para explorar o sistema com dados pré-carregados.
-              </p>
+            <div className="mt-6 p-3 rounded-lg bg-primary-subtle border border-primary/20 space-y-2">
+              <p className="text-xs font-semibold text-primary mb-1.5">🔑 Acessos de demonstração</p>
+              <div className="text-xs text-text-secondary leading-relaxed">
+                <p className="font-medium text-text-primary mb-0.5">👷 Engenheiro (inspeções e laudos)</p>
+                <p>
+                  <strong className="text-text-primary">demo@nr13pro.com.br</strong> /{" "}
+                  <strong className="text-text-primary">123456</strong>
+                </p>
+              </div>
+              <div className="text-xs text-text-secondary leading-relaxed">
+                <p className="font-medium text-text-primary mb-0.5">💼 Closer — Vendas (carteira de leads)</p>
+                <p>
+                  <strong className="text-text-primary">closer@nr13pro.com.br</strong> /{" "}
+                  <strong className="text-text-primary">123456</strong>
+                </p>
+              </div>
             </div>
 
             <p className="mt-4 text-center text-sm text-text-secondary">

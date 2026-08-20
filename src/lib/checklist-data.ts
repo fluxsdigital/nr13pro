@@ -2,7 +2,7 @@ import { ChecklistItem } from "./types"
 
 export interface CheckSecao {
   secao: string
-  itens: { item: string }[]
+  itens: { item: string; naoAplicavelVaso?: boolean }[]
 }
 
 export const CHECKLIST_INSPECAO: CheckSecao[] = [
@@ -50,18 +50,18 @@ export const CHECKLIST_INSPECAO: CheckSecao[] = [
       { item: "Manômetros com faixa de operação adequada" },
       { item: "Manômetros com selo de calibração válido" },
       { item: "Válvula de segurança com lacre intacto" },
-      { item: "Visor de nível transparente e sem vazamentos" },
-      { item: "Termômetros e pressostatos operacionais" },
+      { item: "Visor de nível transparente e sem vazamentos", naoAplicavelVaso: true },
+      { item: "Termômetros e pressostatos operacionais", naoAplicavelVaso: true },
     ],
   },
   {
     secao: "Segurança na Operação",
     itens: [
-      { item: "Procedimentos operacionais disponíveis" },
-      { item: "Treinamento da equipe registrado" },
-      { item: "Equipamentos de proteção individual disponíveis" },
-      { item: "Sistemas de intertravamento funcionais" },
-      { item: "Válvulas de bloqueio em bom estado" },
+      { item: "Procedimentos operacionais disponíveis", naoAplicavelVaso: true },
+      { item: "Treinamento da equipe registrado", naoAplicavelVaso: true },
+      { item: "Equipamentos de proteção individual disponíveis", naoAplicavelVaso: true },
+      { item: "Sistemas de intertravamento funcionais", naoAplicavelVaso: true },
+      { item: "Válvulas de bloqueio em bom estado", naoAplicavelVaso: true },
     ],
   },
   {

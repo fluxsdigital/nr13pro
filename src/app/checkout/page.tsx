@@ -1,12 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
 import { useAuth } from "@/lib/auth-context"
+import { leadService } from "@/lib/services"
 import { Container } from "@/components/ui/container"
+import { MessageCircle } from "lucide-react"
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -14,10 +16,46 @@ export default function CheckoutPage() {
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [whatsapp, setWhatsapp] = useState("")
   const [crea, setCrea] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [paid, setPaid] = useState(false)
+
+  // Rastreamento do lead: criado quando o visitante demonstra interesse (preenche o formulário)
+  const leadIdRef = useRef<string | null>(null)
+  const convertidoRef = useRef(false)
+
+  const criarLead = async () => {
+    if (leadIdRef.current || !name.trim() || !whatsapp.trim()) return
+    try {
+      const lead = await leadService.create({
+        nome: name,
+        whatsapp: whatsapp.replace(/\D/g, ""),
+        email,
+        origem: "checkout",
+        status: "novo",
+        mensagemAutomatizada: `Olá ${name.split(" ")[0]}! Notei que você iniciou a assinatura do NR-13 Pro mas não concluiu. Teve alguma dúvida no fechamento? Posso te ajudar!`,
+      }, "nr13pro_empresa")
+      leadIdRef.current = lead.id
+    } catch {
+      // silencioso — lead é opcional
+    }
+  }
+
+  // Marca como "abandonou_checkout" se o visitante sair sem concluir
+  useEffect(() => {
+    const marcarAbandono = () => {
+      if (leadIdRef.current && !convertidoRef.current) {
+        leadService.update(leadIdRef.current, { status: "abandonou_checkout" }).catch(() => {})
+      }
+    }
+    window.addEventListener("beforeunload", marcarAbandono)
+    return () => {
+      window.removeEventListener("beforeunload", marcarAbandono)
+      marcarAbandono()
+    }
+  }, [])
 
   // Se já estiver logado com plano, redireciona
   if (isAuthenticated && typeof window !== "undefined") {
@@ -27,8 +65,8 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name || !email || !password || !crea) {
-      toast.error("Preencha todos os campos.")
+    if (!name || !email || !password || !crea || !whatsapp) {
+      toast.error("Preencha todos os campos, incluindo o WhatsApp.")
       return
     }
     if (password.length < 6) {
@@ -38,6 +76,9 @@ export default function CheckoutPage() {
     setLoading(true)
 
     try {
+      // Garante que o lead existe antes de converter
+      await criarLead()
+
       // Simula processamento de pagamento
       await new Promise((r) => setTimeout(r, 2000))
 
@@ -46,6 +87,15 @@ export default function CheckoutPage() {
 
       // Atribui o plano
       await setPlan("Mensal")
+
+      // Marca o lead como convertido
+      convertidoRef.current = true
+      if (leadIdRef.current) {
+        await leadService.update(leadIdRef.current, {
+          status: "convertido",
+          mensagemAutomatizada: `Olá ${name.split(" ")[0]}! Sua assinatura foi confirmada. Bem-vindo ao NR-13 Pro! 🎉`,
+        }).catch(() => {})
+      }
 
       setPaid(true)
       toast.success("Assinatura confirmada! Bem-vindo ao NR-13 Pro.")
@@ -128,7 +178,7 @@ export default function CheckoutPage() {
                   type="text"
                   placeholder="Seu nome"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => { setName(e.target.value); criarLead() }}
                   className="w-full h-11 px-4 rounded-md bg-card border border-input text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 />
               </div>
@@ -139,6 +189,19 @@ export default function CheckoutPage() {
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="w-full h-11 px-4 rounded-md bg-card border border-input text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-text-secondary mb-1.5 flex items-center gap-1.5">
+                  <MessageCircle className="h-3.5 w-3.5 text-success" />
+                  WhatsApp <span className="text-text-muted">(para receber suporte e novidades)</span>
+                </label>
+                <input
+                  type="tel"
+                  placeholder="(11) 99999-9999"
+                  value={whatsapp}
+                  onChange={(e) => { setWhatsapp(e.target.value); criarLead() }}
                   className="w-full h-11 px-4 rounded-md bg-card border border-input text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
                 />
               </div>

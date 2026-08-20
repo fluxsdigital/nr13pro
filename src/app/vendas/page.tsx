@@ -17,6 +17,7 @@ import { CTA } from "@/components/sections/cta"
 import { Footer } from "@/components/sections/footer"
 import { ScrollProgress } from "@/components/ui/scroll-progress"
 import { GlowBackground } from "@/components/ui/glow-background"
+import { WhatsAppCapture } from "@/components/sections/whatsapp-capture"
 
 export default function VendasPage() {
   const lenisRef = useRef<Lenis | null>(null)
@@ -64,6 +65,7 @@ export default function VendasPage() {
         <CTA />
         <Footer />
       </div>
+      <WhatsAppCapture />
     </MotionProvider>
   )
 }

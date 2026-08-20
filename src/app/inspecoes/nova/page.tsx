@@ -2,11 +2,11 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
-import { useState, Suspense, useRef } from "react"
+import { useState, Suspense, useRef, useMemo } from "react"
 import { equipamentos, clientes } from "@/lib/store"
-import { inspecaoService, equipamentoService } from "@/lib/services"
+import { inspecaoService } from "@/lib/services"
 import { toast } from "sonner"
-import type { CreateInspecaoDTO } from "@/lib/types"
+import type { CreateInspecaoDTO, TipoTampo } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -18,10 +18,25 @@ import { Separator } from "@/components/ui/separator"
 import { Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react"
 import { ImageUpload } from "@/components/ui/image-upload"
 import { cn } from "@/lib/utils"
+import { calcularPMTACasco, calcularPMTATampoEliptico, formatarPressao } from "@/lib/nr13"
 
 import { CHECKLIST_INSPECAO } from "@/lib/checklist-data"
 
 type Step = "equipamento" | "exames" | "checklist" | "medicoes" | "anomalias" | "dispositivos" | "parecer"
+
+const tipoTampoOptions: { value: TipoTampo; label: string }[] = [
+  { value: "eliptico", label: "Elíptico" },
+  { value: "torisferico", label: "Torisférico" },
+  { value: "plano", label: "Plano" },
+  { value: "conico", label: "Cônico" },
+  { value: "sem_tampo", label: "Sem tampo" },
+]
+
+const localizacaoOptions = [
+  { value: "tampo_superior", label: "Tampo Superior" },
+  { value: "costado", label: "Costado" },
+  { value: "tampo_inferior", label: "Tampo Inferior" },
+]
 
 function NovaInspecaoForm() {
   const { user } = useAuth()
@@ -42,31 +57,67 @@ function NovaInspecaoForm() {
   const [dataTermino, setDataTermino] = useState(new Date().toISOString().slice(0, 10))
   const [saving, setSaving] = useState(false)
 
+  // PLH responsável — auto-preenchido com o usuário logado
+  const [plhResponsavel, setPlhResponsavel] = useState(user?.name ?? "")
+  const [plhCrea, setPlhCrea] = useState(user?.crea ?? "")
+
+  // Resultados do Teste Hidrostático
+  const [thVazamentosVisiveis, setThVazamentosVisiveis] = useState<boolean | null>(null)
+  const [thDeformacao, setThDeformacao] = useState<boolean | null>(null)
+  const [thAprovado, setThAprovado] = useState<boolean | null>(null)
+  const [thMotivo, setThMotivo] = useState("")
+
+  const ehVaso = selectedEq?.tipo === "vaso" || selectedEq?.tipo === "tanque"
+
   const [checklist, setChecklist] = useState<
-    { secao: string; item: string; ok: boolean | null; observacao: string }[]
+    { secao: string; item: string; ok: boolean | null; naoAplicavel: boolean; observacao: string }[]
   >(
     CHECKLIST_INSPECAO.flatMap((s) =>
-      s.itens.map((i) => ({ secao: s.secao, item: i.item, ok: null, observacao: "" }))
+      s.itens.map((i) => ({
+        secao: s.secao,
+        item: i.item,
+        ok: null,
+        // Para vaso de pressão, itens como visor de nível, termômetro, procedimentos,
+        // treinamento, EPI, intertravamento e válvula de bloqueio são N/A
+        naoAplicavel: false,
+        observacao: "",
+      }))
     )
   )
 
+  // Pré-marca itens N/A quando o equipamento é vaso de pressão
+  const aplicarNAVaso = () => {
+    if (!ehVaso) return
+    setChecklist((prev) =>
+      prev.map((c) => {
+        const def = CHECKLIST_INSPECAO.flatMap((s) => s.itens).find((i) => i.item === c.item)
+        return def?.naoAplicavelVaso ? { ...c, naoAplicavel: true, ok: null } : c
+      })
+    )
+  }
+
   const setCheck = (idx: number, ok: boolean | null) =>
-    setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, ok } : c)))
+    setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, ok, naoAplicavel: ok !== null ? false : c.naoAplicavel } : c)))
+
+  const setCheckNA = (idx: number) =>
+    setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, naoAplicavel: !c.naoAplicavel, ok: !c.naoAplicavel ? null : c.ok } : c)))
 
   const setCheckObs = (idx: number, observacao: string) =>
     setChecklist((prev) => prev.map((c, i) => (i === idx ? { ...c, observacao } : c)))
 
-  const [medicoes, setMedicoes] = useState([{ ponto: "", espessura: "", observacao: "" }])
+  const [medicoes, setMedicoes] = useState<
+    { ponto: string; localizacao: string; tipoTampo: string; espessura: string; foto: string | null; observacao: string }[]
+  >([{ ponto: "", localizacao: "costado", tipoTampo: "eliptico", espessura: "", foto: null, observacao: "" }])
   const [anomalias, setAnomalias] = useState<{ descricao: string; gravidade: string; planoAcao: string; foto: string | null }[]>([])
   const [dispositivos, setDispositivos] = useState<
-    { tipo: string; tag: string; fabricante: string; modelo: string; numeroSerie: string; pressaoAbertura: string; pressaoVedacao: string; inspecaoOk: boolean; observacao: string }[]
+    { tipo: string; tag: string; fabricante: string; modelo: string; numeroSerie: string; pressaoAbertura: string; pressaoVedacao: string; calibrada: boolean; ultimaCalibracao: string; proximaCalibracao: string; numeroCertificado: string; inspecaoOk: boolean; observacao: string }[]
   >([
-    { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", inspecaoOk: true, observacao: "" },
+    { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", calibrada: true, ultimaCalibracao: "", proximaCalibracao: "", numeroCertificado: "", inspecaoOk: true, observacao: "" },
   ])
 
-  const adicionarMedicao = () => setMedicoes([...medicoes, { ponto: "", espessura: "", observacao: "" }])
+  const adicionarMedicao = () => setMedicoes([...medicoes, { ponto: "", localizacao: "costado", tipoTampo: "eliptico", espessura: "", foto: null, observacao: "" }])
   const adicionarAnomalia = () => setAnomalias([...anomalias, { descricao: "", gravidade: "media", planoAcao: "", foto: null }])
-  const adicionarDispositivo = () => setDispositivos([...dispositivos, { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", inspecaoOk: true, observacao: "" }])
+  const adicionarDispositivo = () => setDispositivos([...dispositivos, { tipo: "valvula_seguranca", tag: "", fabricante: "", modelo: "", numeroSerie: "", pressaoAbertura: "", pressaoVedacao: "", calibrada: true, ultimaCalibracao: "", proximaCalibracao: "", numeroCertificado: "", inspecaoOk: true, observacao: "" }])
 
   const steps: { key: Step; label: string }[] = [
     ...(equipamentoId ? [] : [{ key: "equipamento" as Step, label: "Equipamento" }]),
@@ -81,8 +132,32 @@ function NovaInspecaoForm() {
   const currentIndex = steps.findIndex((s) => s.key === step)
   const selectedClient = selectedEq ? clientes.find((c) => c.id === selectedEq.clienteId) : null
 
+  // ── PMTA ao vivo (menor espessura medida) ──
+  const pmtaPreview = useMemo(() => {
+    if (!selectedEq || !selectedEq.diametroInterno) return null
+    const medidas = medicoes
+      .filter((m) => m.espessura && Number(m.espessura) > 0)
+      .map((m) => ({ ...m, espessuraNum: Number(m.espessura) }))
+    if (medidas.length === 0) return null
+    const menor = medidas.reduce((a, b) => (a.espessuraNum < b.espessuraNum ? a : b))
+    const pmtaCasco = calcularPMTACasco(
+      selectedEq.materialConstrucao, selectedEq.codigoProjeto,
+      selectedEq.diametroInterno, menor.espessuraNum
+    )
+    const pmtaTampo = calcularPMTATampoEliptico(
+      selectedEq.materialConstrucao, selectedEq.codigoProjeto,
+      selectedEq.diametroInterno, menor.espessuraNum, null
+    )
+    return { menor, pmtaCasco, pmtaTampo }
+  }, [medicoes, selectedEq])
+
   const finalizar = async () => {
     if (!selectedEq) return
+    if (medicoes.filter((m) => m.ponto && m.espessura).length < 6) {
+      toast.error("O mínimo de pontos de coleta é 6 (2 em cada tampo + restante no costado).")
+      setStep("medicoes")
+      return
+    }
     setSaving(true)
     try {
       const data: CreateInspecaoDTO = {
@@ -93,6 +168,12 @@ function NovaInspecaoForm() {
         examesExternos,
         examesInternos,
         testeHidrostatico,
+        thVazamentosVisiveis: testeHidrostatico ? thVazamentosVisiveis : null,
+        thDeformacao: testeHidrostatico ? thDeformacao : null,
+        thAprovado: testeHidrostatico ? thAprovado : null,
+        thMotivo: testeHidrostatico ? thMotivo : "",
+        plhResponsavel,
+        plhCrea,
         temSPIE,
         parecer,
         concluida: true,
@@ -102,6 +183,8 @@ function NovaInspecaoForm() {
           .filter((m) => m.ponto && m.espessura)
           .map((m) => ({
             ponto: m.ponto,
+            tipoTampo: (m.localizacao === "costado" ? null : m.tipoTampo) as TipoTampo | null,
+            foto: m.foto,
             espessura: parseFloat(m.espessura),
             espessuraAnterior: null,
             espessuraConstrucao: null,
@@ -128,7 +211,10 @@ function NovaInspecaoForm() {
             numeroSerie: d.numeroSerie || undefined,
             pressaoAbertura: d.pressaoAbertura ? Number(d.pressaoAbertura) : undefined,
             pressaoVedacao: d.pressaoVedacao ? Number(d.pressaoVedacao) : undefined,
-            inspecaoOk: d.inspecaoOk,
+            ultimaCalibracao: d.ultimaCalibracao || undefined,
+            proximaCalibracao: d.proximaCalibracao || undefined,
+            numeroCertificado: d.numeroCertificado || undefined,
+            inspecaoOk: d.tipo === "valvula_seguranca" && ehVaso ? d.calibrada : d.inspecaoOk,
             observacao: d.observacao,
           })),
       }
@@ -211,6 +297,24 @@ function NovaInspecaoForm() {
       <Separator className="bg-border" />
 
       <div className="space-y-3">
+        <p className="text-xs font-semibold text-text-primary">Profissional Legalmente Habilitado (PLH) Responsável</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <Label className="text-xs text-text-secondary">Nome do PLH</Label>
+            <Input value={plhResponsavel} onChange={(e) => setPlhResponsavel(e.target.value)}
+              placeholder="Nome do responsável técnico" className="border-border bg-card h-9" />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs text-text-secondary">CREA</Label>
+            <Input value={plhCrea} onChange={(e) => setPlhCrea(e.target.value)}
+              placeholder="Registro CREA" className="border-border bg-card h-9" />
+          </div>
+        </div>
+      </div>
+
+      <Separator className="bg-border" />
+
+      <div className="space-y-3">
         <Label className="text-base text-text-primary font-medium">Exames Realizados</Label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
@@ -233,6 +337,64 @@ function NovaInspecaoForm() {
           ))}
         </div>
       </div>
+
+      {testeHidrostatico && (
+        <div className="p-4 rounded-lg border border-primary/30 bg-primary-subtle space-y-4">
+          <p className="text-sm font-semibold text-text-primary">Resultado do Teste Hidrostático</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">1. Houve vazamentos visíveis?</Label>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setThVazamentosVisiveis(thVazamentosVisiveis === true ? null : true)}
+                  className={cn("flex-1 py-2 rounded-lg border text-sm font-medium transition-colors",
+                    thVazamentosVisiveis === true ? "bg-red-500 text-white border-red-500" : "border-border bg-card text-text-secondary hover:border-red-500/50")}>
+                  Sim
+                </button>
+                <button type="button" onClick={() => setThVazamentosVisiveis(thVazamentosVisiveis === false ? null : false)}
+                  className={cn("flex-1 py-2 rounded-lg border text-sm font-medium transition-colors",
+                    thVazamentosVisiveis === false ? "bg-success text-white border-success" : "border-border bg-card text-text-secondary hover:border-success/50")}>
+                  Não
+                </button>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs text-text-secondary">2. Houve deformação?</Label>
+              <div className="flex gap-2">
+                <button type="button" onClick={() => setThDeformacao(thDeformacao === true ? null : true)}
+                  className={cn("flex-1 py-2 rounded-lg border text-sm font-medium transition-colors",
+                    thDeformacao === true ? "bg-red-500 text-white border-red-500" : "border-border bg-card text-text-secondary hover:border-red-500/50")}>
+                  Sim
+                </button>
+                <button type="button" onClick={() => setThDeformacao(thDeformacao === false ? null : false)}
+                  className={cn("flex-1 py-2 rounded-lg border text-sm font-medium transition-colors",
+                    thDeformacao === false ? "bg-success text-white border-success" : "border-border bg-card text-text-secondary hover:border-success/50")}>
+                  Não
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs text-text-secondary">3. Aprovado?</Label>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setThAprovado(thAprovado === true ? null : true)}
+                className={cn("flex-1 py-2 rounded-lg border text-sm font-medium transition-colors",
+                  thAprovado === true ? "bg-success text-white border-success" : "border-border bg-card text-text-secondary hover:border-success/50")}>
+                Aprovado
+              </button>
+              <button type="button" onClick={() => setThAprovado(thAprovado === false ? null : false)}
+                className={cn("flex-1 py-2 rounded-lg border text-sm font-medium transition-colors",
+                  thAprovado === false ? "bg-red-500 text-white border-red-500" : "border-border bg-card text-text-secondary hover:border-red-500/50")}>
+                Reprovado
+              </button>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs text-text-secondary">4. Justificativa / Observações do resultado</Label>
+            <Textarea value={thMotivo} onChange={(e) => setThMotivo(e.target.value)}
+              placeholder="Descreva o motivo da aprovação ou reprovação..." className="border-border bg-card min-h-[60px]" />
+          </div>
+        </div>
+      )}
     </div>
   )
 
@@ -241,7 +403,14 @@ function NovaInspecaoForm() {
     let checkIdx = 0
     return (
       <div className="space-y-6">
-        <p className="text-base font-medium text-text-primary">Checklist de Inspeção</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base font-medium text-text-primary">Checklist de Inspeção</p>
+          {ehVaso && (
+            <Button variant="outline" size="sm" onClick={aplicarNAVaso} className="border-border text-text-primary shrink-0">
+              Marcar itens N/A para vaso de pressão
+            </Button>
+          )}
+        </div>
         {secoes.map((s) => {
           const startIdx = checkIdx
           checkIdx += s.itens.length
@@ -252,7 +421,7 @@ function NovaInspecaoForm() {
                 {(checklist.slice(startIdx, startIdx + s.itens.length) as typeof checklist).map((item, j) => {
                   const idx = startIdx + j
                   return (
-                    <div key={idx} className="px-4 py-3 flex items-start gap-3">
+                    <div key={idx} className={cn("px-4 py-3 flex items-start gap-3", item.naoAplicavel && "opacity-50")}>
                       <div className="flex gap-1 shrink-0 mt-0.5">
                         <button
                           type="button"
@@ -272,12 +441,25 @@ function NovaInspecaoForm() {
                               : "bg-background border border-border text-text-muted hover:border-red-500/50"
                           }`}
                         >Não</button>
+                        <button
+                          type="button"
+                          onClick={() => setCheckNA(idx)}
+                          className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
+                            item.naoAplicavel
+                              ? "bg-text-muted text-white"
+                              : "bg-background border border-border text-text-muted hover:border-text-muted/50"
+                          }`}
+                          title="Não aplicável"
+                        >N/A</button>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm ${item.ok === null ? "text-text-secondary" : item.ok ? "text-success font-medium" : "text-red-600 font-medium"}`}>
+                        <p className={`text-sm ${item.naoAplicavel ? "text-text-muted line-through" : item.ok === null ? "text-text-secondary" : item.ok ? "text-success font-medium" : "text-red-600 font-medium"}`}>
                           {item.item}
                         </p>
-                        {item.ok === false && (
+                        {item.naoAplicavel && (
+                          <p className="text-[10px] text-text-muted mt-0.5">Não aplicável a este equipamento</p>
+                        )}
+                        {item.ok === false && !item.naoAplicavel && (
                           <input
                             value={item.observacao}
                             onChange={(e) => setCheckObs(idx, e.target.value)}
@@ -297,32 +479,94 @@ function NovaInspecaoForm() {
     )
   }
 
-  const renderMedicoes = () => (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Label className="text-base text-text-primary font-medium">Medições de Espessura (Ultrassom)</Label>
-        <Button variant="outline" size="sm" onClick={adicionarMedicao} className="border-border text-text-primary shrink-0">
-          <Plus className="h-3 w-3 mr-1" /> Adicionar
-        </Button>
-      </div>
-      {medicoes.map((med, i) => (
-        <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-text-secondary font-medium">Ponto {i + 1}</span>
-            {medicoes.length > 1 && (
-              <Trash2 className="h-3 w-3 text-red-500 cursor-pointer" onClick={() => setMedicoes(medicoes.filter((_, j) => j !== i))} />
-            )}
+  const renderMedicoes = () => {
+    const pontosValidos = medicoes.filter((m) => m.ponto && m.espessura).length
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <Label className="text-base text-text-primary font-medium">Medições de Espessura (Ultrassom)</Label>
+            <p className="text-xs text-text-secondary mt-0.5">
+              Mínimo de <strong>6 pontos</strong>: 2 em cada tampo (superior e inferior) + restante no costado
+            </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Ponto de Medição</Label>
-              <Input value={med.ponto} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], ponto: e.target.value }; setMedicoes(m) }}
-                placeholder="Ex: Costado Seção A" className="border-border bg-card h-9" />
+          <Button variant="outline" size="sm" onClick={adicionarMedicao} className="border-border text-text-primary shrink-0">
+            <Plus className="h-3 w-3 mr-1" /> Adicionar
+          </Button>
+        </div>
+
+        <div className={cn(
+          "flex items-center gap-2 px-3 py-2 rounded-lg border text-xs",
+          pontosValidos >= 6 ? "border-success/30 bg-success-subtle text-success" : "border-amber-300 bg-amber-50 text-amber-700"
+        )}>
+          <span className="font-semibold">{pontosValidos} / 6</span>
+          <span>pontos preenchidos</span>
+          {pontosValidos < 6 && <span className="ml-auto">Adicione mais {6 - pontosValidos} ponto(s)</span>}
+        </div>
+
+        {medicoes.map((med, i) => (
+          <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-text-secondary font-medium">Ponto {i + 1}</span>
+              {medicoes.length > 1 && (
+                <Trash2 className="h-3 w-3 text-red-500 cursor-pointer" onClick={() => setMedicoes(medicoes.filter((_, j) => j !== i))} />
+              )}
             </div>
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Espessura (mm)</Label>
-              <Input type="number" step="0.1" value={med.espessura} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], espessura: e.target.value }; setMedicoes(m) }}
-                placeholder="12.5" className="border-border bg-card h-9" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label className="text-xs text-text-secondary">Localização do Ponto</Label>
+                <Select value={med.localizacao} onValueChange={(v) => { const m = [...medicoes]; m[i] = { ...m[i], localizacao: v ?? "costado" }; setMedicoes(m) }}>
+                  <SelectTrigger className="border-border bg-card h-9"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {localizacaoOptions.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              {med.localizacao !== "costado" ? (
+                <div className="space-y-1">
+                  <Label className="text-xs text-text-secondary">Tipo de Tampo</Label>
+                  <Select value={med.tipoTampo} onValueChange={(v) => { const m = [...medicoes]; m[i] = { ...m[i], tipoTampo: v ?? "eliptico" }; setMedicoes(m) }}>
+                    <SelectTrigger className="border-border bg-card h-9"><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {tipoTampoOptions.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <Label className="text-xs text-text-secondary">Ponto de Medição</Label>
+                  <Input value={med.ponto} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], ponto: e.target.value }; setMedicoes(m) }}
+                    placeholder="Ex: Costado Seção A" className="border-border bg-card h-9" />
+                </div>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {med.localizacao === "costado" ? (
+                <div className="space-y-1">
+                  <Label className="text-xs text-text-secondary">Ponto de Medição</Label>
+                  <Input value={med.ponto} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], ponto: e.target.value }; setMedicoes(m) }}
+                    placeholder="Ex: Costado Seção A" className="border-border bg-card h-9" />
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <Label className="text-xs text-text-secondary">Ponto de Medição</Label>
+                  <Input value={med.ponto} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], ponto: e.target.value }; setMedicoes(m) }}
+                    placeholder="Ex: Tampo Superior - Centro" className="border-border bg-card h-9" />
+                </div>
+              )}
+              <div className="space-y-1">
+                <Label className="text-xs text-text-secondary">Espessura (mm)</Label>
+                <Input type="number" step="0.1" value={med.espessura} onChange={(e) => { const m = [...medicoes]; m[i] = { ...m[i], espessura: e.target.value }; setMedicoes(m) }}
+                  placeholder="12.5" className="border-border bg-card h-9" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs text-text-secondary">Foto do Ponto</Label>
+                <ImageUpload value={med.foto} onChange={(v) => { const m = [...medicoes]; m[i] = { ...m[i], foto: v }; setMedicoes(m) }} label="Anexar Foto" />
+              </div>
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-text-secondary">Observação</Label>
@@ -330,10 +574,27 @@ function NovaInspecaoForm() {
                 placeholder="Normal" className="border-border bg-card h-9" />
             </div>
           </div>
-        </div>
-      ))}
-    </div>
-  )
+        ))}
+
+        {pmtaPreview && (
+          <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
+            <p className="text-sm font-semibold text-amber-800 mb-2">Cálculo de PMTA (menor espessura medida)</p>
+            <div className="text-xs space-y-1 text-amber-700">
+              <p>Menor espessura: <strong>{pmtaPreview.menor.espessuraNum} mm</strong> ({pmtaPreview.menor.ponto})</p>
+              <p>PMTA casco: <strong>{pmtaPreview.pmtaCasco ? `${pmtaPreview.pmtaCasco.toFixed(2)} kgf/cm² (${(pmtaPreview.pmtaCasco * 98.0665).toFixed(1)} kPa)` : "—"}</strong></p>
+              <p>PMTA tampo elíptico: <strong>{pmtaPreview.pmtaTampo ? `${pmtaPreview.pmtaTampo.toFixed(2)} kgf/cm² (${(pmtaPreview.pmtaTampo * 98.0665).toFixed(1)} kPa)` : "—"}</strong></p>
+              <p>PMTA atual do equipamento: <strong>{selectedEq ? formatarPressao(selectedEq.pmta, selectedEq.unidadePressao ?? "kPa") : "—"}</strong></p>
+              <p className={pmtaPreview.pmtaCasco && (pmtaPreview.pmtaCasco * 98.0665) >= selectedEq!.pmta ? "text-success font-semibold" : "text-red-600 font-semibold"}>
+                {pmtaPreview.pmtaCasco && (pmtaPreview.pmtaCasco * 98.0665) >= selectedEq!.pmta
+                  ? "✓ PMTA calculada ≥ PMTA atual — Espessura suficiente"
+                  : "✗ PMTA calculada < PMTA atual — Atenção"}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   const renderAnomalias = () => (
     <div className="space-y-4">
@@ -388,85 +649,135 @@ function NovaInspecaoForm() {
   const renderDispositivos = () => (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <Label className="text-base text-text-primary font-medium">Dispositivos de Segurança</Label>
+        <div>
+          <Label className="text-base text-text-primary font-medium">Dispositivos de Segurança</Label>
+          {ehVaso && (
+            <p className="text-xs text-text-secondary mt-0.5">
+              No ato da instalação de vaso, a válvula de segurança requer apenas a confirmação de calibração e validade
+            </p>
+          )}
+        </div>
         <Button variant="outline" size="sm" onClick={adicionarDispositivo} className="border-border text-text-primary shrink-0">
           <Plus className="h-3 w-3 mr-1" /> Adicionar
         </Button>
       </div>
-      {dispositivos.map((disp, i) => (
-        <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-text-secondary font-medium">Dispositivo {i + 1}</span>
-            {dispositivos.length > 1 && (
-              <Trash2 className="h-3 w-3 text-red-500 cursor-pointer" onClick={() => setDispositivos(dispositivos.filter((_, j) => j !== i))} />
+      {dispositivos.map((disp, i) => {
+        const ehValvulaSimplificada = disp.tipo === "valvula_seguranca" && ehVaso
+        return (
+          <div key={i} className="p-4 rounded-lg border border-border bg-card space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-text-secondary font-medium">Dispositivo {i + 1}</span>
+              {dispositivos.length > 1 && (
+                <Trash2 className="h-3 w-3 text-red-500 cursor-pointer" onClick={() => setDispositivos(dispositivos.filter((_, j) => j !== i))} />
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label className="text-xs text-text-secondary">Tipo</Label>
+                <Select value={disp.tipo} onValueChange={(v) => { const d = [...dispositivos]; d[i] = { ...d[i], tipo: v ?? "valvula_seguranca" }; setDispositivos(d) }}>
+                  <SelectTrigger className="border-border bg-card h-9"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="valvula_seguranca">Válvula de Segurança</SelectItem>
+                    <SelectItem value="disco_ruptura">Disco de Ruptura</SelectItem>
+                    <SelectItem value="manometro">Manômetro</SelectItem>
+                    <SelectItem value="termometro">Termômetro</SelectItem>
+                    <SelectItem value="visor_nivel">Visor de Nível</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs text-text-secondary">Tag</Label>
+                <Input value={disp.tag} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], tag: e.target.value }; setDispositivos(d) }}
+                  placeholder="Ex: PSV-101" className="border-border bg-card h-9" />
+              </div>
+            </div>
+
+            {ehValvulaSimplificada ? (
+              <>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={cn(
+                      "flex-1 p-2 rounded-lg border cursor-pointer text-center transition-colors",
+                      disp.calibrada ? "border-primary bg-primary-subtle text-primary" : "border-border bg-card text-text-secondary"
+                    )}
+                    onClick={() => { const d = [...dispositivos]; d[i] = { ...d[i], calibrada: !d[i].calibrada }; setDispositivos(d) }}
+                  >
+                    <span className="text-xs font-medium">{disp.calibrada ? "✓ Calibrada" : "Não calibrada"}</span>
+                  </div>
+                  <div className="flex-[2]">
+                    <Input value={disp.observacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], observacao: e.target.value }; setDispositivos(d) }}
+                      placeholder="Observação..." className="border-border bg-card h-9" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Última Calibração</Label>
+                    <Input type="date" value={disp.ultimaCalibracao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], ultimaCalibracao: e.target.value }; setDispositivos(d) }}
+                      className="border-border bg-card h-8 text-xs" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Próxima Calibração</Label>
+                    <Input type="date" value={disp.proximaCalibracao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], proximaCalibracao: e.target.value }; setDispositivos(d) }}
+                      className="border-border bg-card h-8 text-xs" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Nº Certificado</Label>
+                    <Input value={disp.numeroCertificado} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], numeroCertificado: e.target.value }; setDispositivos(d) }}
+                      placeholder="Ex: CAL-PSV-2026-001" className="border-border bg-card h-8 text-xs" />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Fabricante</Label>
+                    <Input value={disp.fabricante} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], fabricante: e.target.value }; setDispositivos(d) }}
+                      placeholder="Ex: Spirax Sarco" className="border-border bg-card h-8 text-xs" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Modelo</Label>
+                    <Input value={disp.modelo} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], modelo: e.target.value }; setDispositivos(d) }}
+                      placeholder="Ex: SCV-25" className="border-border bg-card h-8 text-xs" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Nº Série</Label>
+                    <Input value={disp.numeroSerie} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], numeroSerie: e.target.value }; setDispositivos(d) }}
+                      placeholder="Ex: SS-2025-001" className="border-border bg-card h-8 text-xs" />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Pressão de Abertura (kPa)</Label>
+                    <Input type="number" value={disp.pressaoAbertura} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoAbertura: e.target.value }; setDispositivos(d) }}
+                      placeholder="Ex: 1650" className="border-border bg-card h-8 text-xs" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs text-text-secondary">Pressão de Vedação (kPa)</Label>
+                    <Input type="number" value={disp.pressaoVedacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoVedacao: e.target.value }; setDispositivos(d) }}
+                      placeholder="Ex: 1480" className="border-border bg-card h-8 text-xs" />
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={cn(
+                      "flex-1 p-2 rounded-lg border cursor-pointer text-center transition-colors",
+                      disp.inspecaoOk ? "border-primary bg-primary-subtle text-primary" : "border-border bg-card text-text-secondary"
+                    )}
+                    onClick={() => { const d = [...dispositivos]; d[i] = { ...d[i], inspecaoOk: !d[i].inspecaoOk }; setDispositivos(d) }}
+                  >
+                    <span className="text-xs font-medium">{disp.inspecaoOk ? "Aprovado" : "Reprovado"}</span>
+                  </div>
+                  <div className="flex-[2]">
+                    <Input value={disp.observacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], observacao: e.target.value }; setDispositivos(d) }}
+                      placeholder="Observação..." className="border-border bg-card h-9" />
+                  </div>
+                </div>
+              </>
             )}
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Tipo</Label>
-              <Select value={disp.tipo} onValueChange={(v) => { const d = [...dispositivos]; d[i] = { ...d[i], tipo: v ?? "valvula_seguranca" }; setDispositivos(d) }}>
-                <SelectTrigger className="border-border bg-card h-9"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="valvula_seguranca">Válvula de Segurança</SelectItem>
-                  <SelectItem value="disco_ruptura">Disco de Ruptura</SelectItem>
-                  <SelectItem value="manometro">Manômetro</SelectItem>
-                  <SelectItem value="termometro">Termômetro</SelectItem>
-                  <SelectItem value="visor_nivel">Visor de Nível</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Tag</Label>
-              <Input value={disp.tag} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], tag: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: PSV-101" className="border-border bg-card h-9" />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Fabricante</Label>
-              <Input value={disp.fabricante} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], fabricante: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: Spirax Sarco" className="border-border bg-card h-8 text-xs" />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Modelo</Label>
-              <Input value={disp.modelo} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], modelo: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: SCV-25" className="border-border bg-card h-8 text-xs" />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Nº Série</Label>
-              <Input value={disp.numeroSerie} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], numeroSerie: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: SS-2025-001" className="border-border bg-card h-8 text-xs" />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Pressão de Abertura (kPa)</Label>
-              <Input type="number" value={disp.pressaoAbertura} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoAbertura: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: 1650" className="border-border bg-card h-8 text-xs" />
-            </div>
-            <div className="space-y-1">
-              <Label className="text-xs text-text-secondary">Pressão de Vedação (kPa)</Label>
-              <Input type="number" value={disp.pressaoVedacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], pressaoVedacao: e.target.value }; setDispositivos(d) }}
-                placeholder="Ex: 1480" className="border-border bg-card h-8 text-xs" />
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div
-              className={cn(
-                "flex-1 p-2 rounded-lg border cursor-pointer text-center transition-colors",
-                disp.inspecaoOk ? "border-primary bg-primary-subtle text-primary" : "border-border bg-card text-text-secondary"
-              )}
-              onClick={() => { const d = [...dispositivos]; d[i] = { ...d[i], inspecaoOk: !d[i].inspecaoOk }; setDispositivos(d) }}
-            >
-              <span className="text-xs font-medium">{disp.inspecaoOk ? "Aprovado" : "Reprovado"}</span>
-            </div>
-            <div className="flex-[2]">
-              <Input value={disp.observacao} onChange={(e) => { const d = [...dispositivos]; d[i] = { ...d[i], observacao: e.target.value }; setDispositivos(d) }}
-                placeholder="Observação..." className="border-border bg-card h-9" />
-            </div>
-          </div>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 
@@ -476,8 +787,11 @@ function NovaInspecaoForm() {
         <CardContent className="p-4 space-y-1">
           <p className="text-sm text-text-primary font-medium">Resumo da Inspeção</p>
           <p className="text-xs text-text-secondary">
-            Equipamento: {selectedEq?.tag} • {medicoes.length} ponto(s) medido(s) • {anomalias.length} anomalia(s) • {dispositivos.length} dispositivo(s)
+            Equipamento: {selectedEq?.tag} • {medicoes.filter((m) => m.ponto && m.espessura).length} ponto(s) medido(s) • {anomalias.length} anomalia(s) • {dispositivos.length} dispositivo(s)
           </p>
+          {plhResponsavel && (
+            <p className="text-xs text-text-secondary">PLH Responsável: {plhResponsavel} {plhCrea && `• ${plhCrea}`}</p>
+          )}
         </CardContent>
       </Card>
 
