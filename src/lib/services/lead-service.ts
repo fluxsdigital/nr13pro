@@ -1,6 +1,5 @@
-import { leads, persistirLeads } from "@/lib/store"
+import { api, getApiErrorMessage } from "@/lib/api"
 import type { Lead, CreateLeadDTO, UpdateLeadDTO } from "@/lib/types"
-import { authService } from "@/lib/services/auth-service"
 
 // Duração da degustação liberada pelo closer (7 dias)
 export const DIAS_DEGUSTACAO = 7
@@ -8,7 +7,7 @@ export const DIAS_DEGUSTACAO = 7
 export interface LeadService {
   list(filters?: { status?: string; userId?: string }): Promise<Lead[]>
   getById(id: string): Promise<Lead | undefined>
-  create(data: CreateLeadDTO, userId: string): Promise<Lead>
+  create(data: CreateLeadDTO): Promise<Lead>
   update(id: string, data: UpdateLeadDTO): Promise<Lead>
   delete(id: string): Promise<void>
   // Automação WhatsApp: marca como contatado e registra o último contato
@@ -19,118 +18,80 @@ export interface LeadService {
   liberarAcessoDegustacao(id: string): Promise<Lead>
 }
 
-class MockLeadService implements LeadService {
-  private nextId = 100
-
-  async list(filters?: { status?: string; userId?: string }) {
-    let result = leads
-    if (filters?.userId) {
-      result = result.filter((l) => l.userId === filters.userId)
+export const leadService: LeadService = {
+  async list(filters) {
+    try {
+      const params: Record<string, string> = {}
+      if (filters?.status && filters.status !== "") params.status = filters.status
+      // userId é ignorado: backend escopa por role (closer vê tudo)
+      const { data } = await api.get<Lead[]>("/leads", { params })
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
     }
-    if (filters?.status && filters.status !== "") {
-      result = result.filter((l) => l.status === filters.status)
+  },
+
+  async getById(id) {
+    try {
+      const { data } = await api.get<Lead>(`/leads/${id}`)
+      return data
+    } catch {
+      return undefined
     }
-    return result
-  }
+  },
 
-  async getById(id: string) {
-    return leads.find((l) => l.id === id)
-  }
-
-  async create(data: CreateLeadDTO, userId: string) {
-    const lead: Lead = {
-      ...data,
-      id: String(this.nextId++),
-      userId,
-      criadoEm: new Date().toISOString(),
-      ultimoContato: null,
-      transferidoConsultor: false,
-      acessoDegustacaoLiberado: false,
-      dataLiberacaoAcesso: null,
-      credenciaisDegustacao: null,
+  // Rota pública no backend (captura na landing/checkout)
+  async create(data) {
+    try {
+      const { data: lead } = await api.post<Lead>("/leads", data)
+      return lead
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
     }
-    leads.push(lead)
-    persistirLeads()
-    return lead
-  }
+  },
 
-  async update(id: string, data: UpdateLeadDTO) {
-    const idx = leads.findIndex((l) => l.id === id)
-    if (idx === -1) throw new Error("Lead não encontrado")
-    leads[idx] = { ...leads[idx], ...data }
-    persistirLeads()
-    return leads[idx]
-  }
-
-  async delete(id: string) {
-    const idx = leads.findIndex((l) => l.id === id)
-    if (idx === -1) throw new Error("Lead não encontrado")
-    leads.splice(idx, 1)
-    persistirLeads()
-  }
-
-  async enviarMensagemAutomatizada(id: string) {
-    const idx = leads.findIndex((l) => l.id === id)
-    if (idx === -1) throw new Error("Lead não encontrado")
-    leads[idx] = {
-      ...leads[idx],
-      status: leads[idx].status === "novo" || leads[idx].status === "abandonou_checkout" ? "contatado" : leads[idx].status,
-      ultimoContato: new Date().toISOString(),
+  async update(id, data) {
+    try {
+      const { data: lead } = await api.patch<Lead>(`/leads/${id}`, data)
+      return lead
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
     }
-    persistirLeads()
-    return leads[idx]
-  }
+  },
 
-  async transferirParaConsultor(id: string) {
-    const idx = leads.findIndex((l) => l.id === id)
-    if (idx === -1) throw new Error("Lead não encontrado")
-    leads[idx] = {
-      ...leads[idx],
-      status: "consultor",
-      transferidoConsultor: true,
-      ultimoContato: new Date().toISOString(),
+  async delete(id) {
+    try {
+      await api.delete(`/leads/${id}`)
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
     }
-    persistirLeads()
-    return leads[idx]
-  }
+  },
 
-  async liberarAcessoDegustacao(id: string) {
-    const idx = leads.findIndex((l) => l.id === id)
-    if (idx === -1) throw new Error("Lead não encontrado")
-    if (leads[idx].acessoDegustacaoLiberado) return leads[idx]
-
-    // Gera credenciais de degustação com validade de 7 dias
-    // Remove acentos (João → joao) antes de montar o e-mail
-    const base = leads[idx].email
-      ? leads[idx].email.split("@")[0]
-      : leads[idx].nome
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/[^a-z0-9]/g, ".")
-    const email = `${base}@degustacao.nr13pro.com.br`
-    const senha = "123456"
-    const expiraEm = new Date(Date.now() + DIAS_DEGUSTACAO * 24 * 60 * 60 * 1000).toISOString()
-
-    // Cria o usuário REAL no mock de autenticação — o lead poderá logar no sistema
-    await authService.criarUsuarioDegustacao({
-      nome: leads[idx].nome,
-      email,
-      senha,
-      expiraEm,
-    })
-
-    leads[idx] = {
-      ...leads[idx],
-      status: "em_negociacao",
-      acessoDegustacaoLiberado: true,
-      dataLiberacaoAcesso: new Date().toISOString(),
-      credenciaisDegustacao: { email, senha, expiraEm },
-      ultimoContato: new Date().toISOString(),
+  async enviarMensagemAutomatizada(id) {
+    try {
+      const { data } = await api.post<Lead>(`/leads/${id}/whatsapp`)
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
     }
-    persistirLeads()
-    return leads[idx]
-  }
+  },
+
+  async transferirParaConsultor(id) {
+    try {
+      const { data } = await api.post<Lead>(`/leads/${id}/consultor`)
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
+
+  async liberarAcessoDegustacao(id) {
+    try {
+      // Backend cria o usuário de degustação e devolve o lead atualizado
+      const { data } = await api.post<Lead>(`/leads/${id}/degustacao`)
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
 }
-
-export const leadService: LeadService = new MockLeadService()

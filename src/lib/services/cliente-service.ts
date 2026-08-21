@@ -1,4 +1,4 @@
-import { clientes } from "@/lib/store"
+import { api, getApiErrorMessage } from "@/lib/api"
 import type { Cliente, CreateClienteDTO, UpdateClienteDTO } from "@/lib/types"
 
 export interface ClienteService {
@@ -9,37 +9,48 @@ export interface ClienteService {
   delete(id: string): Promise<void>
 }
 
-class MockClienteService implements ClienteService {
-  private nextId = 100
+export const clienteService: ClienteService = {
+  async list() {
+    try {
+      const { data } = await api.get<Cliente[]>("/clientes")
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
 
-  async list(userId?: string) {
-    if (!userId) return clientes
-    return clientes.filter((c) => c.userId === userId)
-  }
+  async getById(id) {
+    try {
+      const { data } = await api.get<Cliente>(`/clientes/${id}`)
+      return data
+    } catch {
+      return undefined
+    }
+  },
 
-  async getById(id: string) {
-    return clientes.find((c) => c.id === id)
-  }
+  async create(data) {
+    try {
+      const { data: cliente } = await api.post<Cliente>("/clientes", data)
+      return cliente
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
 
-  async create(data: CreateClienteDTO, userId: string) {
-    const now = new Date().toISOString().slice(0, 10)
-    const cliente: Cliente = { ...data, userId, id: String(this.nextId++), createdAt: now }
-    clientes.push(cliente)
-    return cliente
-  }
+  async update(id, data) {
+    try {
+      const { data: cliente } = await api.patch<Cliente>(`/clientes/${id}`, data)
+      return cliente
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
 
-  async update(id: string, data: UpdateClienteDTO) {
-    const idx = clientes.findIndex((c) => c.id === id)
-    if (idx === -1) throw new Error("Cliente não encontrado")
-    clientes[idx] = { ...clientes[idx], ...data }
-    return clientes[idx]
-  }
-
-  async delete(id: string) {
-    const idx = clientes.findIndex((c) => c.id === id)
-    if (idx === -1) throw new Error("Cliente não encontrado")
-    clientes.splice(idx, 1)
-  }
+  async delete(id) {
+    try {
+      await api.delete(`/clientes/${id}`)
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
 }
-
-export const clienteService: ClienteService = new MockClienteService()

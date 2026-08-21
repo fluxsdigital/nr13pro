@@ -59,7 +59,7 @@ export function WhatsAppCapture() {
         origem: "landing",
         status: "novo",
         mensagemAutomatizada: `Olá ${nome.split(" ")[0]}! Vi que você demonstrou interesse no NR-13 Pro. Posso ajudar com alguma dúvida sobre o fechamento?`,
-      }, "nr13pro_empresa")
+      })
       localStorage.setItem(LEAD_ID_KEY, criado.id)
       setLead(criado)
       setEstado("aguardando")

@@ -36,7 +36,7 @@ export default function CheckoutPage() {
         origem: "checkout",
         status: "novo",
         mensagemAutomatizada: `Olá ${name.split(" ")[0]}! Notei que você iniciou a assinatura do NR-13 Pro mas não concluiu. Teve alguma dúvida no fechamento? Posso te ajudar!`,
-      }, "nr13pro_empresa")
+      })
       leadIdRef.current = lead.id
     } catch {
       // silencioso — lead é opcional

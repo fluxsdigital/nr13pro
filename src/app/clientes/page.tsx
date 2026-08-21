@@ -2,8 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useAuth } from "@/lib/auth-context"
-import { clienteService } from "@/lib/services"
-import type { Cliente } from "@/lib/types"
+import {
+  clienteService,
+  equipamentoService,
+  inspecaoService,
+  laudoService,
+} from "@/lib/services"
+import type { Cliente, Equipamento, Inspecao, Laudo } from "@/lib/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -21,7 +26,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { equipamentos as eqStore, inspecoes as insStore, laudos as lauStore } from "@/lib/store"
 
 interface ClienteStatus {
   overdue: number
@@ -31,19 +35,24 @@ interface ClienteStatus {
   inProgress: number
 }
 
-function getStatus(clienteId: string): ClienteStatus {
-  const eqs = eqStore.filter((eq) => eq.clienteId === clienteId)
+function getStatus(
+  clienteId: string,
+  equipamentos: Equipamento[],
+  inspecoes: Inspecao[],
+  laudos: Laudo[]
+): ClienteStatus {
+  const eqs = equipamentos.filter((eq) => eq.clienteId === clienteId)
   const today = new Date()
   let overdue = 0, approaching = 0, safe = 0, unknown = 0, inProgress = 0
 
   eqs.forEach((eq) => {
-    const insps = insStore.filter((i) => i.equipamentoId === eq.id)
+    const insps = inspecoes.filter((i) => i.equipamentoId === eq.id)
     if (insps.length === 0) { unknown++; return }
 
     const latest = insps.sort((a, b) => b.dataTermino.localeCompare(a.dataTermino))[0]
     if (!latest.concluida) { inProgress++; return }
 
-    const laudo = lauStore.find((l) => l.id === latest.laudoId)
+    const laudo = latest.laudoId ? laudos.find((l) => l.id === latest.laudoId) : undefined
     if (!laudo?.dataProximaInspecao) { unknown++; return }
 
     const diff = Math.ceil(
@@ -67,16 +76,42 @@ export default function Clientes() {
   const [filtroStatus, setFiltroStatus] = useState<FiltroStatus>("todas")
   const [filtroCliente, setFiltroCliente] = useState("")
   const [data, setData] = useState<Cliente[]>([])
+  const [equipamentos, setEquipamentos] = useState<Equipamento[]>([])
+  const [inspecoes, setInspecoes] = useState<Inspecao[]>([])
+  const [laudos, setLaudos] = useState<Laudo[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    clienteService.list(user?.id).then(setData)
-  }, [user?.id])
+    let cancelled = false
+    Promise.all([
+      clienteService.list(),
+      equipamentoService.list(),
+      inspecaoService.list(),
+      laudoService.list(),
+    ])
+      .then(([clientesData, eqs, insps, lds]) => {
+        if (cancelled) return
+        setData(clientesData)
+        setEquipamentos(eqs)
+        setInspecoes(insps)
+        setLaudos(lds)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const statusPorCliente = useMemo(() => {
     const map = new Map<string, ClienteStatus>()
-    data.forEach((c) => map.set(c.id, getStatus(c.id)))
+    data.forEach((c) =>
+      map.set(c.id, getStatus(c.id, equipamentos, inspecoes, laudos))
+    )
     return map
-  }, [data])
+  }, [data, equipamentos, inspecoes, laudos])
 
   const filtered = useMemo(() => {
     return data.filter((c) => {
@@ -224,7 +259,13 @@ export default function Clientes() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {isLoading ? (
+        <Card className="border-border shadow-sm">
+          <CardContent className="py-16 text-center text-text-secondary">
+            Carregando clientes...
+          </CardContent>
+        </Card>
+      ) : filtered.length === 0 ? (
         <Card className="border-border shadow-sm">
           <CardContent className="py-16 text-center">
             <Building2 className="h-16 w-16 text-text-muted mx-auto mb-4" />

@@ -2,11 +2,10 @@
 
 import { useSearchParams, useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
-import { useState, Suspense, useRef, useMemo } from "react"
-import { equipamentos, clientes } from "@/lib/store"
-import { inspecaoService } from "@/lib/services"
+import { useState, useEffect, Suspense, useRef, useMemo } from "react"
+import { clienteService, equipamentoService, inspecaoService } from "@/lib/services"
 import { toast } from "sonner"
-import type { CreateInspecaoDTO, TipoTampo } from "@/lib/types"
+import type { Cliente, CreateInspecaoDTO, Equipamento, TipoTampo } from "@/lib/types"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -46,7 +45,27 @@ function NovaInspecaoForm() {
   const [step, setStep] = useState<Step>(equipamentoId ? "exames" : "equipamento")
   const contentRef = useRef<HTMLDivElement>(null)
 
-  const [selectedEq, setSelectedEq] = useState(equipamentos.find((e) => e.id === equipamentoId) ?? null)
+  const [equipamentos, setEquipamentos] = useState<Equipamento[]>([])
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [selectedEq, setSelectedEq] = useState<Equipamento | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    Promise.all([equipamentoService.list(), clienteService.list()])
+      .then(([eqs, cls]) => {
+        if (cancelled) return
+        setEquipamentos(eqs)
+        setClientes(cls)
+        if (equipamentoId) {
+          const found = eqs.find((e) => e.id === equipamentoId)
+          if (found) setSelectedEq(found)
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [equipamentoId])
   const [tipo, setTipo] = useState("periodica")
   const [examesExternos, setExamesExternos] = useState(true)
   const [examesInternos, setExamesInternos] = useState(true)

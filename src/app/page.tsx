@@ -1,11 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAuth } from "@/lib/auth-context"
-import { clientes, equipamentos, inspecoes, laudos } from "@/lib/store"
 import {
-  getEquipamentosDoCliente, getInspecoesDoCliente, getLaudoPorInspecao,
-} from "@/lib/mock-data"
+  clienteService,
+  equipamentoService,
+  inspecaoService,
+  laudoService,
+} from "@/lib/services"
+import type { Cliente, Equipamento, Inspecao, Laudo } from "@/lib/types"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -16,11 +19,17 @@ import Link from "next/link"
 
 type FiltroCliente = "todas" | string
 
-function progressoCliente(clienteId: string, laudosRef: typeof laudos) {
-  const eqs = getEquipamentosDoCliente(clienteId)
-  const insps = getInspecoesDoCliente(clienteId)
+function progressoCliente(
+  clienteId: string,
+  equipamentos: Equipamento[],
+  inspecoes: Inspecao[],
+  laudos: Laudo[]
+) {
+  const eqs = equipamentos.filter((e) => e.clienteId === clienteId)
+  const eqIds = new Set(eqs.map((e) => e.id))
+  const insps = inspecoes.filter((i) => eqIds.has(i.equipamentoId))
   const total = eqs.length
-  const comLaudo = insps.filter((i) => i.concluida && laudosRef.some((l) => l.inspecaoId === i.id)).length
+  const comLaudo = insps.filter((i) => i.concluida && laudos.some((l) => l.inspecaoId === i.id)).length
   const emAndamento = insps.filter((i) => !i.concluida).length
   const semInspecao = total - new Set(insps.map((i) => i.equipamentoId)).size
   const pct = total > 0 ? Math.round((comLaudo / total) * 100) : 0
@@ -29,10 +38,40 @@ function progressoCliente(clienteId: string, laudosRef: typeof laudos) {
 
 export default function Dashboard() {
   const { user } = useAuth()
-  const meusClientes = clientes.filter(c => c.userId === user?.id)
-  const meusEquipamentos = equipamentos.filter(e => e.userId === user?.id)
-  const minhasInspecoes = inspecoes.filter(i => i.userId === user?.id)
-  const meusLaudos = laudos.filter(l => l.userId === user?.id)
+  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [equipamentos, setEquipamentos] = useState<Equipamento[]>([])
+  const [inspecoes, setInspecoes] = useState<Inspecao[]>([])
+  const [laudos, setLaudos] = useState<Laudo[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    Promise.all([
+      clienteService.list(),
+      equipamentoService.list(),
+      inspecaoService.list(),
+      laudoService.list(),
+    ])
+      .then(([cs, eqs, insps, lds]) => {
+        if (cancelled) return
+        setClientes(cs)
+        setEquipamentos(eqs)
+        setInspecoes(insps)
+        setLaudos(lds)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const meusClientes = clientes
+  const meusEquipamentos = equipamentos
+  const minhasInspecoes = [...inspecoes].sort((a, b) => b.dataInicio.localeCompare(a.dataInicio))
+  const meusLaudos = laudos
 
   const [filtro, setFiltro] = useState<FiltroCliente>("todas")
 
@@ -71,7 +110,13 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {filtro === "todas" ? (
+      {isLoading ? (
+        <Card className="card-kpi">
+          <CardContent className="py-16 text-center text-text-secondary">
+            Carregando dashboard...
+          </CardContent>
+        </Card>
+      ) : filtro === "todas" ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <Card className="card-kpi">
@@ -153,7 +198,7 @@ export default function Dashboard() {
               <CardContent>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                    {meusClientes.map((cli) => {
-                     const p = progressoCliente(cli.id, meusLaudos)
+                     const p = progressoCliente(cli.id, meusEquipamentos, minhasInspecoes, meusLaudos)
                     return (
                       <button
                         key={cli.id}
@@ -212,7 +257,7 @@ export default function Dashboard() {
               </CardHeader>
               <CardContent>
                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   {[...minhasInspecoes].reverse().map((ins) => {
+                   {minhasInspecoes.map((ins) => {
                      const eq = meusEquipamentos.find((e) => e.id === ins.equipamentoId)
                      const cliNome = eq ? meusClientes.find((c) => c.id === eq.clienteId)?.nome ?? "" : ""
                     return (
@@ -289,14 +334,15 @@ export default function Dashboard() {
 }
 
 function DetalheCliente({ clienteId, onVoltar, meusClientes, meusLaudos, minhasInspecoes, meusEquipamentos }: {
-  clienteId: string; onVoltar: () => void; meusClientes: typeof clientes; meusLaudos: typeof laudos; minhasInspecoes: typeof inspecoes; meusEquipamentos: typeof equipamentos
+  clienteId: string; onVoltar: () => void; meusClientes: Cliente[]; meusLaudos: Laudo[]; minhasInspecoes: Inspecao[]; meusEquipamentos: Equipamento[]
 }) {
   const cli = meusClientes.find((c) => c.id === clienteId)
   if (!cli) return null
 
-  const eqs = getEquipamentosDoCliente(clienteId)
-  const insps = getInspecoesDoCliente(clienteId)
-  const p = progressoCliente(clienteId, meusLaudos)
+  const eqs = meusEquipamentos.filter((e) => e.clienteId === clienteId)
+  const eqIds = new Set(eqs.map((e) => e.id))
+  const insps = minhasInspecoes.filter((i) => eqIds.has(i.equipamentoId))
+  const p = progressoCliente(clienteId, meusEquipamentos, minhasInspecoes, meusLaudos)
 
   const certificadosDisponiveis = insps.filter(
     (i) => i.concluida && !meusLaudos.some((l) => l.inspecaoId === i.id)
@@ -389,7 +435,7 @@ function DetalheCliente({ clienteId, onVoltar, meusClientes, meusLaudos, minhasI
                     .filter((i) => i.equipamentoId === eq.id)
                     .sort((a, b) => b.dataInicio.localeCompare(a.dataInicio))
                   const ultima = ins[0]
-                  const laudo = ultima ? getLaudoPorInspecao(ultima.id) : null
+                  const laudo = ultima ? meusLaudos.find((l) => l.inspecaoId === ultima.id) ?? null : null
 
                   let statusLabel: string
                   let statusColor: "default" | "secondary" | "destructive" | "outline" = "secondary"

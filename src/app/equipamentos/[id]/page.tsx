@@ -1,9 +1,14 @@
 "use client"
 
 import { useParams } from "next/navigation"
-import { useAuth } from "@/lib/auth-context"
-import { inspecoes } from "@/lib/store"
-import { getEquipamento, getLaudoPorInspecao, getClientePorEquipamento } from "@/lib/mock-data"
+import { useEffect, useState } from "react"
+import {
+  clienteService,
+  equipamentoService,
+  inspecaoService,
+  laudoService,
+} from "@/lib/services"
+import type { Cliente, Equipamento, Inspecao, Laudo } from "@/lib/types"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,23 +18,59 @@ import { FileText, ClipboardCheck, ArrowRight, Pencil } from "lucide-react"
 import Link from "next/link"
 
 export default function EquipamentoDetalhe() {
-  const { user } = useAuth()
   const params = useParams()
-  const eq = getEquipamento(params.id as string)
+  const id = params.id as string
+  const [eq, setEq] = useState<Equipamento | undefined>(undefined)
+  const [cliente, setCliente] = useState<Cliente | null>(null)
+  const [inspecoesEq, setInspecoesEq] = useState<Inspecao[]>([])
+  const [laudosEq, setLaudosEq] = useState<Laudo[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+    equipamentoService
+      .getById(id)
+      .then(async (equip) => {
+        if (!equip || cancelled) return
+        const [insps, cli, todosLaudos] = await Promise.all([
+          inspecaoService.list({ equipamentoId: equip.id }),
+          clienteService.getById(equip.clienteId),
+          laudoService.list(),
+        ])
+        const ordenadas = [...insps].sort((a, b) => a.dataInicio.localeCompare(b.dataInicio))
+        const meusLaudos = todosLaudos.filter((l) => l.equipamentoId === equip.id)
+        if (cancelled) return
+        setEq(equip)
+        setInspecoesEq(ordenadas)
+        setLaudosEq(meusLaudos)
+        setCliente(cli ?? null)
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setIsLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [id])
+
+  if (isLoading) {
+    return <div className="p-4 sm:p-8 text-text-secondary">Carregando...</div>
+  }
 
   if (!eq) {
     return <div className="p-4 sm:p-8 text-text-secondary">Equipamento não encontrado</div>
   }
 
-  const cliente = getClientePorEquipamento(eq.id)
-  const inspecoesEq = inspecoes.filter((i) => i.equipamentoId === eq.id)
   const catInfo = eq.categoria ? descricaoCategoria(eq.categoria as any) : null
   const periodicidade = eq.categoria && ["I", "II", "III", "IV", "V"].includes(eq.categoria)
     ? periodicidadeInspecao(eq.categoria as any, false)
     : null
 
   const ultimaInspecao = inspecoesEq[inspecoesEq.length - 1]
-  const laudo = ultimaInspecao ? getLaudoPorInspecao(ultimaInspecao.id) : null
+  const laudo = ultimaInspecao
+    ? laudosEq.find((l) => l.inspecaoId === ultimaInspecao.id) ?? null
+    : null
 
   return (
     <div className="p-4 sm:p-8 space-y-6">
@@ -200,7 +241,7 @@ export default function EquipamentoDetalhe() {
           ) : (
             <div className="space-y-2">
               {inspecoesEq.map((ins) => {
-                const l = getLaudoPorInspecao(ins.id)
+                const l = laudosEq.find((ld) => ld.inspecaoId === ins.id)
                 return (
                   <Link key={ins.id} href={`/inspecoes/${ins.id}`} className="block">
                     <Card className="border-border shadow-sm hover:bg-card-hover transition-colors">

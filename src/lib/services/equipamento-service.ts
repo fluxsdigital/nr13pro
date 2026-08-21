@@ -1,6 +1,5 @@
-import { equipamentos } from "@/lib/store"
+import { api, getApiErrorMessage } from "@/lib/api"
 import type { Equipamento, CreateEquipamentoDTO, UpdateEquipamentoDTO } from "@/lib/types"
-import { classificarVaso, classificarCaldeira, obterGrupoPotencialRisco, calcularPV } from "@/lib/nr13"
 
 export interface EquipamentoService {
   list(filters?: { clienteId?: string; search?: string; userId?: string }): Promise<Equipamento[]>
@@ -10,93 +9,52 @@ export interface EquipamentoService {
   delete(id: string): Promise<void>
 }
 
-function autoClassificar(data: CreateEquipamentoDTO) {
-  if (data.tipo === "caldeira") {
-    return { categoria: classificarCaldeira(data.pressaoOperacao), grupoPotencialRisco: null }
-  }
-  const pv = calcularPV(data.pressaoOperacao, data.volume)
-  const grupo = obterGrupoPotencialRisco(pv)
-  if (!grupo && data.classeFluido !== "A") {
-    return { categoria: null, grupoPotencialRisco: null }
-  }
-  const result = classificarVaso(data.classeFluido, data.pressaoOperacao, data.volume)
-  if (!result) {
-    return { categoria: null, grupoPotencialRisco: grupo }
-  }
-  return { categoria: result.categoria, grupoPotencialRisco: result.grupo }
+export const equipamentoService: EquipamentoService = {
+  async list(filters) {
+    try {
+      const params: Record<string, string> = {}
+      if (filters?.clienteId) params.clienteId = filters.clienteId
+      if (filters?.search) params.search = filters.search
+      // userId é ignorado: o backend já escopa pelo token JWT
+      const { data } = await api.get<Equipamento[]>("/equipamentos", { params })
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
+
+  async getById(id) {
+    try {
+      const { data } = await api.get<Equipamento>(`/equipamentos/${id}`)
+      return data
+    } catch {
+      return undefined
+    }
+  },
+
+  async create(data) {
+    try {
+      const { data: equipamento } = await api.post<Equipamento>("/equipamentos", data)
+      return equipamento
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
+
+  async update(id, data) {
+    try {
+      const { data: equipamento } = await api.patch<Equipamento>(`/equipamentos/${id}`, data)
+      return equipamento
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
+
+  async delete(id) {
+    try {
+      await api.delete(`/equipamentos/${id}`)
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
 }
-
-class MockEquipamentoService implements EquipamentoService {
-  private nextId = 100
-
-  async list(filters?: { clienteId?: string; search?: string; userId?: string }) {
-    let result = equipamentos
-    if (filters?.userId) {
-      result = result.filter((e) => e.userId === filters.userId)
-    }
-    if (filters?.clienteId) {
-      result = result.filter((e) => e.clienteId === filters.clienteId)
-    }
-    if (filters?.search) {
-      const q = filters.search.toLowerCase()
-      result = result.filter(
-        (e) =>
-          e.tag.toLowerCase().includes(q) ||
-          e.descricao.toLowerCase().includes(q) ||
-          e.localizacao.toLowerCase().includes(q)
-      )
-    }
-    return result
-  }
-
-  async getById(id: string) {
-    return equipamentos.find((e) => e.id === id)
-  }
-
-  async create(data: CreateEquipamentoDTO, userId: string) {
-    const now = new Date().toISOString().slice(0, 10)
-    const classificacao = autoClassificar(data)
-    const equipamento: Equipamento = {
-      ...data,
-      id: String(this.nextId++),
-      userId,
-      ...classificacao,
-      createdAt: now,
-    }
-    equipamentos.push(equipamento)
-    return equipamento
-  }
-
-  async update(id: string, data: UpdateEquipamentoDTO) {
-    const idx = equipamentos.findIndex((e) => e.id === id)
-    if (idx === -1) throw new Error("Equipamento não encontrado")
-    const updated = { ...equipamentos[idx], ...data }
-    if (data.pressaoOperacao !== undefined || data.volume !== undefined || data.classeFluido !== undefined || data.tipo !== undefined) {
-      const classificacao = autoClassificar({
-        clienteId: updated.clienteId, tag: updated.tag, descricao: updated.descricao,
-        fabricante: updated.fabricante, numeroSerie: updated.numeroSerie,
-        anoFabricacao: updated.anoFabricacao, pressaoProjeto: updated.pressaoProjeto,
-        pressaoOperacao: updated.pressaoOperacao, unidadePressao: updated.unidadePressao,
-        pressaoTesteHidrostatico: updated.pressaoTesteHidrostatico,
-        volume: updated.volume, pmta: updated.pmta,
-        temperaturaProjeto: updated.temperaturaProjeto, temperaturaOperacao: updated.temperaturaOperacao,
-        diametroInterno: updated.diametroInterno, alturaComprimento: updated.alturaComprimento,
-        materialConstrucao: updated.materialConstrucao, codigoProjeto: updated.codigoProjeto,
-        fluido: updated.fluido, classeFluido: updated.classeFluido,
-        localizacao: updated.localizacao, tipo: updated.tipo,
-      })
-      updated.categoria = classificacao.categoria
-      updated.grupoPotencialRisco = classificacao.grupoPotencialRisco
-    }
-    equipamentos[idx] = updated
-    return updated
-  }
-
-  async delete(id: string) {
-    const idx = equipamentos.findIndex((e) => e.id === id)
-    if (idx === -1) throw new Error("Equipamento não encontrado")
-    equipamentos.splice(idx, 1)
-  }
-}
-
-export const equipamentoService: EquipamentoService = new MockEquipamentoService()

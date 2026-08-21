@@ -12,6 +12,24 @@ export const api = axios.create({
   timeout: 15000,
 })
 
+// Anexa automaticamente o token JWT da sessão (localStorage "nr13pro_session")
+api.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    try {
+      const raw = localStorage.getItem("nr13pro_session")
+      if (raw) {
+        const session = JSON.parse(raw) as { token?: string }
+        if (session.token && !config.headers.Authorization) {
+          config.headers.Authorization = `Bearer ${session.token}`
+        }
+      }
+    } catch {
+      // sessão corrompida — segue sem token
+    }
+  }
+  return config
+})
+
 export function getAuthHeader(token?: string | null): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
