@@ -11,10 +11,10 @@ import { AppSettingsProvider } from "@/components/ui/app-settings-context"
 import { authService } from "@/lib/services/auth-service"
 import { MainContent } from "@/components/layout/main-content"
 
-const publicRoutes = ["/vendas", "/checkout", "/login", "/cadastro", "/privacidade", "/termos-de-uso"]
+const publicRoutes = ["/vendas", "/checkout", "/login", "/cadastro", "/recuperar-senha", "/privacidade", "/termos-de-uso"]
 const publicPrefixes = ["/certificados/"]
 
-const authExceptions = ["/vendas", "/checkout", "/login", "/cadastro", "/privacidade", "/termos-de-uso"]
+const authExceptions = ["/vendas", "/checkout", "/login", "/cadastro", "/recuperar-senha", "/privacidade", "/termos-de-uso"]
 
 // Rotas exclusivas do closer (vendedor NR-13 Pro)
 const closerOnlyRoutes = ["/leads"]

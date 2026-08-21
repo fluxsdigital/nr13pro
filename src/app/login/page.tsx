@@ -125,6 +125,14 @@ export default function LoginPage() {
               </motion.button>
             </form>
 
+            {/* Recuperação de senha */}
+            <Link
+              href="/recuperar-senha"
+              className="inline-block mt-2 text-sm text-text-secondary hover:text-primary transition-colors"
+            >
+              Esqueci minha senha
+            </Link>
+
             {/* Acesso Demo */}
             <div className="mt-6 p-3 rounded-lg bg-primary-subtle border border-primary/20 space-y-2">
               <p className="text-xs font-semibold text-primary mb-1.5">🔑 Acessos de demonstração</p>

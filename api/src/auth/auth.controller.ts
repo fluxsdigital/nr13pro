@@ -37,4 +37,29 @@ export class AuthController {
   setPlan(@CurrentUser() user: AuthUser, @Body('plan') plan: 'Mensal' | 'Anual') {
     return this.authService.setPlan(user.id, plan);
   }
+
+  @Post('degustacao')
+  criarUsuarioDegustacao(
+    @CurrentUser() user: AuthUser,
+    @Body() body: { nome: string; email: string; senha: string; expiraEm: string },
+  ) {
+    return this.authService.criarUsuarioDegustacao({
+      nome: body.nome,
+      email: body.email,
+      senha: body.senha,
+      expiraEm: new Date(body.expiraEm),
+    });
+  }
+
+  @Public()
+  @Post('request-reset')
+  requestPasswordReset(@Body('email') email: string) {
+    return this.authService.requestPasswordReset(email);
+  }
+
+  @Public()
+  @Post('reset-password')
+  resetPassword(@Body() body: { token: string; newPassword: string }) {
+    return this.authService.resetPassword(body.token, body.newPassword);
+  }
 }
