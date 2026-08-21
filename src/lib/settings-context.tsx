@@ -1,8 +1,8 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
-import { settings } from "./store"
 import { settingsService } from "./services"
+import type { Settings } from "./settings"
 
 type Profile = { name: string; crea: string }
 
@@ -16,23 +16,27 @@ const SettingsContext = createContext<SettingsContextValue>({
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile>({
-    name: settings.profile.nome,
-    crea: settings.profile.crea,
+    name: "",
+    crea: "",
   })
 
   useEffect(() => {
-    function handleUpdate() {
-      setProfile({
-        name: settings.profile.nome,
-        crea: settings.profile.crea,
-      })
+    let cancelled = false
+
+    function apply(s: Settings) {
+      if (cancelled) return
+      setProfile({ name: s.profile.nome, crea: s.profile.crea })
     }
 
-    const unsub = settingsService.onChange(handleUpdate)
-    window.addEventListener("settings-updated", handleUpdate)
+    settingsService.get().then(apply).catch(() => {})
+
+    const unsub = settingsService.onChange(() => {
+      settingsService.get().then(apply).catch(() => {})
+    })
+
     return () => {
+      cancelled = true
       unsub()
-      window.removeEventListener("settings-updated", handleUpdate)
     }
   }, [])
 

@@ -4,6 +4,24 @@ import type { Lead, CreateLeadDTO, UpdateLeadDTO } from "@/lib/types"
 // Duração da degustação liberada pelo closer (7 dias)
 export const DIAS_DEGUSTACAO = 7
 
+// Backend persiste credenciais em campos planos (credencialEmail/Senha/ExpiraEm);
+// o frontend consome o formato aninhado credenciaisDegustacao — normaliza aqui.
+function normalizeLead(raw: Lead): Lead {
+  const r = raw as Lead & {
+    credencialEmail?: string | null
+    credencialSenha?: string | null
+    credencialExpiraEm?: string | null
+  }
+  if (r.credenciaisDegustacao || (!r.credencialEmail && !r.credencialSenha)) return raw
+  return {
+    ...r,
+    credenciaisDegustacao:
+      r.credencialEmail && r.credencialSenha && r.credencialExpiraEm
+        ? { email: r.credencialEmail, senha: r.credencialSenha, expiraEm: r.credencialExpiraEm }
+        : null,
+  }
+}
+
 export interface LeadService {
   list(filters?: { status?: string; userId?: string }): Promise<Lead[]>
   getById(id: string): Promise<Lead | undefined>
@@ -25,7 +43,7 @@ export const leadService: LeadService = {
       if (filters?.status && filters.status !== "") params.status = filters.status
       // userId é ignorado: backend escopa por role (closer vê tudo)
       const { data } = await api.get<Lead[]>("/leads", { params })
-      return data
+      return data.map(normalizeLead)
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }
@@ -34,7 +52,7 @@ export const leadService: LeadService = {
   async getById(id) {
     try {
       const { data } = await api.get<Lead>(`/leads/${id}`)
-      return data
+      return normalizeLead(data)
     } catch {
       return undefined
     }
@@ -44,7 +62,7 @@ export const leadService: LeadService = {
   async create(data) {
     try {
       const { data: lead } = await api.post<Lead>("/leads", data)
-      return lead
+      return normalizeLead(lead)
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }
@@ -53,7 +71,7 @@ export const leadService: LeadService = {
   async update(id, data) {
     try {
       const { data: lead } = await api.patch<Lead>(`/leads/${id}`, data)
-      return lead
+      return normalizeLead(lead)
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }
@@ -70,7 +88,7 @@ export const leadService: LeadService = {
   async enviarMensagemAutomatizada(id) {
     try {
       const { data } = await api.post<Lead>(`/leads/${id}/whatsapp`)
-      return data
+      return normalizeLead(data)
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }
@@ -79,7 +97,7 @@ export const leadService: LeadService = {
   async transferirParaConsultor(id) {
     try {
       const { data } = await api.post<Lead>(`/leads/${id}/consultor`)
-      return data
+      return normalizeLead(data)
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }
@@ -89,7 +107,7 @@ export const leadService: LeadService = {
     try {
       // Backend cria o usuário de degustação e devolve o lead atualizado
       const { data } = await api.post<Lead>(`/leads/${id}/degustacao`)
-      return data
+      return normalizeLead(data)
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }
