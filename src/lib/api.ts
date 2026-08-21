@@ -1,7 +1,13 @@
 import axios, { AxiosError } from "axios"
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ??
+  (process.env.NODE_ENV === "production"
+    ? "https://algebra-pointing-dose-screenshots.trycloudflare.com/api"
+    : "http://localhost:3333/api")
+
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3333/api",
+  baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
   timeout: 15000,
 })
