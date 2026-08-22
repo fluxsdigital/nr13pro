@@ -40,6 +40,15 @@ export const authService = {
     localStorage.removeItem(STORAGE_KEYS.session)
   },
 
+  /**
+   * Grava uma sessão no localStorage sem passar pela API.
+   * Usado ao criar contas de demonstração: o signup devolve a sessão do
+   * DEMO, e precisamos restaurar a sessão do CLOSER em seguida.
+   */
+  restoreSession(session: AuthSession): void {
+    saveSession(session)
+  },
+
   getSession(): AuthSession | null {
     if (typeof window === "undefined") return null
     try {
@@ -130,6 +139,47 @@ export const authService = {
         headers: getAuthHeader(session.token),
       })
       return user
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
+
+  /**
+   * Lista as contas de demonstração (plan === "Degustação").
+   * Exclusivo closer — usado na aba Leads.
+   */
+  async listarContasDegustacao(): Promise<User[]> {
+    const session = this.getSession()
+    if (!session) throw new Error("Não autenticado.")
+
+    try {
+      const { data } = await api.get<User[]>("/auth/degustacao", {
+        headers: getAuthHeader(session.token),
+      })
+      return data
+    } catch (error) {
+      throw new Error(getApiErrorMessage(error))
+    }
+  },
+
+  /**
+   * Gerencia uma conta de demonstração:
+   * - expiraEm → define/renova o prazo (converte a conta para Degustação)
+   * - ativo    → inativa (false) ou reativa (true)
+   * Exclusivo closer.
+   */
+  async gerenciarContaDegustacao(
+    userId: string,
+    updates: { expiraEm?: string; ativo?: boolean }
+  ): Promise<User> {
+    const session = this.getSession()
+    if (!session) throw new Error("Não autenticado.")
+
+    try {
+      const { data } = await api.patch<User>(`/auth/degustacao/${userId}`, updates, {
+        headers: getAuthHeader(session.token),
+      })
+      return data
     } catch (error) {
       throw new Error(getApiErrorMessage(error))
     }

@@ -204,6 +204,7 @@ export interface User {
   crea: string
   role: UserRole
   plan: "Mensal" | "Anual" | "Degustação" | null
+  ativo?: boolean // contas de degustação podem ser inativadas pelo closer
   degustacaoExpiraEm: string | null
   createdAt: string
 }

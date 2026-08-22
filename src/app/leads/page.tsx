@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useAuth } from "@/lib/auth-context"
-import { leadService } from "@/lib/services"
-import type { Lead, LeadStatus } from "@/lib/types"
+import { leadService, authService } from "@/lib/services"
+import type { Lead, LeadStatus, User } from "@/lib/types"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,7 +18,7 @@ import {
 import {
   Search, MessageCircle, UserCheck, Users, ShoppingCart, TrendingUp,
   CheckCircle2, XCircle, Phone, Mail, Clock, KeyRound, ShieldAlert,
-  Copy, Check,
+  Copy, Check, UserPlus, Ban, RotateCcw, CalendarPlus,
 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
@@ -45,6 +45,16 @@ function formatarData(iso: string | null): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
+const DIAS_DEGUSTACAO_PADRAO = 7
+
+function statusDemo(conta: User): { label: string; badge: string } {
+  if (conta.ativo === false)
+    return { label: "Inativa", badge: "bg-red-50 text-red-700 border-red-200" }
+  if (conta.degustacaoExpiraEm && new Date(conta.degustacaoExpiraEm) < new Date())
+    return { label: "Expirada", badge: "bg-amber-50 text-amber-700 border-amber-200" }
+  return { label: "Ativa", badge: "bg-success-subtle text-success border-success/30" }
+}
+
 export default function Leads() {
   const { user } = useAuth()
   const [search, setSearch] = useState("")
@@ -55,9 +65,20 @@ export default function Leads() {
 
   const isCloser = user?.role === "closer"
 
+  // ── Contas de demonstração ──
+  const [demoUsers, setDemoUsers] = useState<User[]>([])
+  const [loadingDemo, setLoadingDemo] = useState(true)
+  const [showNovaDemo, setShowNovaDemo] = useState(false)
+  const [novaNome, setNovaNome] = useState("")
+  const [novaEmail, setNovaEmail] = useState("")
+  const [novaSenha, setNovaSenha] = useState("123456")
+  const [criandoDemo, setCriandoDemo] = useState(false)
+  const [busyDemoId, setBusyDemoId] = useState<string | null>(null)
+
   useEffect(() => {
     if (!isCloser) {
       setLoading(false)
+      setLoadingDemo(false)
       return
     }
     // Leads pertencem à empresa NR-13 Pro — closer vê toda a carteira
@@ -65,6 +86,10 @@ export default function Leads() {
       .then(setData)
       .catch(() => {})
       .finally(() => setLoading(false))
+    authService.listarContasDegustacao()
+      .then(setDemoUsers)
+      .catch(() => {})
+      .finally(() => setLoadingDemo(false))
   }, [isCloser])
 
   const filtered = useMemo(() => {
@@ -133,6 +158,95 @@ export default function Leads() {
     const atualizado = await leadService.update(lead.id, { status })
     setData((prev) => prev.map((l) => (l.id === lead.id ? atualizado : l)))
     toast.success(`Status atualizado para "${statusMeta[status].label}"`)
+  }
+
+  // ── Contas de demonstração ─────────────────────────────────────────────
+
+  const criarContaDemo = async () => {
+    if (!novaNome.trim() || !novaEmail.trim()) {
+      toast.error("Informe nome e e-mail da conta de demonstração.")
+      return
+    }
+    if (novaSenha.length < 6) {
+      toast.error("A senha deve ter no mínimo 6 caracteres.")
+      return
+    }
+    setCriandoDemo(true)
+    try {
+      const sessaoCloser = authService.getSession()
+
+      // 1) Cria a conta pela rota pública de signup
+      const demoSession = await authService.signup({
+        name: novaNome.trim(),
+        email: novaEmail.trim(),
+        password: novaSenha,
+        crea: "—",
+      })
+
+      // O signup sobrescreve a sessão local com a do DEMO — restaura a do closer
+      if (sessaoCloser) authService.restoreSession(sessaoCloser)
+
+      // 2) Converte em conta de degustação com prazo de 7 dias
+      const expiraEm = new Date(Date.now() + DIAS_DEGUSTACAO_PADRAO * 24 * 60 * 60 * 1000).toISOString()
+      await authService.gerenciarContaDegustacao(demoSession.user.id, { expiraEm })
+
+      // 3) Atualiza a listagem
+      const lista = await authService.listarContasDegustacao().catch(() => demoUsers)
+      setDemoUsers(lista)
+      setShowNovaDemo(false)
+      setNovaNome("")
+      setNovaEmail("")
+      setNovaSenha("123456")
+      toast.success(
+        `Conta criada! E-mail: ${demoSession.user.email} • Senha: ${novaSenha} • Válida por ${DIAS_DEGUSTACAO_PADRAO} dias.`
+      )
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao criar conta de demonstração.")
+    } finally {
+      setCriandoDemo(false)
+    }
+  }
+
+  const prorrogarPrazo = async (conta: User, dias: number) => {
+    setBusyDemoId(conta.id)
+    try {
+      // Prorroga a partir da data atual se já expirou; senão, a partir da validade
+      const base =
+        conta.degustacaoExpiraEm && new Date(conta.degustacaoExpiraEm) > new Date()
+          ? new Date(conta.degustacaoExpiraEm)
+          : new Date()
+      const expiraEm = new Date(base.getTime() + dias * 24 * 60 * 60 * 1000).toISOString()
+      const atualizado = await authService.gerenciarContaDegustacao(conta.id, {
+        expiraEm,
+        ativo: true,
+      })
+      setDemoUsers((prev) => prev.map((c) => (c.id === conta.id ? atualizado : c)))
+      toast.success(`Prazo de ${conta.name} prorrogado até ${formatarData(expiraEm)}.`)
+    } catch {
+      toast.error("Erro ao prorrogar o prazo.")
+    } finally {
+      setBusyDemoId(null)
+    }
+  }
+
+  const alternarAtiva = async (conta: User) => {
+    const inativando = conta.ativo !== false
+    setBusyDemoId(conta.id)
+    try {
+      const atualizado = await authService.gerenciarContaDegustacao(conta.id, {
+        ativo: !inativando,
+      })
+      setDemoUsers((prev) => prev.map((c) => (c.id === conta.id ? atualizado : c)))
+      toast.success(
+        inativando
+          ? `Conta de ${conta.name} inativada — login bloqueado.`
+          : `Conta de ${conta.name} reativada.`
+      )
+    } catch {
+      toast.error(inativando ? "Erro ao inativar a conta." : "Erro ao reativar a conta.")
+    } finally {
+      setBusyDemoId(null)
+    }
   }
 
   if (loading) return <div className="p-4 sm:p-8 text-text-secondary">Carregando...</div>
@@ -352,6 +466,161 @@ export default function Leads() {
           ))}
         </div>
       )}
+
+      {/* ── Contas de Demonstração ── */}
+      <Card className="border-border shadow-sm">
+        <CardContent className="p-4 sm:p-6 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <KeyRound className="h-5 w-5 text-primary shrink-0" />
+              <div>
+                <p className="text-text-primary font-medium">Contas de Demonstração</p>
+                <p className="text-xs text-text-secondary">
+                  Crie acessos temporários, prorrogue prazos ou inative contas. Contas inativadas não conseguem fazer login.
+                </p>
+              </div>
+            </div>
+            {!showNovaDemo && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setShowNovaDemo(true)}
+                className="shrink-0 w-full sm:w-auto"
+              >
+                <UserPlus className="h-4 w-4 mr-1" />
+                Nova conta demo
+              </Button>
+            )}
+          </div>
+
+          {showNovaDemo && (
+            <div className="p-4 rounded-lg border border-primary/20 bg-primary-subtle/50 space-y-3">
+              <p className="text-sm font-medium text-text-primary">Nova conta de demonstração ({DIAS_DEGUSTACAO_PADRAO} dias)</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="space-y-1">
+                  <label className="text-xs text-text-secondary">Nome</label>
+                  <Input
+                    value={novaNome}
+                    onChange={(e) => setNovaNome(e.target.value)}
+                    placeholder="Nome do prospect"
+                    className="border-border bg-card h-9"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs text-text-secondary">E-mail de acesso</label>
+                  <Input
+                    type="email"
+                    value={novaEmail}
+                    onChange={(e) => setNovaEmail(e.target.value)}
+                    placeholder="prospect@empresa.com.br"
+                    className="border-border bg-card h-9"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs text-text-secondary">Senha</label>
+                  <Input
+                    value={novaSenha}
+                    onChange={(e) => setNovaSenha(e.target.value)}
+                    placeholder="Mínimo 6 caracteres"
+                    className="border-border bg-card h-9 font-mono"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2 justify-end">
+                <Button variant="outline" size="sm" onClick={() => setShowNovaDemo(false)} disabled={criandoDemo} className="border-border text-text-secondary">
+                  Cancelar
+                </Button>
+                <Button variant="primary" size="sm" onClick={criarContaDemo} disabled={criandoDemo}>
+                  {criandoDemo ? "Criando..." : "Criar conta demo"}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {loadingDemo ? (
+            <p className="text-sm text-text-secondary py-4 text-center">Carregando contas...</p>
+          ) : demoUsers.length === 0 ? (
+            <div className="py-8 text-center">
+              <UserPlus className="h-10 w-10 text-text-muted mx-auto mb-2" />
+              <p className="text-sm text-text-secondary">Nenhuma conta de demonstração criada</p>
+              <p className="text-xs text-text-muted mt-1">
+                Use o botão acima ou libere acesso por um lead na carteira.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {demoUsers.map((conta) => {
+                const st = statusDemo(conta)
+                const busy = busyDemoId === conta.id
+                return (
+                  <div
+                    key={conta.id}
+                    className={cn(
+                      "flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-lg border transition-colors",
+                      conta.ativo === false ? "border-red-200 bg-red-50/50" : "border-border bg-card hover:bg-card-hover"
+                    )}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-sm font-semibold text-text-primary truncate">{conta.name}</p>
+                        <Badge className={cn("text-[10px] leading-tight py-0 px-1.5", st.badge)}>{st.label}</Badge>
+                      </div>
+                      <p className="text-xs text-text-secondary truncate">{conta.email}</p>
+                      <p className="text-[11px] text-text-muted flex items-center gap-1 mt-0.5">
+                        <Clock className="h-3 w-3" />
+                        {conta.degustacaoExpiraEm
+                          ? `Válida até ${formatarData(conta.degustacaoExpiraEm)}`
+                          : "Sem prazo definido"}
+                        • Criada em {formatarData(conta.createdAt)}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2 shrink-0">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={busy}
+                        onClick={() => prorrogarPrazo(conta, 7)}
+                        className="border-primary/30 text-primary h-8 text-xs"
+                      >
+                        <CalendarPlus className="h-3.5 w-3.5 mr-1" />
+                        +7 dias
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={busy}
+                        onClick={() => prorrogarPrazo(conta, 30)}
+                        className="border-primary/30 text-primary h-8 text-xs"
+                      >
+                        <CalendarPlus className="h-3.5 w-3.5 mr-1" />
+                        +30 dias
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={busy}
+                        onClick={() => alternarAtiva(conta)}
+                        className={cn(
+                          "h-8 text-xs",
+                          conta.ativo === false
+                            ? "border-success/30 text-success"
+                            : "border-red-200 text-red-600 hover:bg-red-50"
+                        )}
+                      >
+                        {conta.ativo === false ? (
+                          <><RotateCcw className="h-3.5 w-3.5 mr-1" /> Reativar</>
+                        ) : (
+                          <><Ban className="h-3.5 w-3.5 mr-1" /> Inativar</>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
